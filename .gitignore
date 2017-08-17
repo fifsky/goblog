@@ -1,0 +1,5 @@
+/vendor
+/.idea/
+glide.lock
+proxy
+/views_bak
