@@ -1,0 +1,7 @@
+pre {
+	border: 0;
+	border-left: 3px solid rgb(204, 204, 204);
+	display: block;
+	font-family: "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+	white-space: pre;
+}

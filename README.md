@@ -1,2 +1,1 @@
-# goblog
-learn go
+# only is test

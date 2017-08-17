@@ -1,0 +1,32 @@
+{
+  "debug": {
+    "database": {
+      "host": "127.0.0.1",
+      "port": "3306",
+      "name": "fy_blog",
+      "user": "root",
+      "password": "123456"
+    },
+    "session_secret": "fifsky"
+  },
+  "release": {
+    "database": {
+      "host": "127.0.0.1",
+      "port": "3306",
+      "name": "fy_blog",
+      "user": "root",
+      "password": "123456"
+    },
+    "session_secret": "fifsky"
+  },
+  "test": {
+    "database": {
+      "host": "127.0.0.1",
+      "port": "3306",
+      "name": "fy_blog",
+      "user": "root",
+      "password": "123456"
+    },
+    "session_secret": "fifsky"
+  }
+}

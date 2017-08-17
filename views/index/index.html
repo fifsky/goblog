@@ -1,0 +1,7 @@
+{{ define "index/index" }}
+{{ template "layout" }}
+{{ end }}
+{{ define "content" }}
+{{ template "module/article" . }}
+{{ template "module/pagination" . }}
+{{ end }}

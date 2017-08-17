@@ -1,0 +1,10 @@
+{{ define "module/mood" }}
+<div id="info">
+    <div id="avatar"><img title="莫一哲" alt="莫一哲" src="<?php echo resource_url('style/images/faceicon.jpg');?>"></div>
+    <div id="latest">
+        <p class="current"><?php echo $mood_info['mood_content'];?><span class="stamp"><span
+                class="method"><?php echo show_human_time($mood_info['mood_date']);?>
+            by <?php echo $mood_info['user_name'];?></span></span></p>
+    </div>
+</div>
+{{ end }}

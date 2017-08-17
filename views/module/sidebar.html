@@ -1,0 +1,187 @@
+{{ define "module/sidebar" }}
+<div id="sidebar">
+
+    <div class="sect" id="search">
+        <form id="searchpanel" action="/search" method="get">
+            <p>
+                <input class="input_text" type="text" value="" name="keyword">
+                <input class="formbutton" type="submit" value="搜索">
+            </p>
+        </form>
+    </div>
+
+    <div class="sect">
+        <div id="blog-calendar"><table class="canlender"><tbody><tr><td><a href="javascript:void(0);" class="_cal_handel _prev_year">&lt;&lt;</a></td><td><a href="javascript:void(0);" class="_cal_handel _prev_month">&lt;</a></td><td colspan="3">2017-08</td><td><a href="javascript:void(0);" class="_cal_handel _next_month">&gt;</a></td><td><a href="javascript:void(0);" class="_cal_handel _next_year">&gt;&gt;</a></td></tr><tr><td class="happy">日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td class="happy">六</td></tr><tr><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr><tr><td>13</td><td>14</td><td>15</td><td class="today">16</td><td>17</td><td>18</td><td>19</td></tr><tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr><tr><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td></tr></tbody></table></div>
+        <script type="text/javascript">
+            (function($){
+                var get_max_days = function(year, month) {
+                    switch (month) {
+                        case 1:
+                        case 3:
+                        case 5:
+                        case 7:
+                        case 8:
+                        case 10:
+                        case 12:
+                            return 31;
+                        case 4:
+                        case 6:
+                        case 9:
+                        case 11:
+                            return 30;
+                        case 2:
+                            if (year % 400 == 0 || (year % 4 == 0 && year % 100 != 0)) {
+                                return 29;
+                            }
+                            else {
+                                return 28;
+                            }
+                        default:
+                            return 0;
+                    }
+                };
+
+                var get_week = function(y, m, d) {
+                    return (new Date(y+'/'+m+'/'+d)).getDay();
+                };
+
+
+                function calendar(y,m) {
+                    var days = get_max_days(y, m);
+                    var start_week = get_week(y, m, 1);
+                    var html = '<table class="canlender"><tr><td><a href="javascript:void(0);" class="_cal_handel _prev_year">&lt;&lt;</a></td><td><a href="javascript:void(0);" class="_cal_handel _prev_month">&lt;</a></td><td colspan="3">'+y+'-'+(m > 9 ? m : '0'+m) +'</td><td><a href="javascript:void(0);" class="_cal_handel _next_month">&gt;</a></td><td><a href="javascript:void(0);" class="_cal_handel _next_year">&gt;&gt;</a></td></tr><tr><td class="happy">日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td class="happy">六</td></tr>';
+                    for (var i = 0,d = 1; i <= 41; i++) {
+                        if(i%7 == 0){
+                            html += '<tr>';
+                        }
+
+                        if(i < start_week || d > days){
+                            html += '<td></td>';
+                        }else if(d <= days){
+                            var today = new Date();
+                            var cy = today.getFullYear(),cm = today.getMonth() + 1,cd = today.getDate();
+
+                            if(y === cy && cm === m && d === cd){
+                                html += '<td class="today">'+(d++)+'</td>';
+                            }else{
+                                html += '<td>'+(d++)+'</td>';
+                            }
+                        }
+
+                        if((i+1)%7 == 0){
+                            html += '</tr>';
+                            if(d > days){
+                                break;
+                            }
+                        }
+                    }
+                    html += "</table>";
+
+                    var $cal = $(html);
+
+                    $cal.find('a._cal_handel').bind('click',function(){
+                        var year = y,month = m;
+                        if($(this).hasClass('_prev_year')){
+                            year--;
+                        }else if($(this).hasClass('_prev_month')){
+                            month--;
+                            if(month < 1){
+                                month = 12;
+                                year--;
+                            }
+                        }else if($(this).hasClass('_next_month')){
+                            month++;
+                            if(month > 12){
+                                month = 1;
+                                year++;
+                            }
+                        }else if($(this).hasClass('_next_year')){
+                            year++;
+                        }
+
+                        calendar(year,month);
+                        return false;
+                    });
+
+                    $("#blog-calendar").html($cal);
+                }
+
+                var today = new Date(),year = today.getFullYear(),month = today.getMonth() + 1;
+                calendar(year,month);
+            })(jQuery);
+        </script>
+    </div>
+
+    <div class="sect">
+        <h2>文章分类</h2>
+        <ul class="tlist">
+            <li>
+                <a href="/categroy/default">默认分类&nbsp;(22)</a>
+                <a href="/feed/default" target="_blank"><img src="//s.fifsky.com/style/images/rss.png"></a>
+            </li>
+            <li>
+                <a href="/categroy/baby">宝贝计划&nbsp;(2)</a>
+                <a href="/feed/baby" target="_blank"><img src="//s.fifsky.com/style/images/rss.png"></a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="sect">
+        <h2>历史存档</h2>
+        <ul class="tlist">
+            <li><a href="/date/2015/12">2015年12月(1)</a></li>
+            <li><a href="/date/2014/11">2014年11月(1)</a></li>
+            <li><a href="/date/2014/07">2014年07月(3)</a></li>
+            <li><a href="/date/2014/05">2014年05月(2)</a></li>
+            <li><a href="/date/2014/04">2014年04月(1)</a></li>
+            <li><a href="/date/2014/03">2014年03月(4)</a></li>
+            <li><a href="/date/2013/12">2013年12月(1)</a></li>
+            <li><a href="/date/2013/09">2013年09月(1)</a></li>
+            <li><a href="/date/2013/07">2013年07月(1)</a></li>
+            <li><a href="/date/2013/04">2013年04月(1)</a></li>
+            <li><a href="/date/2013/02">2013年02月(2)</a></li>
+            <li><a href="/date/2012/12">2012年12月(1)</a></li>
+            <li><a href="/date/2012/11">2012年11月(2)</a></li>
+            <li><a href="/date/2012/10">2012年10月(2)</a></li>
+            <li><a href="/date/2012/09">2012年09月(1)</a></li>
+        </ul>
+    </div>
+
+    <!--
+        <div class="sect">
+            <h2>最新评论</h2>
+            <ul class="tlist">
+                //foreach($comments as $v){
+                <li><a href="//echo get_url('article/'.$v['post_id']);?>#comment">//echo htmlspecialchars($v['comment_content']);
+                </a></li>
+                 //}
+            </ul>
+        </div>
+    -->
+    <div class="sect">
+        <h2>最新评论</h2>
+        <ul class="ds-recent-comments" data-num-items="10" data-show-avatars="0" data-show-title="0"></ul>
+    </div>
+
+    <div class="sect">
+        <h2>我关注的</h2>
+        <ul class="tlist">
+            <li><a title="" href="http://crazyphper.com/" target="_blank"><span>konakona</span></a></li>
+            <li><a title="" href="http://weibo.com/u/1774249523" target="_blank"><span>小空o0</span></a></li>
+            <li><a title="" href="http://weibo.com/edoing" target="_blank"><span>Swen1985</span></a></li>
+            <li><a title="" href="http://weibo.com/linghuaqiang" target="_blank"><span>blue1986</span></a></li>
+            <li><a title="" href="http://weibo.com/brucellll" target="_blank"><span>bruce_baby</span></a></li>
+            <li><a title="" href="http://weibo.com/u/1661491540" target="_blank"><span>周静涛</span></a></li>
+            <li><a title="" href="http://weibo.com/tsredis" target="_blank"><span>萝卜</span></a></li>
+            <li><a title="" href="http://weibo.com/snowsnow1" target="_blank"><span>snow</span></a></li>
+            <li><a title="" href="http://handaoliang.com/" target="_blank"><span>老韩</span></a></li>
+            <li><a title="" href="http://weibo.com/mielove" target="_blank"><span>isno</span></a></li>
+            <li><a title="" href="http://weibo.com/knighte" target="_blank"><span>Yes_KE</span></a></li>
+            <li><a title="" href="http://weibo.com/yuanzi" target="_blank"><span>圆子</span></a></li>
+        </ul>
+    </div>
+    <div class="rss">
+        <div class="rss-ico"><a href="/feed" target="_blank">订阅我的消息</a></div>
+    </div>
+</div>
+{{ end }}
