@@ -16,7 +16,7 @@ type BaseModel struct {
 	UpdatedAt time.Time `xorm:"notnull"`
 }
 
-var engine *xorm.Engine
+var orm *xorm.Engine
 
 func InitDB() (*xorm.Engine, error) {
 	config := system.GetConfig()
@@ -24,10 +24,9 @@ func InitDB() (*xorm.Engine, error) {
 	dsn += url.QueryEscape("Asia/Shanghai")
 
 	var err error
-	engine, err = xorm.NewEngine("mysql", dsn)
-	engine.SetMaxIdleConns(20)
-	engine.SetMaxOpenConns(20)
-	engine.ShowSQL(true)
-
-	return engine, err
+	orm, err = xorm.NewEngine("mysql", dsn)
+	orm.SetMaxIdleConns(20)
+	orm.SetMaxOpenConns(20)
+	orm.ShowSQL(true)
+	return orm, err
 }
