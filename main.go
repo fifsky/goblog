@@ -63,13 +63,11 @@ func main() {
 func setTemplate(engine *gin.Engine) {
 
 	funcMap := template.FuncMap{
-		"dateFormat": helpers.DateFormat,
-		"substring":  helpers.Substring,
-		"isOdd":      helpers.IsOdd,
-		"isEven":     helpers.IsEven,
-		"truncate":   helpers.Truncate,
-		"add":        helpers.Add,
-		"resource":   helpers.Resource,
+		"DateFormat": helpers.DateFormat,
+		"Substr":     helpers.Substr,
+		"Truncate":   helpers.Truncate,
+		"Unescaped":  helpers.Unescaped,
+		"StaticUrl":  helpers.StaticUrl,
 	}
 
 	engine.SetFuncMap(funcMap)
@@ -90,6 +88,12 @@ func setSessions(router *gin.Engine) {
 //SharedData fills in common data, such as user info, etc...
 func SharedData() gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		optionModel := &models.Options{}
+		options, _ := optionModel.GetOptions()
+
+		c.Set("options", options)
+
 		session := sessions.Default(c)
 		if id := session.Get(controllers.SESSION_KEY); id != nil {
 			//user := models.DB.First(&models.User{}, id)

@@ -2,19 +2,11 @@ package models
 
 import (
 	"fmt"
-	"time"
 	"net/url"
 	"github.com/fifsky/goblog/system"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 )
-
-// I don't need soft delete,so I use customized BaseModel instead gorm.Model
-type BaseModel struct {
-	Id        uint `xorm:"pk"`
-	CreatedAt time.Time `xorm:"notnull"`
-	UpdatedAt time.Time `xorm:"notnull"`
-}
 
 var orm *xorm.Engine
 

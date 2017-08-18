@@ -9,7 +9,6 @@ import (
 	"github.com/pkg/errors"
 	"io"
 	"os"
-	"strings"
 )
 
 // 计算字符串的md5值
@@ -19,23 +18,10 @@ func Md5(source string) string {
 	return hex.EncodeToString(md5h.Sum(nil))
 }
 
-func Truncate(s string, n int) string {
-	runes := []rune(s)
-	if len(runes) > n {
-		return string(runes[:n])
-	}
-	return s
-}
-
 func PanicIf(err error) {
 	if err != nil {
 		panic(err)
 	}
-}
-
-//返回资源路径
-func Resource(url string) string {
-	return "/static/" + strings.Trim(url, "/")
 }
 
 func PathExists(path string) (bool, error) {

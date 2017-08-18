@@ -4,19 +4,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/models"
 	"net/http"
-	"fmt"
+	"github.com/fifsky/goblog/helpers"
 )
 
 func IndexGet(c *gin.Context) {
-	post := &models.Posts{Id:5}
-	posts, err := post.GetList()
+	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
+	postModel := new(models.Posts)
+	posts, err := postModel.GetList(page, 10)
 
-	fmt.Println(err)
+	h := defaultH(c)
+	h["Posts"] = posts
 
 	if err == nil {
-		c.JSON(http.StatusOK, gin.H{
-			"posts": posts,
-		})
+		c.HTML(http.StatusOK, "index/index", h)
 	} else {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}

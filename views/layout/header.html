@@ -1,25 +1,25 @@
-{{ define "layout" }}
+{{ define "layout/header" }}
 <!doctype html>
 <html>
 <head>
-    <title><?php echo get_option('site_name');?></title>
+    <title>{{ if .Title }}{{ .Title }} - {{ end }}{{ .SiteTitle }}</title>
     <meta http-equiv=content-type content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="initial-scale=1,minimum-scale=1"/>
     <meta name="keywords" content="xxxx"/>
     <meta name="description" content="xxxx"/>
-    <link rel="shortcut icon" href="{{ resource "style/images/favicon.ico" }}" type="image/x-icon"/>
-    <link media="screen" href="{{ resource "style/css/base.css" }}" type=text/css rel=stylesheet>
+    <link rel="shortcut icon" href="{{ StaticUrl }}style/images/favicon.ico" type="image/x-icon"/>
+    <link media="screen" href="{{ StaticUrl }}style/css/base.css" type=text/css rel=stylesheet>
     <script src="//upcdn.b0.upaiyun.com/libs/jquery/jquery-1.10.2.min.js" type="text/javascript"></script>
-    <script src="{{ resource "style/js/jquery-plugins.js" }}" type="text/javascript"></script>
-    <link media="screen" href="{{ resource "public/highlight/styles/atelier-lakeside.light.css" }}" type=text/css
+    <script src="{{ StaticUrl }}style/js/jquery-plugins.js" type="text/javascript"></script>
+    <link media="screen" href="{{ StaticUrl }}public/highlight/styles/atelier-lakeside.light.css" type=text/css
           rel=stylesheet>
-    <script src="{{ resource "public/highlight/highlight.pack.js" }}" type="text/javascript"></script>
+    <script src="{{ StaticUrl }}public/highlight/highlight.pack.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="container">
     <div id="header" class="clearfix">
-        <h1><a href="/"><img alt=首页 src="{{ resource "style/images/logo.gif" }}"><span>首页</span></a></h1>
+        <h1><a href="/"><img alt=首页 src="{{ StaticUrl }}style/images/logo.gif"><span>首页</span></a></h1>
 
         <div id="navigation">
             <ul>
@@ -34,17 +34,4 @@
             </ul>
         </div>
     </div>
-    <div id="main">
-        {{ template "module/mood" . }}
-        {{ template "module/tabs" . }}
-        <div id="content">
-            {{ template "content" . }}
-        </div>
-    </div>
-    {{ template "module/sidebar" . }}
-    {{ template "module/footer" . }}
-
-</div>
-</body>
-</html>
 {{ end }}

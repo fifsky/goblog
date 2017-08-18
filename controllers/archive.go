@@ -2,26 +2,20 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	//"github.com/fifsky/goblog/models"
-	//"net/http"
-	//"strconv"
+	"net/http"
+	"github.com/fifsky/goblog/models"
+	"github.com/fifsky/goblog/helpers"
 )
 
 func ArchiveGet(c *gin.Context) {
-	//year := c.Param("year")
-	//month := c.Param("month")
-	//posts, err := models.ListPostByArchive(year, month)
-	//if err == nil {
-	//	for _, post := range posts {
-	//		post.Tags, _ = models.ListTagByPostId(strconv.FormatUint(uint64(post.ID), 10))
-	//	}
-	//	c.HTML(http.StatusOK, "index/index.html", gin.H{
-	//		"posts":    posts,
-	//		"tags":     models.MustListTag(),
-	//		"archives": models.MustListPostArchives(),
-	//		"links":    models.MustListLinks(),
-	//	})
-	//} else {
-	//	c.AbortWithStatus(http.StatusInternalServerError)
-	//}
+	id, _ := helpers.StrTo(c.Param("id")).Uint()
+	postModel := &models.Posts{Id: id}
+	post, err := postModel.Get()
+	if err == nil {
+		c.HTML(http.StatusOK, "index/article", gin.H{
+			"post": post,
+		})
+	} else {
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
 }

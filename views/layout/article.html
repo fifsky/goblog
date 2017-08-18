@@ -1,0 +1,29 @@
+{{define "layout/article"}}
+    {{ if .Title }}
+    <div class="article">
+        <div class="entry-title">
+            <!--        <img width="40" height="40" class="avatar" src="--><!--" alt="">-->
+            <img width="40" height="40" class="avatar"
+                 src="https://avatars3.githubusercontent.com/u/280967?v=3&amp;s=460" alt="">
+            <h2>
+                <a href="/article/{{ .Id }}">{{ .Title }}</a>
+            </h2>
+            <div class="entry-meta">
+                by&nbsp;fifsky&nbsp;&nbsp;/&nbsp;&nbsp;<a rel="category tag" title="查看 默认分类 中的全部文章"
+                                                          href="/categroy/default">默认分类</a>&nbsp;&nbsp;/&nbsp;&nbsp;{{ .UpdatedAt }}
+            </div>
+        </div>
+        <div class="entry">
+            {{ .Content | Unescaped }}
+        </div>
+        <div class="post-meta">
+            <span class="ds-thread-count" data-thread-key="39">暂无评论</span><span class="line">|</span><a
+                href="/article/{{ .Id }}#comments">发表评论&gt;&gt;</a>
+        </div>
+    </div>
+    {{ else }}
+    <div class="not_article">
+        没有找到相关文章！
+    </div>
+    {{ end }}
+{{ end }}

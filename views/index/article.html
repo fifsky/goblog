@@ -1,4 +1,12 @@
-{{ define "content" }}
-{{ template "module/article" . }}
-{{ template "module/page" . }}
+{{ define "index/article" }}
+{{ template "layout/header" }}
+<div id="main">
+    {{ template "layout/mood" . }}
+    {{ template "layout/tabs" . }}
+    <div id="content">
+        {{ template "layout/article" .post }}
+    </div>
+</div>
+{{ template "layout/sidebar" . }}
+{{ template "layout/footer" }}
 {{ end }}

@@ -1,7 +1,24 @@
 {{ define "index/index" }}
-{{ template "layout" }}
-{{ end }}
-{{ define "content" }}
-{{ template "module/article" . }}
-{{ template "module/pagination" . }}
+{{ template "layout/header" . }}
+<div id="main">
+    {{ template "layout/mood" . }}
+    {{ template "layout/tabs" . }}
+    <div id="content">
+        <div class="articles">
+            {{ $exists := len .Posts}}
+            {{ if gt $exists 0 }}
+            {{ range .Posts }}
+            {{ template "layout/article" . }}
+            {{ end }}
+            {{ else }}
+            <div class="not_article">
+                没有找到相关文章！
+            </div>
+            {{ end }}
+        </div>
+        {{ template "layout/pagination" . }}
+    </div>
+</div>
+{{ template "layout/sidebar" . }}
+{{ template "layout/footer" }}
 {{ end }}
