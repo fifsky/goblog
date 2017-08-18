@@ -15,3 +15,8 @@ type Users struct {
 	UpdatedAt time.Time `xorm:"notnull"`
 	DeletedAt *time.Time `xorm:"notnull"`
 }
+
+func (this *Users) Get() (*Users, error) {
+	_, err := orm.Get(this)
+	return this, err
+}

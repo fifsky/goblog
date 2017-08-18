@@ -11,3 +11,9 @@ type Cates struct {
 	UpdatedAt time.Time `xorm:"notnull"`
 	DeletedAt *time.Time `xorm:"notnull"`
 }
+
+
+func (this *Cates) Get() (*Cates, error) {
+	_, err := orm.Get(this)
+	return this, err
+}

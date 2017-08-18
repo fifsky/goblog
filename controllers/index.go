@@ -12,8 +12,12 @@ func IndexGet(c *gin.Context) {
 	postModel := new(models.Posts)
 	posts, err := postModel.GetList(page, 10)
 
+	moodModel := new(models.Moods)
+	mood, err := moodModel.Frist()
+
 	h := defaultH(c)
 	h["Posts"] = posts
+	h["Mood"] = mood
 
 	if err == nil {
 		c.HTML(http.StatusOK, "index/index", h)

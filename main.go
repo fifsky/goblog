@@ -70,6 +70,8 @@ func setTemplate(engine *gin.Engine) {
 		"StaticUrl":  helpers.StaticUrl,
 	}
 
+	engine.HTMLRender.Instance(name, obj)
+
 	engine.SetFuncMap(funcMap)
 	engine.LoadHTMLGlob("views/**/*")
 }

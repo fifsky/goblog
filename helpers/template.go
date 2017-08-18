@@ -44,5 +44,3 @@ func StaticUrl(url ...string) string {
 
 	return "/static/"
 }
-
-

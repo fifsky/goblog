@@ -1,10 +1,10 @@
 {{ define "index/article" }}
-{{ template "layout/header" }}
+{{ template "layout/header" . }}
 <div id="main">
-    {{ template "layout/mood" . }}
+    {{ template "layout/mood" .Mood }}
     {{ template "layout/tabs" . }}
     <div id="content">
-        {{ template "layout/article" .post }}
+        {{ template "layout/article" .Post }}
     </div>
 </div>
 {{ template "layout/sidebar" . }}

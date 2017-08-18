@@ -9,8 +9,8 @@
                 <a href="/article/{{ .Id }}">{{ .Title }}</a>
             </h2>
             <div class="entry-meta">
-                by&nbsp;fifsky&nbsp;&nbsp;/&nbsp;&nbsp;<a rel="category tag" title="查看 默认分类 中的全部文章"
-                                                          href="/categroy/default">默认分类</a>&nbsp;&nbsp;/&nbsp;&nbsp;{{ .UpdatedAt }}
+                by&nbsp;{{ .NickName }}&nbsp;&nbsp;/&nbsp;&nbsp;<a rel="category tag" title="查看 默认分类 中的全部文章"
+                                                          href="/categroy/default">{{ .Name }}</a>&nbsp;&nbsp;/&nbsp;&nbsp;{{ DateFormat .UpdatedAt "2006-01-02 15:04" }}
             </div>
         </div>
         <div class="entry">
@@ -20,10 +20,6 @@
             <span class="ds-thread-count" data-thread-key="39">暂无评论</span><span class="line">|</span><a
                 href="/article/{{ .Id }}#comments">发表评论&gt;&gt;</a>
         </div>
-    </div>
-    {{ else }}
-    <div class="not_article">
-        没有找到相关文章！
     </div>
     {{ end }}
 {{ end }}
