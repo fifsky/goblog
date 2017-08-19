@@ -26,16 +26,21 @@ func (UserPosts) TableName() string {
 	return "posts"
 }
 
-func (this *Posts) Get() (*Posts, error) {
-	_, err := orm.Get(this)
-	return this, err
+func (p *Posts) Get() (*Posts, error) {
+	_, err := orm.Get(p)
+	return p, err
 }
 
-func (this *Posts) GetList(start int, num int) ([]UserPosts, error) {
-	var posts = make([]UserPosts, 0)
+func (p *Posts) GetList(start int, num int) ([]*UserPosts, error) {
+	var posts = make([]*UserPosts, 0)
 	start = (start - 1) * num
 	//err := orm.Limit(num, start).Find(&posts)
 	err := orm.SQL("select p.*, c.name,u.nick_name from posts p left join users u on p.user_id = u.id left join cates c on p.cate_id = c.id limit ?,?", start, num).Find(&posts)
 
 	return posts, err
+}
+
+func (p *Posts) Count() (int64, error) {
+	total, err := orm.Where("id >?", 1).Count(p)
+	return total, err
 }

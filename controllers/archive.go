@@ -20,13 +20,9 @@ func ArchiveGet(c *gin.Context) {
 
 	newpost := &models.UserPosts{Posts: *post, Name: cate.Name, NickName: user.NickName}
 
-	moodModel := new(models.Moods)
-	mood, err := moodModel.Frist()
-
 	h := defaultH(c)
 	h["Title"] = post.Title
 	h["Post"] = newpost
-	h["Mood"] = mood
 
 	if err == nil {
 		c.HTML(http.StatusOK, "index/article", h)

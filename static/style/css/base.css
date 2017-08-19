@@ -195,7 +195,7 @@ form p.inputting .formtip { color:#000;}
 /* page navigator */
 .paginator { list-style:none; padding:10px 0; text-align:center;}
 .paginator li { margin:0 .2em; display:inline;}
-.paginator li.current { padding:2px 5px; border:1px solid #ddd; background: #ddd}
+.paginator li.current,.paginator li.normal { padding:2px 5px; border:1px solid #ddd; background: #ddd}
 .paginator li a { padding:2px 5px; border:1px solid #ddd; text-decoration:none;}
 .paginator li a:hover { border-color:#06c; background:#06c; color:#fff;}
 

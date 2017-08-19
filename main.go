@@ -13,21 +13,22 @@ import (
 	"net/http"
 	"os"
 	"time"
+	"fmt"
 )
 
-func init() {
-	// Log as JSON instead of the default ASCII formatter.
-	logrus.SetFormatter(&logrus.TextFormatter{})
-
-	// Output to stdout instead of the default stderr
-	// Can be any io.Writer, see below for File example
-	logrus.SetOutput(os.Stdout)
-
-	// Only log the warning severity or above.
-	logrus.SetLevel(logrus.WarnLevel)
-}
-
 func main() {
+
+	// log to file
+	f, ferr := os.OpenFile("logs/app.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+	if ferr != nil {
+		fmt.Printf("error opening file: %v", ferr)
+	}
+	defer f.Close()
+
+	logrus.SetFormatter(&logrus.TextFormatter{})
+	//logrus.SetOutput(os.Stdout)
+	logrus.SetOutput(f)
+	logrus.SetLevel(logrus.WarnLevel)
 
 	gin.SetMode(gin.DebugMode)
 	router := gin.Default()
@@ -69,8 +70,6 @@ func setTemplate(engine *gin.Engine) {
 		"Unescaped":  helpers.Unescaped,
 		"StaticUrl":  helpers.StaticUrl,
 	}
-
-	engine.HTMLRender.Instance(name, obj)
 
 	engine.SetFuncMap(funcMap)
 	engine.LoadHTMLGlob("views/**/*")

@@ -9,7 +9,7 @@ type Moods struct {
 	CreatedAt time.Time   `xorm:"notnull"`
 }
 
-func (this *Moods) Frist() (*Moods, error) {
-	_, err := orm.Limit(1).Desc("id").Get(this)
-	return this, err
+func (m *Moods) Frist() (*Moods, error) {
+	_, err := orm.Limit(1).Desc("id").Get(m)
+	return m, err
 }

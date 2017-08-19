@@ -16,7 +16,7 @@ type Users struct {
 	DeletedAt *time.Time `xorm:"notnull"`
 }
 
-func (this *Users) Get() (*Users, error) {
-	_, err := orm.Get(this)
-	return this, err
+func (u *Users) Get() (*Users, error) {
+	_, err := orm.Get(u)
+	return u, err
 }

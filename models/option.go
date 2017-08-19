@@ -6,7 +6,7 @@ type Options struct {
 	Value string `xorm:"varchar(200) notnull"`
 }
 
-func (this * Options) GetOptions() (map[string]string, error) {
+func (o * Options) GetOptions() (map[string]string, error) {
 	var options = make([]Options, 0)
 	err := orm.Find(&options)
 	options2 := make(map[string]string)
