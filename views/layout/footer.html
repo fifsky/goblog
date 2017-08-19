@@ -12,12 +12,15 @@
     <p class="info">&copy; Fyblog v1.2 <a href="http://www.miitbeian.gov.cn/" target="_blank">沪ICP备14029559号</a></p>
 </div>
 <a id="scroll_top" href="javascript:void(0)">返回顶部</a>
+{{ if not .IsAdminPage }}
 <script type="text/javascript" src="{{ StaticUrl }}style/js/main.js"></script>
-<script type="text/javascript" src="{{ StaticUrl }}style/js/admin.js"></script>
 <script type="text/javascript">
     hljs.configure({tabReplace: '    '});
     hljs.initHighlightingOnLoad();
 </script>
+{{ else }}
+<script type="text/javascript" src="{{ StaticUrl }}style/js/admin.js"></script>
+{{ end }}
 </div>
 </body>
 </html>

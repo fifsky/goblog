@@ -1,0 +1,66 @@
+{{ define "admin/index" }}
+{{ template "layout/header" . }}
+<div id="settings" class="admin">
+    {{ template "layout/admin_tabs" . }}
+    <div id="content">
+        <h2>站点设置</h2>
+        <div class="message">保存成功</div>
+        <form id="settings_form" class="nf" action="/admin/index" method="post" autocomplete="off">
+            <p>
+                <label class="label_input">站点名称</label>
+                <input type="text" class="input_text" size="50" name="site_name" value="{{ .options.site_name }}"/>
+                <span class="hint">站点的名称将显示在网页的标题处。</span>
+            </p>
+            <p>
+                <label class="label_input">站点描述</label>
+                <textarea name="site_desc" rows="3" cols="50">{{ .options.site_desc }}</textarea>
+                <span class="hint">站点描述将显示在网页代码的头部。</span>
+            </p>
+            <p>
+                <label class="label_input">关键字</label>
+                <input type="text" class="input_text" size="50" name="site_keyword" value="{{ .options.site_keyword }}"/>
+                <span class="hint">请以半角逗号","分割多个关键字。</span>
+            </p>
+
+            <p>
+                <label class="label_input">每页显示文章数</label>
+                <input class="input_text" style="width: 50px" name="post_num" type="text" value="{{ .options.post_num }}"/>
+            </p>
+
+            <p class="act"><input class="formbutton" type="submit" value=保存></p>
+        </form>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#settings_form').submit(function(){
+        var self = this;
+
+        $.ajax({
+            'url': $(this).attr('action'),
+            'type': this.method,
+            'data': $(this).serializeArray(),
+            'dataType': 'json',
+            beforeSend: function(xhr) {
+                $(self).find(':submit').addClass('formdisabled').attr('disabled',true);
+            },
+            error:function(){
+                $(self).find(':submit').addClass('formdisabled').attr('disabled',true);
+            },
+            success: function(data) {
+                $.scrollTo($('body'),0);
+                if (data.statusCode == 200){
+                    $('.message').html(data.message).show().delay(2000).fadeOut(500);
+                    $(self).find(':submit').removeClass('formdisabled').attr('disabled',false);
+                }else{
+                    $('.message').html(data.message).show();
+                }
+            }
+        });
+
+        return false;
+    });
+</script>
+{{ template "layout/footer" . }}
+{{ end }}

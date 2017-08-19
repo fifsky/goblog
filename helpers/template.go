@@ -24,7 +24,7 @@ func Substr(source string, start, end int) string {
 	return string(rs[start:end])
 }
 
-func Unescaped (x string) interface{} {
+func Unescaped(x string) interface{} {
 	return template.HTML(x)
 }
 
@@ -43,4 +43,20 @@ func StaticUrl(url ...string) string {
 	}
 
 	return "/static/"
+}
+
+func IsPage(url string, page string) bool {
+	url = strings.Trim(url, "/")
+	page = strings.Trim(page, "/")
+
+	urls := strings.Split(url, "/")
+	pages := strings.Split(page, "/")
+
+	plen := len(pages)
+
+	if plen == 0 || len(urls) < plen {
+		return false
+	}
+	suburls := urls[:plen]
+	return strings.Join(suburls, "/") == strings.Join(pages, "/")
 }

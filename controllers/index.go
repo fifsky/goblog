@@ -29,8 +29,3 @@ func IndexGet(c *gin.Context) {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}
 }
-
-func AdminIndex(c *gin.Context) {
-	c.HTML(http.StatusOK, "admin/index", gin.H{
-	})
-}

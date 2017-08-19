@@ -5,11 +5,6 @@ import (
 	"net/http"
 )
 
-const (
-	SESSION_KEY          = "UserID"       // session key
-	CONTEXT_USER_KEY     = "User"         // context user key
-)
-
 func Handle404(c *gin.Context) {
 	HandleMessage(c, "Sorry,I lost myself!")
 }

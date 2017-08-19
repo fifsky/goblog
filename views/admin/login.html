@@ -1,0 +1,67 @@
+{{ define "admin/login" }}
+{{ template "layout/header" . }}
+<div id="sign-in" class="admin">
+    <div id="content">
+        <h2>博客管理登录</h2>
+        <div class="message"></div>
+        <form method="post" action="/admin/login" id="login" name="login" class="vf lf">
+            <p>
+                <label class="label_input">用户名：</label>
+                <input type="text" name="user_name" class="input_text" value=""/>
+            </p>
+            <p>
+                <label class="label_input">密码：</label>
+                <input type="password" name="user_pass" class="input_text" value=""/>
+            </p>
+            <p>
+                <label for="auto_login" class="label_check">
+                    <input id="auto_login" type="checkbox" value="1" class="input_check" name="auto_login"/> 下次自动登录
+                </label>
+            </p>
+            <p class="act">
+                <input type="submit" class="formbutton" value="登录"/>
+            </p>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#login').submit(function () {
+        var self = this;
+
+        var $el = $('input[name="user_name"]');
+        if ($.trim($el.val()) === '') {
+            $el.focus().closest('p').addClass('error');
+            return false;
+        }
+
+        $el = $('input[name="user_pass"]');
+        if ($.trim($el.val()) === '') {
+            $el.focus().closest('p').addClass('error');
+            return false;
+        }
+
+        $.ajax({
+            'url': $(this).attr('action'),
+            'type': this.method,
+            'data': $(this).serializeArray(),
+            'dataType': 'json',
+            beforeSend: function (xhr) {
+                $(self).find(':submit').addClass('formdisabled').attr('disabled', true);
+            },
+            complete: function () {
+                $(self).find(':submit').removeClass('formdisabled').attr('disabled', false);
+            },
+            success: function (data) {
+                if (data.statusCode === 200) {
+                    location.href = "/admin/index";
+                } else {
+                    $('.message').addClass('notice').html(data.message).show();
+                }
+            }
+        });
+
+        return false;
+    });
+</script>
+{{ template "layout/footer" . }}
+{{ end }}
