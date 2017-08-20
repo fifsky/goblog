@@ -9,11 +9,22 @@ import (
 )
 
 func IndexGet(c *gin.Context) {
-
 	num := 10
+
+	domain := c.Param("domain")
+
+	cate := &models.Cates{}
+
+	if domain != "" {
+		cate.Domain = domain
+		cate.Get()
+	}
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
 	postModel := new(models.Posts)
+	if cate.Id > 0 {
+		postModel.CateId = cate.Id
+	}
 	posts, err := postModel.GetList(page, num)
 
 	h := defaultH(c)
@@ -29,7 +40,6 @@ func IndexGet(c *gin.Context) {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}
 }
-
 
 func ArticleGet(c *gin.Context) {
 	id, _ := helpers.StrTo(c.Param("id")).Uint()

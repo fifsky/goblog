@@ -19,6 +19,6 @@ func InitDB() (*xorm.Engine, error) {
 	orm, err = xorm.NewEngine("mysql", dsn)
 	orm.SetMaxIdleConns(20)
 	orm.SetMaxOpenConns(20)
-	//orm.ShowSQL(true)
+	orm.ShowSQL(true)
 	return orm, err
 }

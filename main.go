@@ -37,7 +37,9 @@ func main() {
 	router.NoRoute(controllers.Handle404)
 	router.GET("/", controllers.IndexGet)
 	router.GET("/article/:id", controllers.ArticleGet)
+	router.GET("/categroy/:domain", controllers.IndexGet)
 
+	//管理后台
 	admin := router.Group("/admin")
 	admin.GET("/login", controllers.LoginGet)
 	admin.POST("/login", controllers.LoginPost)

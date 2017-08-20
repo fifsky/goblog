@@ -37,8 +37,21 @@ func (p *Posts) GetList(start int, num int) ([]*UserPosts, error) {
 	var posts = make([]*UserPosts, 0)
 	start = (start - 1) * num
 	//err := orm.Limit(num, start).Find(&posts)
-	err := orm.SQL("select p.*, c.name,u.nick_name,c.domain from posts p left join users u on p.user_id = u.id left join cates c on p.cate_id = c.id order by p.id desc limit ?,?", start, num).Find(&posts)
+	//下面这个方式拼接WHERE太麻烦
+	//err := orm.SQL("select p.*, c.name,u.nick_name,c.domain from posts p left join users u on p.user_id = u.id left join cates c on p.cate_id = c.id order by p.id desc limit ?,?", start, num).Find(&posts)
 
+	orm := orm.Select("posts.*, cates.name,users.nick_name,cates.domain")
+	orm.Join("LEFT OUTER", "users", "posts.user_id = users.id")
+	orm.Join("LEFT OUTER", "cates", "posts.cate_id = cates.id")
+
+	if p.CateId > 0 {
+		orm.Where("posts.cate_id = ?", p.CateId)
+	}
+
+	orm.Desc("posts.id")
+	orm.Limit(num, start)
+
+	err := orm.Find(&posts)
 	return posts, err
 }
 

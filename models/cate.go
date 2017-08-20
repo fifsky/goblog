@@ -4,9 +4,9 @@ import "time"
 
 type Cates struct {
 	Id        uint `xorm:"pk"`
-	Name      string    `xorm:"varchar(100) unique"`  //用户名
-	Desc      string    `xorm:"varchar(255) notnull"` //密码
-	Domain    string    `xorm:"varchar(100) "`        //邮箱
+	Name      string    `xorm:"varchar(100) unique"`  //分类名
+	Desc      string    `xorm:"varchar(255) notnull"` //分类详情
+	Domain    string    `xorm:"varchar(100) unique"`  //分类短域名
 	CreatedAt time.Time `xorm:"created notnull"`
 	UpdatedAt time.Time `xorm:"updated notnull"`
 }
