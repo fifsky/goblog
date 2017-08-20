@@ -10,9 +10,7 @@ import (
 
 func IndexGet(c *gin.Context) {
 	num := 10
-
 	domain := c.Param("domain")
-
 	cate := &models.Cates{}
 
 	if domain != "" {
