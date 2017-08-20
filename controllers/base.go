@@ -23,9 +23,18 @@ func defaultH(c *gin.Context) gin.H {
 		moodModel := new(models.Moods)
 		mood, err := moodModel.Frist()
 		if err != nil {
-			logrus.Error("get mood error:" + err.Error())
+			logrus.Error(err)
 		}
+
+		cateModel := new(models.Cates)
+		cates, err := cateModel.All()
+		if err != nil {
+			logrus.Error(err)
+		}
+
 		h["Mood"] = mood
+		h["Cates"] = cates
+
 		h["IsAdminPage"] = false
 	} else {
 		h["IsAdminPage"] = true
