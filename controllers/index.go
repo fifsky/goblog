@@ -29,3 +29,28 @@ func IndexGet(c *gin.Context) {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}
 }
+
+
+func ArticleGet(c *gin.Context) {
+	id, _ := helpers.StrTo(c.Param("id")).Uint()
+	postModel := &models.Posts{Id: id}
+	post, err := postModel.Get()
+
+	cateModel := &models.Cates{Id: post.CateId}
+	cate, err := cateModel.Get()
+
+	userModel := &models.Users{Id: post.UserId}
+	user, err := userModel.Get()
+
+	newpost := &models.UserPosts{Posts: *post, Name: cate.Name, Domain: cate.Domain, NickName: user.NickName}
+
+	h := defaultH(c)
+	h["Title"] = post.Title
+	h["Post"] = newpost
+
+	if err == nil {
+		c.HTML(http.StatusOK, "index/article", h)
+	} else {
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+}

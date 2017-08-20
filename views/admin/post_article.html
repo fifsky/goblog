@@ -1,0 +1,141 @@
+{{ define "admin/post_article" }}
+{{ template "layout/header" . }}
+<div id="articles" class="admin">
+    {{ template "layout/admin_tabs" . }}
+    <div id="content">
+        <h2>{{ if .Post }}编辑{{ else }}撰写{{ end }}文章<a href="/admin/articles"><img
+                class="ico" src="{{ StaticUrl }}style/images/back.png"/>返回列表</a></h2>
+        <div class="message"></div>
+        <form id="article_form" class="vf" action="/admin/post/article" method="post"
+              autocomplete="off">
+            <div class="clearfix">
+                <div class="col-left">
+                    <p><label class="label_input">标题</label>
+                        <input type="hidden" name="id" value="{{.Post.Id}}"/>
+                        <input type="hidden" name="type" value="1"/>
+                        <input type="text" class="input_text" maxlength="200" size="50" name="title"
+                               value="{{.Post.Title}}"/></p>
+                    <p>
+                        <label class="label_input">分类</label>
+
+                        <select name="cate_id">
+                            {{ range .Cates }}
+                            <option value="{{.Id}}" {{if $.Post}}{{if eq .Id $.Post.Id}}selected{{end}}{{end}}>{{.Name}}
+                            </option>
+                            {{ end }}
+                        </select>
+                    </p>
+                    <!--<p><label class="label_input">标签</label>-->
+                        <!--<input type="text" class="input_text" maxlength="200" size="50" name="post_tags"-->
+                               <!--value=""/>-->
+                        <!--<span class="hint">请以半角逗号","分割多个标签。</span>-->
+                    <!--</p>-->
+                </div>
+                <div class="col-right">
+                    <!--<p><label class="label_input">权限</label>-->
+                        <!--<input class="input_check" name="comment_status" type="checkbox"-->
+                               <!--value="1"/> 允许评论-->
+                        <!--<br/>-->
+                        <!--<select name="power">-->
+                            <!--<option value="1">公开</option>-->
+                            <!--<option value="2">私密</option>-->
+                        <!--</select>-->
+                        <!--<input style="display: none" type="text" class="input_text" name="post_password"-->
+                               <!--value="" size="20"/>-->
+                    <!--</p>-->
+                </div>
+            </div>
+            <p>
+                <textarea id="kindeditor" name="content"
+                          style="width:100%;height:400px;visibility:hidden;">{{ if .Post }}{{.Post.Content | Unescaped}}{{ end }}</textarea>
+            </p>
+
+            <p class="act"><input class="formbutton" type="submit" value="发布"><a id="_save_draft"
+                                                                                 href="javascript:void(0)" class="ml10">保存草稿</a>
+            </p>
+        </form>
+
+    </div>
+</div>
+
+<script src="{{ StaticUrl }}public/kindeditor/kindeditor-min.js"></script>
+<script src="{{ StaticUrl }}public/kindeditor/lang/zh_CN.js"></script>
+<script>
+    var editor;
+    KindEditor.ready(function (K) {
+        editor = K.create('#kindeditor', {
+            uploadJson: '/admin/post/upload',
+            filterMode: false,
+            cssPath: '{{ StaticUrl }}style/css/editor.css'
+        });
+    });
+
+    $('select[name="power"]').change(function () {
+        var $password = $('input[name="post_password"]');
+        if ($(this).val() == 2) {
+            $password.show();
+        } else {
+            $password.hide();
+        }
+    });
+
+    $('#_save_draft').click(function () {
+        if (confirm('确定要保存草稿？')) {
+            $('input[name="post_status"]').val(3);
+            $(this).data('clickme', true);
+            $('#article_form').submit();
+        }
+
+        return false;
+    });
+
+    $('#article_form').submit(function () {
+        var self = this;
+        editor.sync();
+
+        var $el = $('input[name="title"]');
+        if ($.trim($el.val()) === '') {
+            $el.focus().closest('p').addClass('error');
+            return false;
+        }
+
+        if ($('select[name="power"]') == 1) {
+            $(this).find('input[name="password"]').val('');
+        }
+
+        if (!$('#_save_draft').data('clickme')) {
+            $('input[name="post_status"]').val(1);
+        }
+
+        $.ajax({
+            'url': $(this).attr('action'),
+            'type': this.method,
+            'data': $(this).serializeArray(),
+            'dataType': 'json',
+            beforeSend: function (xhr) {
+                $(self).find(':submit').addClass('formdisabled').attr('disabled', true);
+            },
+            complete: function () {
+                $(self).find(':submit').removeClass('formdisabled').attr('disabled', false);
+            },
+            success: function (data) {
+                $.scrollTo($('body'), 200);
+                if (data.statusCode === 200) {
+                    $('.message').html(data.message).show();
+                    if (!$(self).find('input[name="post_id"]').val()) {
+                        self.reset();
+                        editor.html('');
+                    }
+                    window.location.href = "/admin/articles"
+                } else {
+                    $('.message').addClass('notice').html(data.message).show();
+                }
+            }
+        });
+
+        return false;
+    });
+</script>
+
+{{ template "layout/footer" . }}
+{{ end }}

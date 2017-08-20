@@ -36,7 +36,7 @@ func main() {
 
 	router.NoRoute(controllers.Handle404)
 	router.GET("/", controllers.IndexGet)
-	router.GET("/article/:id", controllers.ArchiveGet)
+	router.GET("/article/:id", controllers.ArticleGet)
 
 	admin := router.Group("/admin")
 	admin.GET("/login", controllers.LoginGet)
@@ -46,6 +46,10 @@ func main() {
 	admin.Use(authLogin())
 	{
 		admin.GET("/index", controllers.AdminIndex)
+		admin.GET("/articles", controllers.AdminArticlesGet)
+		admin.GET("/post/article", controllers.AdminArticleGet)
+		admin.POST("/post/article", controllers.AdminArticlePost)
+		admin.GET("/post/article_delete", controllers.AdminArticleDelete)
 	}
 	router.Run(":8080")
 }

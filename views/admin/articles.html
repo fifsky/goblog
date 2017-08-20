@@ -1,0 +1,92 @@
+{{ define "admin/articles" }}
+{{ template "layout/header" . }}
+<div id="articles" class="admin">
+    {{ template "layout/admin_tabs" . }}
+    <div id="content">
+        <h2>管理文章<a href="/admin/post/article" class="add"><img class="ico" src="{{ StaticUrl }}style/images/edit.png">写文章</a>
+        </h2>
+
+        <form id="list_form" class="nf" action="" method="get" autocomplete="off">
+            <div class="operate clearfix">
+                <div class="fl">
+                    <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
+                    <select name="set_status">
+                        <option value="" selected>批量操作</option>
+                        <option value="2">置顶</option>
+                        <option value="3">草稿</option>
+                        <option value="4">删除</option>
+                    </select>
+                </div>
+                <div class="fr">
+                    <select name="post_status">
+                        <option value="" selected>显示所有文章</option>
+                        <option value="3">草稿箱</option>
+                        <option value="4">回收站</option>
+                    </select>
+                    <select name="cate_id">
+                        <option value="" selected>显示所有分类</option>
+                        {{ range .Cates }}
+                        <option value="{{ .Id }}">{{ .Name }}</option>
+                        {{ end }}
+                    </select>
+                </div>
+            </div>
+
+            <table class="list">
+                <tbody>
+                <tr>
+                    <th width="20">&nbsp;</th>
+                    <th width="20"><img src="{{ StaticUrl }}style/images/comment-grey-bubble.png"></th>
+                    <th>标题</th>
+                    <th width="60">作者</th>
+                    <th width="80">分类</th>
+                    <th width="80">日期</th>
+                    <th width="80">操作</th>
+                </tr>
+                {{ if not .Posts }}
+                <tr>
+                    <td colspan="7" align="center">还没有文章，来<a href="/admin/post/article">创建一篇</a>文章吧！
+                    </td>
+                </tr>
+                {{ else }}
+                {{ range .Posts }}
+                <tr>
+                    <td><input type="checkbox" name="ids" value="{{.Id}}"/></td>
+                    <td class="comment-num"><a href="/article/{{.Id}}#comment" target="_blank">0</a></td>
+                    <td><a href="/article/{{.Id}}">{{.Title}}</a>
+                    </td>
+                    <td>{{.NickName}}</td>
+                    <td><a href="/category/{{.Domain}}" target="_blank">{{.Name}}</a></td>
+                    <td>{{ DateFormat .UpdatedAt "2006-01-02" }}</td>
+                    <td><a href="/admin/post/article?id={{.Id}}">编辑</a><span class="line">|</span><a
+                            href="/admin/post/article_delete?id={{.Id}}"
+                            rel="confirmTodo" title="确定要删除该文章？">删除</a></td>
+                </tr>
+                {{ end }}
+                {{ end }}
+                </tbody>
+            </table>
+            <div class="operate clearfix">
+                <div class="fl">
+                    <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
+                    <select>
+                        <option value="" selected>批量操作</option>
+                        <option value="2">置顶</option>
+                        <option value="3">草稿</option>
+                        <option value="4">删除</option>
+                    </select>
+                </div>
+                {{ template "layout/pagination" . }}
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#list_form').find('select').change(function () {
+        $('#list_form').submit();
+    });
+</script>
+{{ template "layout/footer" . }}
+{{ end }}

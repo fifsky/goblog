@@ -2,7 +2,7 @@
 <ul class="paginator">
 {{if .Pager.HasPrevious}}
 <li>
-    <a href="/?page={{.Pager.Previous}}">&lt;上一页</a>
+    <a href="?page={{.Pager.Previous}}">&lt;上一页</a>
 </li>
 {{end}}
 
@@ -15,7 +15,7 @@
         <li class="normal">{{.Num}}</li>
         {{else}}
         <li>
-            <a href="/?page={{.Num}}">{{.Num}}</a>
+            <a href="?page={{.Num}}">{{.Num}}</a>
         </li>
          {{end}}
     {{end}}
@@ -23,7 +23,7 @@
 
 {{if .Pager.HasNext}}
 <li>
-    <a href="/?page={{.Pager.Next}}">下一页&gt;</a>
+    <a href="?page={{.Pager.Next}}">下一页&gt;</a>
 </li>
 {{end}}
 </ul>
