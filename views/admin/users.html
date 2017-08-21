@@ -1,0 +1,61 @@
+{{ define "admin/users" }}
+{{ template "layout/header" . }}
+<div id="pages" class="admin">
+    {{ template "layout/admin_tabs" . }}
+    <div id="content">
+        <h2>管理用户<?php if($login_user_info['user_type'] == 1){?><a href="<?php echo get_url('post/user');?>" class="add"><img class="ico" src="<?php echo resource_url('style/images/add.png');?>">新增用户</a><?php }?></h2>
+        <form class="nf" action="" method="post" autocomplete="off">
+            <div class="operate clearfix">
+                <div class="fl">
+                    <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
+                    <select name="gender">
+                        <option value="男" selected>批量操作</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+                <div class="fr">
+                    <input type="text" name="keyword" size="20" class="input_text" value="" />
+                    <input type="submit" class="inlinebutton" value="搜索" />
+                </div>
+            </div>
+
+            <table class="list">
+                <tbody>
+                <tr>
+                    <th width="20">&nbsp;</th>
+                    <th width="80">用户名</th>
+                    <th width="80">昵称</th>
+                    <th>邮箱</th>
+                    <th width="60">角色</th>
+                    <th width="60">文章</th>
+                    <th width="80">操作</th>
+                </tr>
+                <?php foreach($data['rs'] as $v){?>
+                <tr>
+                    <td><input type="checkbox" name="ids" value="<?php echo $v['user_id'];?>"/></td>
+                    <td><?php echo $v['user_name'];?></td>
+                    <td><?php echo $v['user_nickname'];?></td>
+                    <td><a href="mailto:<?php echo $v['user_email'];?>"><?php echo $v['user_email'];?></a></td>
+                    <td><?php echo $v['user_type'] == 1 ? '管理员':'编辑';?></td>
+                    <td class="art-num"><a href="">0</a></td>
+                    <td><?php if($login_user_info['user_type'] == 1 || $login_user_info['user_id'] == $v['user_id']){?><a href="<?php echo get_url('post/user',array('user_id'=>$v['user_id']));?>">编辑</a><?php }?><?php if($login_user_info['user_type'] == 1){?><span class="line">|</span><a href="<?php echo get_url('post/user_delete',array('user_id'=>$v['user_id']));?>" rel="confirmTodo" title="确定要删除该用户？">删除</a><?php }?></td>
+                </tr>
+                <?php }?>
+                </tbody>
+            </table>
+            <div class="operate clearfix">
+                <div class="fl">
+                    <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
+                    <select name="gender" value="男">
+                        <option value="男" selected>批量操作</option>
+                        <option value="女">女</option>
+                    </select>
+                </div>
+                <?php module('paginator');?>
+            </div>
+        </form>
+
+    </div>
+</div>
+{{ template "layout/footer" . }}
+{{ end }}

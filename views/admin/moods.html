@@ -1,0 +1,72 @@
+{{ define "admin/moods" }}
+{{ template "layout/header" . }}
+<div id="moods" class="admin">
+    {{ template "layout/admin_tabs" . }}
+    <div id="content" class="clearfix">
+        <h2>管理心情</h2>
+        <div class="col-left">
+            <form class="nf" action="<?php echo get_url('admin/moods');?>" method="post" autocomplete="off">
+                <div class="operate clearfix">
+                    <div class="fl">
+                        <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
+                        <select name="gender">
+                            <option value="男" selected>批量操作</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                </div>
+
+                <table class="list">
+                    <tbody>
+                    <tr>
+                        <th width="20">&nbsp;</th>
+                        <th width="80">作者</th>
+                        <th>评论</th>
+                        <th width="80">日期</th>
+                        <th width="80">操作</th>
+                    </tr>
+                    <?php if(!$data['rs']){?>
+                    <tr>
+                        <td colspan="7" align="center">还没有心情！</td>
+                    </tr>
+                    <?php }else{?>
+                    <?php foreach($data['rs'] as $v){?>
+                    <tr>
+                        <td><input type="checkbox" name="ids" value="<?php echo $v['mood_id'];?>"/></td>
+                        <td><?php echo $v['user_name'];?></td>
+                        <td><?php echo $v['mood_content'];?></td>
+                        <td><?php echo date('Y-m-d',$v['mood_date']);?></td>
+                        <td><a href="<?php echo get_url('admin/moods',array('mood_id'=>$v['mood_id']));?>">编辑</a><span class="line">|</span><a href="<?php echo get_url('post/mood_delete',array('mood_id'=>$v['mood_id']));?>" rel="confirmTodo" title="确定要删除该心情？">删除</a></td>
+                    </tr>
+                    <?php }?>
+                    <?php }?>
+
+                    </tbody>
+                </table>
+                <div class="operate clearfix">
+                    <div class="fl">
+                        <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
+                        <select name="gender" value="男">
+                            <option value="男" selected>批量操作</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                    <?php module('paginator',array('pager'=>$data['pager'],'nearer_page'=>1));?>
+                </div>
+            </form>
+        </div>
+        <div class="col-right">
+            <form class="vf" action="<?php echo get_url('save/mood');?>" method="post" autocomplete="off">
+                <p>
+                    <label class="label_input" >发表心情</label>
+                    <input type="hidden" name="mood_id" value="<?php echo ifset($mood_info,'mood_id');?>"/>
+                    <textarea name="mood_content" rows="5" cols="30"><?php echo ifset($mood_info,'mood_content');?></textarea>
+                </p>
+                <p class="act"><input class="formbutton" type="submit" value="<?php echo isset($mood_info['mood_id']) ? '修改' : '添加';?>"></p>
+            </form>
+        </div>
+
+    </div>
+</div>
+{{ template "layout/footer" . }}
+{{ end }}

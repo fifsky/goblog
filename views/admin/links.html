@@ -1,0 +1,102 @@
+{{ define "admin/links" }}
+{{ template "layout/header" . }}
+<div id="links" class="admin">
+    {{ template "layout/admin_tabs" . }}
+    <div id="content" class="clearfix">
+        <h2>管理链接</h2>
+        <div class="col-left">
+            <form class="nf" action="/admin/links" method="post" autocomplete="off">
+                <div class="operate clearfix">
+                    <div class="fl">
+                        <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
+                        <select name="gender">
+                            <option value="男" selected>批量操作</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                </div>
+
+                <table class="list">
+                    <tbody>
+                    <tr>
+                        <th width="20">&nbsp;</th>
+                        <th width="80">连接名</th>
+                        <th>地址</th>
+                        <th width="40">图片</th>
+                        <th width="80">操作</th>
+                    </tr>
+                    <?php if(!$data['rs']){?>
+                    <tr>
+                        <td colspan="5" align="center">还没有链接！</td>
+                    </tr>
+                    <?php }else{?>
+                    <?php foreach($data['rs'] as $v){?>
+                    <tr>
+                        <td><input type="checkbox" name="ids" value="<?php echo $v['link_id'];?>"/></td>
+                        <td><a href="<?php echo $v['link_url'];?>" target="_blank"><?php echo $v['link_name'];?></a></td>
+                        <td><a href="<?php echo $v['link_url'];?>" target="_blank"><?php echo $v['link_url'];?></a></td>
+                        <td><?php if($v['link_image']){?><img src="<?php echo $v['link_image'];?>" width="32" height="32" /><?php }?></td>
+                        <td><a href="<?php echo get_url('admin/links',array('link_id'=>$v['link_id']));?>">编辑</a><span class="line">|</span><a href="<?php echo get_url('post/link_delete',array('link_id'=>$v['link_id']));?>" rel="confirmTodo" title="确定要删除该分类？">删除</a></td>
+                    </tr>
+                    <?php }?>
+                    <?php }?>
+                    </tbody>
+                </table>
+                <div class="operate clearfix">
+                    <div class="fl">
+                        <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
+                        <select name="gender">
+                            <option value="男" selected>批量操作</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                    <?php module('paginator',array('pager'=>$data['pager'],'nearer_page'=>1));?>
+                </div>
+            </form>
+        </div>
+        <div class="col-right">
+            <form id="link_form" class="vf" action="<?php echo get_url('save/link');?>" method="post" autocomplete="off">
+                <p><label class="label_input">链接名称</label>
+                    <input type="hidden" name="link_id" value="<?php echo ifset($link_info,'link_id');?>"/>
+                    <input class="input_text" size="30" name="link_name" value="<?php echo ifset($link_info,'link_name');?>"></p>
+
+                <p><label class="label_input">链接地址</label>
+                    <input class="input_text" size="30" name="link_url" value="<?php echo ifset($link_info,'link_url');?>">
+                    <span class="hint">例如：http://fifsky.com/</span>
+                </p>
+                <p><label class="label_input">链接图片</label>
+                    <input class="input_text" size="30" name="link_image" value="<?php echo ifset($link_info,'link_image');?>">
+                    <span class="hint">需要以http://开头，留空表示没有链接图片</span>
+                </p>
+                <p>
+                    <label class="label_input">链接描述</label>
+                    <textarea name="link_desc" rows="5" cols="30"><?php echo ifset($link_info,'link_desc');?></textarea>
+                </p>
+
+                <p class="act"><input class="formbutton" type="submit" value="<?php echo isset($link_info['link_id']) ? '修改' : '添加';?>"></p>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#link_form').submit(function(){
+
+        var ok = true;
+
+        var $el = $('input[name="link_name"]');
+        if($.trim($el.val()) === ''){
+            $el.focus().closest('p').addClass('error');
+            ok = false;
+        }
+
+        $el = $('input[name="link_url"]');
+        if($.trim($el.val()) === ''){
+            $el.focus().closest('p').addClass('error');
+            ok = false;
+        }
+
+        return ok;
+    });
+</script>
+{{ template "layout/footer" . }}
+{{ end }}
