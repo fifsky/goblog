@@ -98,3 +98,12 @@ func Encrypt(plaintext []byte, keystring string) ([]byte, error) {
 
 	return ciphertext, nil
 }
+
+func InArray(find string , arr []string) bool {
+	for _ ,s := range arr{
+		if s == find {
+			return  true
+		}
+	}
+	return false
+}

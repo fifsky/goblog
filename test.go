@@ -1,8 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
 
 func main() {
 	//c := make(chan int)
@@ -22,12 +19,4 @@ func main() {
 	//}()
 	//<-o
 
-	m := map[string]string{
-		"a":"aa",
-		"b":"bb",
-	}
-
-	c := m["cc"]
-
-	fmt.Println(empty(c))
 }
