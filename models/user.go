@@ -4,20 +4,27 @@ import "time"
 
 // table users
 type Users struct {
-	Id        uint `xorm:"pk"`
-	Name      string    `xorm:"varchar(100) unique"`  //用户名
-	Password  string    `xorm:"varchar(100) notnull"` //密码
-	Email     string    `xorm:"varchar(100) notnull"` //邮箱
-	Type      uint8     `xorm:"notnull"`              //1:管理员,2:编辑
-	Status    uint8     `xorm:"notnull"`              //1正常，2删除
-	NickName  string    `xorm:"varchar(100) notnull"` // 昵称
-	CreatedAt time.Time `xorm:"created notnull"`
-	UpdatedAt time.Time `xorm:"updated notnull"`
+	Id        uint `form:"id" xorm:"pk"`
+	Name      string    `form:"name" xorm:"varchar(100) unique"`       //用户名
+	NickName  string    `form:"nick_name" xorm:"varchar(100) notnull"` // 昵称
+	Password  string    `form:"password" xorm:"varchar(100) notnull"`  //密码
+	Email     string    `form:"email" xorm:"varchar(100) notnull"`     //邮箱
+	Type      uint8     `form:"type" xorm:"notnull"`                   //1:管理员,2:编辑
+	Status    uint8     `form:"status" xorm:"notnull"`                 //1正常，2删除
+	CreatedAt time.Time `form:"-" xorm:"created notnull"`
+	UpdatedAt time.Time `form:"-" xorm:"updated notnull"`
 }
 
 func (u *Users) Get() (*Users, error) {
 	_, err := orm.Get(u)
 	return u, err
+}
+
+func (u *Users) GetList(start int, num int) ([]*Users, error) {
+	var users = make([]*Users, 0)
+	start = (start - 1) * num
+	err := orm.Limit(num, start).Find(&users)
+	return users, err
 }
 
 func (u *Users) All() ([]*Cates, error) {
@@ -32,6 +39,16 @@ func (u *Users) Insert() (int64, error) {
 }
 
 func (u *Users) Update() (int64, error) {
+	affected, err := orm.Id(u.Id).Update(u)
+	return affected, err
+}
+
+func (u *Users) Count() (int64, error) {
+	affected, err := orm.Count(u)
+	return affected, err
+}
+
+func (u *Users) Delete() (int64, error) {
 	affected, err := orm.Id(u.Id).Update(u)
 	return affected, err
 }

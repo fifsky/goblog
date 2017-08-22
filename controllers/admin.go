@@ -214,7 +214,6 @@ func AdminArticleDelete(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/admin/articles")
 }
 
-
 func AdminMoodGet(c *gin.Context) {
 	h := defaultH(c)
 
@@ -391,8 +390,8 @@ func AdminCatePost(c *gin.Context) {
 func AdminCateDelete(c *gin.Context) {
 	id, _ := helpers.StrTo(c.Query("id")).Uint()
 
-	post := &models.Posts{CateId:id}
-	total,_ := post.Count()
+	post := &models.Posts{CateId: id}
+	total, _ := post.Count()
 
 	if total > 0 {
 		c.JSON(http.StatusOK, gin.H{
@@ -412,4 +411,218 @@ func AdminCateDelete(c *gin.Context) {
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/cates")
+}
+
+func AdminLinkGet(c *gin.Context) {
+	h := defaultH(c)
+
+	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	if id > 0 {
+		linkModel := &models.Links{Id: id}
+		link, _ := linkModel.Get()
+		h["Link"] = link
+	}
+
+	num := 10
+
+	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
+	model := new(models.Links)
+	links, err := model.GetList(page, num)
+
+	h["Links"] = links
+
+	total, err := model.Count()
+	pager := pagination.New(int(total), num, page, 3)
+	h["Pager"] = pager
+
+	if err == nil {
+		c.HTML(http.StatusOK, "admin/links", h)
+	} else {
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+}
+
+func AdminLinkPost(c *gin.Context) {
+	links := &models.Links{}
+	if err := c.Bind(links); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "参数错误:" + err.Error(),
+		})
+		return
+	}
+
+	if links.Name == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "连接名称不能为空",
+		})
+		return
+	}
+
+	if links.Url == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "连接地址不能为空",
+		})
+		return
+	}
+
+	if links.Id > 0 {
+		if _, err := links.Update(); err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"statusCode": 201,
+				"message":    "更新失败",
+			})
+			logrus.Error(err)
+			return
+		}
+	} else {
+		if _, err := links.Insert(); err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"statusCode": 201,
+				"message":    "创建失败",
+			})
+			logrus.Error(err)
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"statusCode": 200,
+		"message":    "ok",
+	})
+}
+
+func AdminLinkDelete(c *gin.Context) {
+	id, _ := helpers.StrTo(c.Query("id")).Uint()
+
+	link := &models.Links{Id: id}
+	if _, err := link.Delete(); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "删除失败",
+		})
+		logrus.Error(err)
+		return
+	}
+	c.Redirect(http.StatusFound, "/admin/links")
+}
+
+func AdminUsersGet(c *gin.Context) {
+	h := defaultH(c)
+	num := 10
+
+	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
+	model := new(models.Users)
+	users, err := model.GetList(page, num)
+
+	h["Users"] = users
+
+	total, err := model.Count()
+	pager := pagination.New(int(total), num, page, 3)
+	h["Pager"] = pager
+
+	if err == nil {
+		c.HTML(http.StatusOK, "admin/users", h)
+	} else {
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+}
+
+func AdminUserGet(c *gin.Context) {
+	h := defaultH(c)
+	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	if id > 0 {
+		userModel := &models.Users{Id: id}
+		user, err := userModel.Get()
+		if err != nil{
+			c.JSON(http.StatusOK, gin.H{
+				"statusCode": 201,
+				"message":    "用户不存在",
+			})
+			return
+		}
+		h["User"] = user
+	}
+
+	c.HTML(http.StatusOK, "admin/post_user", h)
+}
+
+func AdminUserPost(c *gin.Context) {
+	users := &models.Users{}
+	if err := c.Bind(users); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "参数错误:" + err.Error(),
+		})
+		return
+	}
+
+	if users.Name == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "用户名不能为空",
+		})
+		return
+	}
+
+	if users.Password == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "密码不能为空",
+		})
+		return
+	}
+
+	if users.NickName == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "昵称不能为空",
+		})
+		return
+	}
+
+	users.Password = helpers.Md5(users.Password)
+
+	if users.Id > 0 {
+		if _, err := users.Update(); err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"statusCode": 201,
+				"message":    "更新失败",
+			})
+			logrus.Error(err)
+			return
+		}
+	} else {
+		if _, err := users.Insert(); err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"statusCode": 201,
+				"message":    "创建失败",
+			})
+			logrus.Error(err)
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"statusCode": 200,
+		"message":    "ok",
+	})
+}
+
+func AdminUserStatus(c *gin.Context) {
+	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	status, _ := helpers.StrTo(c.Query("status")).Uint8()
+
+	user := &models.Users{Id: id, Status: status}
+	if _, err := user.Delete(); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "删除失败",
+		})
+		logrus.Error(err)
+		return
+	}
+	c.Redirect(http.StatusFound, "/admin/users")
 }

@@ -3,7 +3,7 @@
 <div id="pages" class="admin">
     {{ template "layout/admin_tabs" . }}
     <div id="content">
-        <h2>管理用户<?php if($login_user_info['user_type'] == 1){?><a href="<?php echo get_url('post/user');?>" class="add"><img class="ico" src="<?php echo resource_url('style/images/add.png');?>">新增用户</a><?php }?></h2>
+        <h2>管理用户<a href="/admin/post/user" class="add"><img class="ico" src="{{.StaticUrl}}style/images/add.png">新增用户</a></h2>
         <form class="nf" action="" method="post" autocomplete="off">
             <div class="operate clearfix">
                 <div class="fl">
@@ -27,20 +27,36 @@
                     <th width="80">昵称</th>
                     <th>邮箱</th>
                     <th width="60">角色</th>
-                    <th width="60">文章</th>
+                    <th width="60">状态</th>
                     <th width="80">操作</th>
                 </tr>
-                <?php foreach($data['rs'] as $v){?>
+
+                {{ if .Users }}
+                {{ range .Users }}
                 <tr>
-                    <td><input type="checkbox" name="ids" value="<?php echo $v['user_id'];?>"/></td>
-                    <td><?php echo $v['user_name'];?></td>
-                    <td><?php echo $v['user_nickname'];?></td>
-                    <td><a href="mailto:<?php echo $v['user_email'];?>"><?php echo $v['user_email'];?></a></td>
-                    <td><?php echo $v['user_type'] == 1 ? '管理员':'编辑';?></td>
-                    <td class="art-num"><a href="">0</a></td>
-                    <td><?php if($login_user_info['user_type'] == 1 || $login_user_info['user_id'] == $v['user_id']){?><a href="<?php echo get_url('post/user',array('user_id'=>$v['user_id']));?>">编辑</a><?php }?><?php if($login_user_info['user_type'] == 1){?><span class="line">|</span><a href="<?php echo get_url('post/user_delete',array('user_id'=>$v['user_id']));?>" rel="confirmTodo" title="确定要删除该用户？">删除</a><?php }?></td>
+                    <td><input type="checkbox" name="ids" value="{{.Id}}"/></td>
+                    <td>{{.Name}}</td>
+                    <td>{{.NickName}}</td>
+                    <td><a href="mailto:{{.Email}}">{{.Email}}</a></td>
+                    <td>{{if eq .Type 1}}管理员{{else}}编辑{{end}}</td>
+                    <td>{{if eq .Status 1}}启用{{else}}<span style="color: red">停用</span>{{end}}</td>
+                    <td>
+                        <a href="/admin/post/user?id={{.Id}}">编辑</a>
+                        <span class="line">|</span>
+                        {{if eq .Status 1}}
+                        <a href="/admin/user_status?id={{.Id}}&status=2" rel="confirmTodo" title="确定要停用该用户？">停用</a>
+                        {{else}}
+                        <a href="/admin/user_status?id={{.Id}}&status=1" rel="confirmTodo" title="确定要启用该用户？">启用</a>
+                        {{end}}
+                    </td>
                 </tr>
-                <?php }?>
+                {{ end }}
+
+                {{ else }}
+                <tr>
+                    <td colspan="7" align="center">还没有用户！</td>
+                </tr>
+                {{ end }}
                 </tbody>
             </table>
             <div class="operate clearfix">
@@ -51,7 +67,7 @@
                         <option value="女">女</option>
                     </select>
                 </div>
-                <?php module('paginator');?>
+                {{ template "layout/pagination" . }}
             </div>
         </form>
 

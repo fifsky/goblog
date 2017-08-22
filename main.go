@@ -80,6 +80,18 @@ func main() {
 		admin.GET("/cates", controllers.AdminCateGet)
 		admin.POST("/cates", controllers.AdminCatePost)
 		admin.GET("/cate_delete", controllers.AdminCateDelete)
+
+
+		//链接
+		admin.GET("/links", controllers.AdminLinkGet)
+		admin.POST("/links", controllers.AdminLinkPost)
+		admin.GET("/link_delete", controllers.AdminLinkDelete)
+
+		//用户
+		admin.GET("/users", controllers.AdminUsersGet)
+		admin.GET("/post/user", controllers.AdminUserGet)
+		admin.POST("/post/user", controllers.AdminUserPost)
+		admin.GET("/user_status", controllers.AdminUserStatus)
 	}
 	router.Run(":8080")
 }

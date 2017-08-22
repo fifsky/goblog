@@ -3,44 +3,39 @@
 <div id="users" class="admin">
     {{ template "layout/admin_tabs" . }}
     <div id="content">
-        <h2><?php echo isset($user_info['user_id']) ? '编辑' : '新增';?>用户<a href="<?php echo get_url('admin/users');?>"><img class="ico" src="<?php echo resource_url('style/images/back.png');?>"/>返回列表</a></h2>
+        <h2>{{ if .User}}编辑{{else}}新增{{end}}用户<a href="/admin/users"><img class="ico" src="{{.StaticUrl}}style/images/back.png"/>返回列表</a></h2>
         <div class="message"></div>
-        <form id="user_form" class="vf" action="<?php echo get_url('save/user');?>" method="post" autocomplete="off">
+        <form id="user_form" class="vf" action="/admin/post/user" method="post" autocomplete="off">
 
             <p><label class="label_input">用户名 <span class="desc">(必填)</span></label>
-                <input type="hidden" name="user_id" value="<?php echo ifset($user_info,'user_id');?>"/>
-                <input class="input_text" size="50" name="user_name" value="<?php echo ifset($user_info,'user_name');?>"></p>
+                <input type="hidden" name="id" value="{{.User.Id}}"/>
+                <input class="input_text" size="50" name="name" value="{{.User.Name}}"></p>
             <span class="hint">此用户名将作为用户登录时所用的名称，请不要与系统中现有的用户名重复。</span>
             <p>
 
             <p><label class="label_input">邮箱 <span class="desc">(必填)</span></label>
-                <input class="input_text" size="50" name="user_email" value="<?php echo ifset($user_info,'user_email');?>"></p>
+                <input class="input_text" size="50" name="email" value="{{.User.Email}}"></p>
             <span class="hint">电子邮箱地址将作为此用户的主要联系方式，请不要与系统中现有的电子邮箱地址重复。</span>
             <p>
 
             <p><label class="label_input">昵称</label>
-                <input class="input_text" size="50" name="user_nickname" value="<?php echo ifset($user_info,'user_nickname');?>"></p>
+                <input class="input_text" size="50" name="nick_name" value="{{.User.NickName}}"></p>
             <span class="hint">用户昵称可以与用户名不同, 用于前台显示，如果你将此项留空，将默认使用用户名。</span>
 
             <p>
                 <label class="label_input">密码 <span class="desc">(必填)</span></label>
-                <input type="password" class="input_text" size="50" name="user_pass" value=""></p>
+                <input type="password" class="input_text" size="50" name="password" value=""></p>
             <span class="hint">为用户分配一个密码。</span>
 
             <p><label class="label_input">确认密码 <span class="desc">(必填)</span></label>
-                <input type="password" class="input_text" name="user_pass2" value="" size="50"/>
+                <input type="password" class="input_text" name="password2" value="" size="50"/>
                 <span class="hint">请确认你的密码，与上面输入的密码保持一致。</span>
             </p>
 
-            <p><label class="label_input">主页</label>
-                <input class="input_text" name="user_url" value="<?php echo ifset($user_info,'user_url');?>" size="50"/>
-                <span class="hint">此用户的个人主页地址, 请用http://开头。</span>
-            </p>
-
             <p><label class="label_input">角色 <span class="desc">(必填)</span></label>
-                <select name="user_type">
-                    <option value="1" <?php if(isset($user_info['user_type']) && $user_info['user_type'] == 1) echo 'selected';?>>管理员</option>
-                    <option value="2" <?php if(isset($user_info['user_type']) && $user_info['user_type'] == 2) echo 'selected';?>>编辑</option>
+                <select name="type">
+                    <option value="1" {{if .User}}{{if eq .User.Type 1}}selected{{end}}{{end}}>管理员</option>
+                    <option value="2" {{if .User}}{{if eq .User.Type 2}}selected{{end}}{{end}}>编辑</option>
                 </select>
                 <span class="hint">管理员具有所有操作权限，编辑仅能包含文章、评论、心情的操作权限。</span>
             </p>
@@ -54,26 +49,26 @@
     $('#user_form').submit(function(){
         var self = this;
 
-        var $el = $('input[name="user_name"]');
-        if($.trim($el.val()) == ''){
+        var $el = $('input[name="name"]');
+        if($.trim($el.val()) === ''){
             $el.focus().closest('p').addClass('error');
             return false;
         }
 
-        $el = $('input[name="user_email"]');
-        if($.trim($el.val()) == ''){
+        $el = $('input[name="email"]');
+        if($.trim($el.val()) === ''){
             $el.focus().closest('p').addClass('error');
             return false;
         }
 
-        $el = $('input[name="user_pass"]');
-        if($.trim($el.val()) == ''){
+        $el = $('input[name="password"]');
+        if($.trim($el.val()) === ''){
             $el.focus().closest('p').addClass('error');
             return false;
         }
 
-        $el2 = $('input[name="user_pass2"]');
-        if($.trim($el2.val()) == '' || $.trim($el.val()) != $.trim($el2.val())){
+        var $el2 = $('input[name="password2"]');
+        if($.trim($el2.val()) === '' || $.trim($el.val()) !== $.trim($el2.val())){
             $el2.focus().closest('p').addClass('error');
             return false;
         }
@@ -91,9 +86,9 @@
             },
             success: function(data) {
                 $.scrollTo($('body'),0);
-                if (data.statusCode == 200){
+                if (data.statusCode === 200){
                     $('.message').html(data.message).show();
-                    location.href = '<?php echo get_url('admin/users');?>';
+                    window.location.href = '/admin/users';
                 }else{
                     $('.message').addClass('notice').html(data.message).show();
                 }

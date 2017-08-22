@@ -1,12 +1,11 @@
 {{ define "layout/admin_tabs" }}
 <div class=tabs>
     <ul>
-        <li {{ if IsPage .UrlPath "admin/index" }}class="current"{{ end }}><a href="/admin/index">基本设置</a></li>
+        <li {{ if IsPage .UrlPath "admin/index" }}class="current"{{ end }}><a href="/admin/index">设置</a></li>
         <li {{ if IsPage .UrlPath "admin/articles" }}class="current"{{ end }}><a href="/admin/articles">文章</a></li>
         <li {{ if IsPage .UrlPath "admin/moods" }}class="current"{{ end }}><a href="/admin/moods">心情</a></li>
         <li {{ if IsPage .UrlPath "admin/cates" }}class="current"{{ end }}><a href="/admin/cates">分类</a></li>
-        <li {{ if IsPage .UrlPath "admin/links" }}class="current"{{ end }}><a href="/admin/links">友情链接</a></li>
-        <li {{ if IsPage .UrlPath "admin/pages" }}class="current"{{ end }}><a href="/admin/pages">页面</a></li>
+        <li {{ if IsPage .UrlPath "admin/links" }}class="current"{{ end }}><a href="/admin/links">链接</a></li>
         <li {{ if IsPage .UrlPath "admin/users" }}class="current"{{ end }}><a href="/admin/users">用户</a></li>
     </ul>
 </div>
