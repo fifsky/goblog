@@ -4,6 +4,7 @@
 
 ## 初始化
 1、创建数据库blog
+
 2、命令行执行
 ```
 go run main.go install
