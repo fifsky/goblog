@@ -104,8 +104,8 @@ DROP TABLE IF EXISTS `options`;
 
 CREATE TABLE `options` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(100) NOT NULL DEFAULT '',
-  `value` varchar(200) NOT NULL DEFAULT '',
+  `option_key` varchar(100) NOT NULL DEFAULT '',
+  `option_value` varchar(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `option_name` (`key`) USING BTREE
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -113,20 +113,12 @@ CREATE TABLE `options` (
 LOCK TABLES `options` WRITE;
 /*!40000 ALTER TABLE `options` DISABLE KEYS */;
 
-INSERT INTO `options` (`id`, `key`, `value`)
+INSERT INTO `options` (`id`, `option_key`, `option_value`)
 VALUES
 	(1,'site_name','無處告別'),
 	(2,'site_desc','回首往事，珍重眼前人'),
 	(3,'site_keyword','fifsky,rita,生活,博客,豆豆'),
-	(4,'comment_check','off'),
-	(5,'comment_email','on'),
-	(6,'comment_url','off'),
-	(7,'comment_close','off'),
-	(8,'comment_gravatar','on'),
-	(9,'comment_gravatar_level','G'),
-	(10,'post_num','10'),
-	(11,'page_suffix',''),
-	(12,'url_rewrite','on');
+	(4,'post_num','10'),
 
 /*!40000 ALTER TABLE `options` ENABLE KEYS */;
 UNLOCK TABLES;

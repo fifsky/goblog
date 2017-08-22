@@ -56,7 +56,7 @@ func (p *Posts) GetList(start int, num int) ([]*UserPosts, error) {
 }
 
 func (p *Posts) Count() (int64, error) {
-	total, err := orm.Where("id >?", 1).Count(p)
+	total, err := orm.Count(p)
 	return total, err
 }
 

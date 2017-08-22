@@ -9,7 +9,12 @@ import (
 )
 
 func IndexGet(c *gin.Context) {
-	num := 10
+	options := c.MustGet("options").(map[string]string)
+	num, err := helpers.StrTo(options["post_num"]).Int()
+	if err != nil || num < 1 {
+		num = 10
+	}
+
 	domain := c.Param("domain")
 	cate := &models.Cates{}
 

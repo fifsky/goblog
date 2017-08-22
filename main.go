@@ -15,6 +15,7 @@ import (
 	"time"
 	"fmt"
 	"flag"
+	"strings"
 )
 
 func main() {
@@ -60,11 +61,25 @@ func main() {
 
 	admin.Use(authLogin())
 	{
+		//网站设置
 		admin.GET("/index", controllers.AdminIndex)
+		admin.POST("/index", controllers.AdminIndexPost)
+
+		//文章管理
 		admin.GET("/articles", controllers.AdminArticlesGet)
 		admin.GET("/post/article", controllers.AdminArticleGet)
 		admin.POST("/post/article", controllers.AdminArticlePost)
 		admin.GET("/post/article_delete", controllers.AdminArticleDelete)
+
+		//心情
+		admin.GET("/moods", controllers.AdminMoodGet)
+		admin.POST("/moods", controllers.AdminMoodPost)
+		admin.GET("/mood_delete", controllers.AdminMoodDelete)
+
+		//分类
+		admin.GET("/cates", controllers.AdminCateGet)
+		admin.POST("/cates", controllers.AdminCatePost)
+		admin.GET("/cate_delete", controllers.AdminCateDelete)
 	}
 	router.Run(":8080")
 }
@@ -125,19 +140,36 @@ func setSessions(router *gin.Engine) {
 
 //middlewares
 func sharedData() gin.HandlerFunc {
+	global := &gin.Context{}
+
 	return func(c *gin.Context) {
 
-		//网站全局配置
-		optionModel := &models.Options{}
-		options, _ := optionModel.GetOptions()
-		c.Set("options", options)
+		if !strings.HasPrefix(c.Request.URL.Path, "/static") {
+			//网站全局配置
+			options := global.GetStringMapString("options")
+			if len(options) == 0 {
+				optionModel := &models.Options{}
+				options, _ = optionModel.GetOptions()
+				global.Set("options", options)
 
-		session := sessions.Default(c)
-		if uID := session.Get("UserId"); uID != nil {
-			userModel := &models.Users{Id: uID.(uint)}
-			user, _ := userModel.Get()
-			if user.Id != 0 {
-				c.Set("LoginUser", user)
+			}
+			c.Set("options", options)
+
+			session := sessions.Default(c)
+			if uid := session.Get("UserId"); uid != nil {
+				userI, exists := global.Get("LoginUser")
+				var user *models.Users
+				if exists {
+					user = userI.(*models.Users)
+				} else {
+					userModel := &models.Users{Id: uid.(uint)}
+					user, _ = userModel.Get()
+					global.Set("LoginUser", user)
+				}
+
+				if user.Id != 0 {
+					c.Set("LoginUser", user)
+				}
 			}
 		}
 		c.Next()

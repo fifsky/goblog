@@ -4,8 +4,9 @@
     {{ template "layout/admin_tabs" . }}
     <div id="content" class="clearfix">
         <h2>管理心情</h2>
+        <div class="message">保存成功</div>
         <div class="col-left">
-            <form class="nf" action="<?php echo get_url('admin/moods');?>" method="post" autocomplete="off">
+            <form class="nf" action="/admin/moods" method="post" autocomplete="off">
                 <div class="operate clearfix">
                     <div class="fl">
                         <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
@@ -25,22 +26,22 @@
                         <th width="80">日期</th>
                         <th width="80">操作</th>
                     </tr>
-                    <?php if(!$data['rs']){?>
+                    {{ if .Moods }}
+                    {{ range .Moods }}
+                    <tr>
+                        <td><input type="checkbox" name="ids" value="{{.Id}}"/></td>
+                        <td>{{.NickName}}</td>
+                        <td>{{.Content}}</td>
+                        <td>{{ DateFormat .CreatedAt "2006-01-02" }}</td>
+                        <td><a href="/admin/moods?id={{.Id}}">编辑</a><span class="line">|</span><a
+                                href="/admin/mood_delete?id={{.Id}}" rel="confirmTodo" title="确定要删除该心情？">删除</a></td>
+                    </tr>
+                    {{ end }}
+                    {{ else }}
                     <tr>
                         <td colspan="7" align="center">还没有心情！</td>
                     </tr>
-                    <?php }else{?>
-                    <?php foreach($data['rs'] as $v){?>
-                    <tr>
-                        <td><input type="checkbox" name="ids" value="<?php echo $v['mood_id'];?>"/></td>
-                        <td><?php echo $v['user_name'];?></td>
-                        <td><?php echo $v['mood_content'];?></td>
-                        <td><?php echo date('Y-m-d',$v['mood_date']);?></td>
-                        <td><a href="<?php echo get_url('admin/moods',array('mood_id'=>$v['mood_id']));?>">编辑</a><span class="line">|</span><a href="<?php echo get_url('post/mood_delete',array('mood_id'=>$v['mood_id']));?>" rel="confirmTodo" title="确定要删除该心情？">删除</a></td>
-                    </tr>
-                    <?php }?>
-                    <?php }?>
-
+                    {{ end }}
                     </tbody>
                 </table>
                 <div class="operate clearfix">
@@ -51,22 +52,52 @@
                             <option value="女">女</option>
                         </select>
                     </div>
-                    <?php module('paginator',array('pager'=>$data['pager'],'nearer_page'=>1));?>
+                    {{ template "layout/pagination" . }}
                 </div>
             </form>
         </div>
         <div class="col-right">
-            <form class="vf" action="<?php echo get_url('save/mood');?>" method="post" autocomplete="off">
+            <form id="mood_form" class="vf" action="/admin/moods" method="post" autocomplete="off">
                 <p>
-                    <label class="label_input" >发表心情</label>
-                    <input type="hidden" name="mood_id" value="<?php echo ifset($mood_info,'mood_id');?>"/>
-                    <textarea name="mood_content" rows="5" cols="30"><?php echo ifset($mood_info,'mood_content');?></textarea>
+                    <label class="label_input">发表心情</label>
+                    <input type="hidden" name="id" value="{{.Mood.Id}}"/>
+                    <textarea name="content" rows="5"
+                              cols="30">{{.Mood.Content}}</textarea>
                 </p>
-                <p class="act"><input class="formbutton" type="submit" value="<?php echo isset($mood_info['mood_id']) ? '修改' : '添加';?>"></p>
+                <p class="act"><input class="formbutton" type="submit"
+                                      value="{{if .Mood}}修改{{else}}添加{{end}}"></p>
             </form>
         </div>
 
     </div>
 </div>
+<script type="text/javascript">
+    $('#mood_form').submit(function () {
+        var self = this;
+
+        $.ajax({
+            'url': $(this).attr('action'),
+            'type': this.method,
+            'data': $(this).serializeArray(),
+            'dataType': 'json',
+            beforeSend: function (xhr) {
+                $(self).find(':submit').addClass('formdisabled').attr('disabled', true);
+            },
+            error: function () {
+                $(self).find(':submit').addClass('formdisabled').attr('disabled', true);
+            },
+            success: function (data) {
+                if (data.statusCode === 200) {
+                    window.location.reload();
+                } else {
+                    $('.message').html(data.message).show();
+                }
+            }
+        });
+
+        return false;
+    });
+</script>
+
 {{ template "layout/footer" . }}
 {{ end }}

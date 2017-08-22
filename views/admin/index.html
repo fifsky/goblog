@@ -8,23 +8,23 @@
         <form id="settings_form" class="nf" action="/admin/index" method="post" autocomplete="off">
             <p>
                 <label class="label_input">站点名称</label>
-                <input type="text" class="input_text" size="50" name="site_name" value="{{ .options.site_name }}"/>
+                <input type="text" class="input_text" size="50" name="site_name" value="{{ .Options.site_name }}"/>
                 <span class="hint">站点的名称将显示在网页的标题处。</span>
             </p>
             <p>
                 <label class="label_input">站点描述</label>
-                <textarea name="site_desc" rows="3" cols="50">{{ .options.site_desc }}</textarea>
+                <textarea name="site_desc" rows="3" cols="50">{{ .Options.site_desc }}</textarea>
                 <span class="hint">站点描述将显示在网页代码的头部。</span>
             </p>
             <p>
                 <label class="label_input">关键字</label>
-                <input type="text" class="input_text" size="50" name="site_keyword" value="{{ .options.site_keyword }}"/>
+                <input type="text" class="input_text" size="50" name="site_keyword" value="{{ .Options.site_keyword }}"/>
                 <span class="hint">请以半角逗号","分割多个关键字。</span>
             </p>
 
             <p>
                 <label class="label_input">每页显示文章数</label>
-                <input class="input_text" style="width: 50px" name="post_num" type="text" value="{{ .options.post_num }}"/>
+                <input class="input_text" style="width: 50px" name="post_num" type="text" value="{{ .Options.post_num }}"/>
             </p>
 
             <p class="act"><input class="formbutton" type="submit" value=保存></p>

@@ -11,6 +11,7 @@ func Handle404(c *gin.Context) {
 
 func HandleMessage(c *gin.Context, message string) {
 	c.JSON(http.StatusNotFound, gin.H{
-		"message": message,
+		"staticCode": 404,
+		"message":    message,
 	})
 }

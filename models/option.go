@@ -1,9 +1,9 @@
 package models
 
 type Options struct {
-	Id    uint `xorm:"pk"`
-	Key   string `xorm:"varchar(100) notnull unique"`
-	Value string `xorm:"varchar(200) notnull"`
+	Id          uint `xorm:"pk"`
+	OptionKey   string `xorm:"varchar(100) notnull unique"`
+	OptionValue string `xorm:"varchar(200) notnull"`
 }
 
 func (o *Options) GetOptions() (map[string]string, error) {
@@ -16,7 +16,7 @@ func (o *Options) GetOptions() (map[string]string, error) {
 	}
 
 	for _, v := range options {
-		options2[v.Key] = v.Value
+		options2[v.OptionKey] = v.OptionValue
 	}
 
 	return options2, nil
@@ -28,6 +28,6 @@ func (o *Options) Insert() (int64, error) {
 }
 
 func (o *Options) Update() (int64, error) {
-	affected, err := orm.Id(o.Id).Update(o)
+	affected, err := orm.Where("option_key = ?", o.OptionKey).Update(o)
 	return affected, err
 }

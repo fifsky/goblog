@@ -9,11 +9,13 @@ import (
 
 func defaultH(c *gin.Context) gin.H {
 	user, _ := c.Get("LoginUser")
-	options := c.MustGet("options").(map[string]string)
+	options := c.GetStringMapString("options")
 
 	h := gin.H{
-		"SiteTitle": options["site_name"],
-		"LoginUser": user,
+		"SiteTitle":   options["site_title"],
+		"SiteKeyword": options["site_keyword"],
+		"SiteDesc":    options["site_desc"],
+		"LoginUser":   user,
 	}
 
 	url := strings.Split(c.Request.URL.Path, "/")
