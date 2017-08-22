@@ -14,14 +14,27 @@ import (
 	"os"
 	"time"
 	"fmt"
+	"flag"
 )
 
 func main() {
+	system.LoadConfig()
+	connectDB()
+
+	flag.Parse()
+	cmd := flag.Arg(0)
+	if cmd == "install" {
+		_, err := models.ImportDB()
+		if err != nil {
+			fmt.Println("Import DB Error:" + err.Error())
+			logrus.Error(err)
+		}
+		return
+	}
+
 	gin.SetMode(gin.DebugMode)
 	f := setLogger()
 	defer f.Close()
-	system.LoadConfig()
-	connectDB()
 
 	router := gin.Default()
 	router.Use(ginrus.Ginrus(logrus.StandardLogger(), time.RFC3339, true))

@@ -33,37 +33,14 @@
         </ul>
     </div>
 
-    <!--
-        <div class="sect">
-            <h2>最新评论</h2>
-            <ul class="tlist">
-                //foreach($comments as $v){
-                <li><a href="//echo get_url('article/'.$v['post_id']);?>#comment">//echo htmlspecialchars($v['comment_content']);
-                </a></li>
-                 //}
-            </ul>
-        </div>
-    -->
-    <div class="sect">
-        <h2>最新评论</h2>
-        <ul class="ds-recent-comments" data-num-items="10" data-show-avatars="0" data-show-title="0"></ul>
-    </div>
-
     <div class="sect">
         <h2>我关注的</h2>
         <ul class="tlist">
-            <li><a title="" href="http://crazyphper.com/" target="_blank"><span>konakona</span></a></li>
-            <li><a title="" href="http://weibo.com/u/1774249523" target="_blank"><span>小空o0</span></a></li>
-            <li><a title="" href="http://weibo.com/edoing" target="_blank"><span>Swen1985</span></a></li>
-            <li><a title="" href="http://weibo.com/linghuaqiang" target="_blank"><span>blue1986</span></a></li>
-            <li><a title="" href="http://weibo.com/brucellll" target="_blank"><span>bruce_baby</span></a></li>
-            <li><a title="" href="http://weibo.com/u/1661491540" target="_blank"><span>周静涛</span></a></li>
-            <li><a title="" href="http://weibo.com/tsredis" target="_blank"><span>萝卜</span></a></li>
-            <li><a title="" href="http://weibo.com/snowsnow1" target="_blank"><span>snow</span></a></li>
-            <li><a title="" href="http://handaoliang.com/" target="_blank"><span>老韩</span></a></li>
-            <li><a title="" href="http://weibo.com/mielove" target="_blank"><span>isno</span></a></li>
-            <li><a title="" href="http://weibo.com/knighte" target="_blank"><span>Yes_KE</span></a></li>
-            <li><a title="" href="http://weibo.com/yuanzi" target="_blank"><span>圆子</span></a></li>
+            {{ range .Links }}
+            <li>
+                <a title="" href="{{.Url}}" target="_blank"><span>{{.Name}}</span></a>
+            </li>
+            {{ end }}
         </ul>
     </div>
     <div class="rss">

@@ -32,8 +32,15 @@ func defaultH(c *gin.Context) gin.H {
 			logrus.Error(err)
 		}
 
+		linkModel := new(models.Links)
+		links, err := linkModel.All()
+		if err != nil {
+			logrus.Error(err)
+		}
+
 		h["Mood"] = mood
 		h["Cates"] = cates
+		h["Links"] = links
 
 		h["IsAdminPage"] = false
 	} else {

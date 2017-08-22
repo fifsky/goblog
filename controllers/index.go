@@ -23,6 +23,7 @@ func IndexGet(c *gin.Context) {
 	if cate.Id > 0 {
 		postModel.CateId = cate.Id
 	}
+
 	posts, err := postModel.GetList(page, num)
 
 	h := defaultH(c)

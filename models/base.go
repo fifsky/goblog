@@ -6,6 +6,7 @@ import (
 	"github.com/fifsky/goblog/system"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
+	"database/sql"
 )
 
 var orm *xorm.Engine
@@ -21,4 +22,10 @@ func InitDB() (*xorm.Engine, error) {
 	orm.SetMaxOpenConns(20)
 	orm.ShowSQL(true)
 	return orm, err
+}
+
+func ImportDB() ([]sql.Result, error) {
+	sqlpath := "./db/blog.sql"
+	rst, err := orm.ImportFile(sqlpath)
+	return rst, err
 }
