@@ -4,3 +4,6 @@ glide.lock
 proxy
 /views_bak
 /templates
+rsync.exclude
+rsync.password
+rsync.sh
