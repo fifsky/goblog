@@ -12,7 +12,6 @@
                 <div class="col-left">
                     <p><label class="label_input">标题</label>
                         <input type="hidden" name="id" value="{{.Post.Id}}"/>
-                        <input type="hidden" name="type" value="1"/>
                         <input type="text" class="input_text" maxlength="200" size="50" name="title"
                                value="{{.Post.Title}}"/></p>
                     <p>
@@ -25,24 +24,29 @@
                             {{ end }}
                         </select>
                     </p>
-                    <!--<p><label class="label_input">标签</label>-->
-                        <!--<input type="text" class="input_text" maxlength="200" size="50" name="post_tags"-->
-                               <!--value=""/>-->
-                        <!--<span class="hint">请以半角逗号","分割多个标签。</span>-->
-                    <!--</p>-->
+                    <p><label class="label_input">缩略名</label>
+                        <input type="text" class="input_text" maxlength="200" size="50" name="url"
+                               value="{{.Post.Url}}"/>
+                        <span class="hint">页面的URL名称，如红色部分http://domain.com/<span style="color: red;">about</span></span>
+                    </p>
                 </div>
                 <div class="col-right">
-                    <!--<p><label class="label_input">权限</label>-->
-                        <!--<input class="input_check" name="comment_status" type="checkbox"-->
-                               <!--value="1"/> 允许评论-->
-                        <!--<br/>-->
+                    <p><label class="label_input">类型</label>
+                        {{ if .Post }}
+                        <input class="input_check" name="type" type="radio" value="1" {{if eq .Post.Type 1}}checked{{end}}/> 文章
+                        <input class="input_check" name="type" type="radio" value="2" {{if eq .Post.Type 2}}checked{{end}}/> 页面
+                        {{ else }}
+                        <input class="input_check" name="type" type="radio" value="1" checked/> 文章
+                        <input class="input_check" name="type" type="radio" value="2"/> 页面
+                        {{ end }}
+                        <br/>
                         <!--<select name="power">-->
                             <!--<option value="1">公开</option>-->
                             <!--<option value="2">私密</option>-->
                         <!--</select>-->
                         <!--<input style="display: none" type="text" class="input_text" name="post_password"-->
                                <!--value="" size="20"/>-->
-                    <!--</p>-->
+                    </p>
                 </div>
             </div>
             <p>

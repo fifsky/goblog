@@ -29,6 +29,7 @@ func IndexGet(c *gin.Context) {
 		postModel.CateId = cate.Id
 	}
 
+	postModel.Type = 1
 	posts, err := postModel.GetList(page, num)
 
 	h := defaultH(c)
@@ -47,14 +48,25 @@ func IndexGet(c *gin.Context) {
 
 func ArticleGet(c *gin.Context) {
 	id, _ := helpers.StrTo(c.Param("id")).Uint()
+	url := c.GetString("url")
 	postModel := &models.Posts{Id: id}
-	post, err := postModel.Get()
+
+	if url != "" {
+		postModel.Url = url
+	}
+
+	post, has := postModel.Get()
+
+	if !has {
+		HandleMessage(c, "文章不存在", "您访问的文章不存在或已经删除！")
+		return
+	}
 
 	cateModel := &models.Cates{Id: post.CateId}
-	cate, err := cateModel.Get()
+	cate, _ := cateModel.Get()
 
 	userModel := &models.Users{Id: post.UserId}
-	user, err := userModel.Get()
+	user, _ := userModel.Get()
 
 	newpost := &models.UserPosts{Posts: *post, Name: cate.Name, Domain: cate.Domain, NickName: user.NickName}
 
@@ -62,9 +74,21 @@ func ArticleGet(c *gin.Context) {
 	h["Title"] = post.Title
 	h["Post"] = newpost
 
-	if err == nil {
-		c.HTML(http.StatusOK, "index/article", h)
-	} else {
-		c.AbortWithStatus(http.StatusInternalServerError)
+	if url == "" {
+		prev, has := postModel.Prev(post.Id)
+		if has {
+			h["Prev"] = prev
+		}
+		next, has := postModel.Next(post.Id)
+		if has {
+			h["Next"] = next
+		}
 	}
+
+	c.HTML(http.StatusOK, "index/article", h)
+}
+
+func AboutGet(c *gin.Context) {
+	c.Set("url", "about")
+	ArticleGet(c)
 }

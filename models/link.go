@@ -1,18 +1,25 @@
 package models
 
-import "time"
+import (
+	"time"
+	"github.com/sirupsen/logrus"
+)
 
 type Links struct {
-	Id        uint 		`form:"id" xorm:"pk"`
+	Id        uint        `form:"id" xorm:"pk"`
 	Name      string    `form:"name" xorm:"varchar(100) unique"`
 	Url       string    `form:"url" xorm:"varchar(200)"`
 	Desc      string    `form:"desc" xorm:"varchar(255) notnull"`
 	CreatedAt time.Time `form:"-" xorm:"created notnull"`
 }
 
-func (l *Links) Get() (*Links, error) {
-	_, err := orm.Get(l)
-	return l, err
+func (l *Links) Get() (*Links, bool) {
+	has, err := orm.Get(l)
+	if err != nil {
+		logrus.Error(err)
+		return l, false
+	}
+	return l, has
 }
 
 func (l *Links) GetList(start int, num int) ([]*Links, error) {

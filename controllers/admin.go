@@ -66,13 +66,10 @@ func LoginPost(c *gin.Context) {
 	}
 
 	userModel := &models.Users{Name: user_name}
-	user, err := userModel.Get()
+	user, has := userModel.Get()
 
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "用户不存在:" + err.Error(),
-		})
+	if has {
+		HandleMessage(c,"用户不存在","您访问的用户不存在或已经删除！")
 		return
 	}
 
@@ -535,12 +532,9 @@ func AdminUserGet(c *gin.Context) {
 	id, _ := helpers.StrTo(c.Query("id")).Uint()
 	if id > 0 {
 		userModel := &models.Users{Id: id}
-		user, err := userModel.Get()
-		if err != nil{
-			c.JSON(http.StatusOK, gin.H{
-				"statusCode": 201,
-				"message":    "用户不存在",
-			})
+		user, has := userModel.Get()
+		if has {
+			HandleMessage(c,"用户不存在","您访问的用户不存在或已经删除！")
 			return
 		}
 		h["User"] = user

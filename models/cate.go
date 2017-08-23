@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"time"
+	"github.com/sirupsen/logrus"
+)
 
 type Cates struct {
 	Id        uint 		`form:"id" xorm:"pk"`
@@ -11,9 +14,13 @@ type Cates struct {
 	UpdatedAt time.Time `form:"-" xorm:"updated notnull"`
 }
 
-func (c *Cates) Get() (*Cates, error) {
-	_, err := orm.Get(c)
-	return c, err
+func (c *Cates) Get() (*Cates, bool) {
+	has, err := orm.Get(c)
+	if err != nil {
+		logrus.Error(err)
+		return c, false
+	}
+	return c, has
 }
 
 func (c *Cates) GetList(start int, num int) ([]*Cates, error) {

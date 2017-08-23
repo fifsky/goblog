@@ -50,6 +50,7 @@ func main() {
 
 	router.NoRoute(controllers.Handle404)
 	router.GET("/", controllers.IndexGet)
+	router.GET("/about", controllers.AboutGet)
 	router.GET("/article/:id", controllers.ArticleGet)
 	router.GET("/categroy/:domain", controllers.IndexGet)
 
@@ -80,7 +81,6 @@ func main() {
 		admin.GET("/cates", controllers.AdminCateGet)
 		admin.POST("/cates", controllers.AdminCatePost)
 		admin.GET("/cate_delete", controllers.AdminCateDelete)
-
 
 		//链接
 		admin.GET("/links", controllers.AdminLinkGet)

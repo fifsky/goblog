@@ -2,6 +2,7 @@ package models
 
 import (
 	"time"
+	"github.com/sirupsen/logrus"
 )
 
 // table posts
@@ -11,7 +12,7 @@ type Posts struct {
 	Type      uint8        `form:"type" xorm:"notnull" json:"type"`
 	UserId    uint         `form:"-" xorm:"notnull" json:"user_id"`
 	Title     string       `form:"title" xorm:"varchar(200) notnull" json:"title"`
-	Url       string       `form:"-" xorm:"varchar(100) notnull" json:"url"`
+	Url       string       `form:"url" xorm:"varchar(100) notnull" json:"url"`
 	Content   string       `form:"content" xorm:"longtext notnull" json:"content"`
 	CreatedAt time.Time    `form:"-" xorm:"created notnull"`
 	UpdatedAt time.Time    `form:"-" xorm:"updated notnull"`
@@ -28,9 +29,33 @@ func (UserPosts) TableName() string {
 	return "posts"
 }
 
-func (p *Posts) Get() (*Posts, error) {
-	_, err := orm.Get(p)
-	return p, err
+func (p *Posts) Get() (*Posts, bool) {
+	has, err := orm.Get(p)
+	if err != nil {
+		logrus.Error(err)
+		return p, false
+	}
+	return p, has
+}
+
+func (p *Posts) Prev(id uint) (*Posts, bool) {
+	post := &Posts{}
+	has, err := orm.Where("id < ? and type = 1", id).Desc("id").Limit(1).Get(post)
+	if err != nil {
+		logrus.Error(err)
+		return post, false
+	}
+	return post, has
+}
+
+func (p *Posts) Next(id uint) (*Posts, bool) {
+	post := &Posts{}
+	has, err := orm.Where("id > ? and type = 1", id).Asc("id").Limit(1).Get(post)
+	if err != nil {
+		logrus.Error(err)
+		return post, false
+	}
+	return post, has
 }
 
 func (p *Posts) GetList(start int, num int) ([]*UserPosts, error) {
@@ -46,6 +71,10 @@ func (p *Posts) GetList(start int, num int) ([]*UserPosts, error) {
 
 	if p.CateId > 0 {
 		orm.Where("posts.cate_id = ?", p.CateId)
+	}
+
+	if p.Type > 0 {
+		orm.Where("posts.type = ?", p.Type)
 	}
 
 	orm.Desc("posts.id")

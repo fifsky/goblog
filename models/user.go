@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"time"
+	"github.com/sirupsen/logrus"
+)
 
 // table users
 type Users struct {
@@ -15,9 +18,13 @@ type Users struct {
 	UpdatedAt time.Time `form:"-" xorm:"updated notnull"`
 }
 
-func (u *Users) Get() (*Users, error) {
-	_, err := orm.Get(u)
-	return u, err
+func (u *Users) Get() (*Users, bool) {
+	has, err := orm.Get(u)
+	if err != nil {
+		logrus.Error(err)
+		return u, false
+	}
+	return u, has
 }
 
 func (u *Users) GetList(start int, num int) ([]*Users, error) {

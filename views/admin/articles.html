@@ -40,6 +40,7 @@
                     <th>标题</th>
                     <th width="60">作者</th>
                     <th width="80">分类</th>
+                    <th width="80">类型</th>
                     <th width="80">日期</th>
                     <th width="80">操作</th>
                 </tr>
@@ -57,6 +58,7 @@
                     </td>
                     <td>{{.NickName}}</td>
                     <td><a href="/category/{{.Domain}}" target="_blank">{{.Name}}</a></td>
+                    <td>{{ if eq .Type 1 }}文章{{else}}页面{{end}}</a></td>
                     <td>{{ DateFormat .UpdatedAt "2006-01-02" }}</td>
                     <td><a href="/admin/post/article?id={{.Id}}">编辑</a><span class="line">|</span><a
                             href="/admin/post/article_delete?id={{.Id}}"

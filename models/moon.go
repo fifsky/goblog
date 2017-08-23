@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"time"
+	"github.com/sirupsen/logrus"
+)
 
 type Moods struct {
 	Id        uint        `form:"id" xorm:"pk"`
@@ -23,9 +26,13 @@ func (m *Moods) Frist() (*Moods, error) {
 	return m, err
 }
 
-func (m *Moods) Get() (*Moods, error) {
-	_, err := orm.Get(m)
-	return m, err
+func (m *Moods) Get() (*Moods, bool) {
+	has, err := orm.Get(m)
+	if err != nil {
+		logrus.Error(err)
+		return m, false
+	}
+	return m, has
 }
 
 func (m *Moods) GetList(start int, num int) ([]*UserMoods, error) {

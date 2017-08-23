@@ -4,9 +4,23 @@
     {{ template "layout/mood" .Mood }}
     {{ template "layout/tabs" . }}
     <div id="content">
-        {{ template "layout/article" .Post }}
+        <div class="article-single">
+            {{ template "layout/article" .Post }}
+            {{ template "layout/article_nav" . }}
+        </div>
+        <div class="comment" id="comments">
+            <h3><span class="commsty">评论内容</span></h3>
+            <div id="SOHUCS" sid="{{.Post.Id}}"></div>
+        </div>
     </div>
 </div>
 {{ template "layout/sidebar" . }}
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cytb6C1ms',
+        conf: 'prod_7f839f2099f531883b136ee323b16f89'
+    });
+</script>
 {{ template "layout/footer" . }}
 {{ end }}
