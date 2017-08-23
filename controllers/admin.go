@@ -68,7 +68,7 @@ func LoginPost(c *gin.Context) {
 	userModel := &models.Users{Name: user_name}
 	user, has := userModel.Get()
 
-	if has {
+	if !has {
 		HandleMessage(c, "用户不存在", "您访问的用户不存在或已经删除！")
 		return
 	}
@@ -533,7 +533,7 @@ func AdminUserGet(c *gin.Context) {
 	if id > 0 {
 		userModel := &models.Users{Id: id}
 		user, has := userModel.Get()
-		if has {
+		if !has {
 			HandleMessage(c, "用户不存在", "您访问的用户不存在或已经删除！")
 			return
 		}

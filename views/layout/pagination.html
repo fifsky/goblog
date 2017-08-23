@@ -9,7 +9,6 @@
 {{range .Pager.Pages}}
     {{if eq .Num -1}}
         ...
-    <li class="current">...</li>
     {{else}}
         {{if .IsCurrent}}
         <li class="normal">{{.Num}}</li>

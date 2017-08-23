@@ -45,18 +45,28 @@ func StaticUrl(url ...string) string {
 	return "/static/"
 }
 
-func IsPage(url string, page string) bool {
-	url = strings.Trim(url, "/")
-	page = strings.Trim(page, "/")
+func IsPage(url ...string) bool {
 
-	urls := strings.Split(url, "/")
-	pages := strings.Split(page, "/")
-
-	plen := len(pages)
-
-	if plen == 0 || len(urls) < plen {
+	if len(url) < 2 {
 		return false
 	}
-	suburls := urls[:plen]
-	return strings.Join(suburls, "/") == strings.Join(pages, "/")
+
+	currurl := strings.Trim(url[0], "/")
+	currurls := strings.Split(currurl, "/")
+	exists := false
+
+	for _, page := range url[1:] {
+		page = strings.Trim(page, "/")
+		pages := strings.Split(page, "/")
+		plen := len(pages)
+
+		if plen == 0 || len(currurls) < plen {
+			continue
+		}
+
+		suburls := currurls[:plen]
+		exists = strings.Join(suburls, "/") == strings.Join(pages, "/")
+	}
+
+	return exists
 }
