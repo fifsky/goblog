@@ -58,7 +58,12 @@ func (p *Posts) Next(id uint) (*Posts, bool) {
 	return post, has
 }
 
-func (p *Posts) GetList(start int, num int) ([]*UserPosts, error) {
+func (p *Posts) Archive() ([]map[string]string, error) {
+	result, err := orm.QueryString("select ym,count(ym) total from (select DATE_FORMAT(created_at,'%Y/%m') as ym from posts where type = 1) s group by ym order by ym desc")
+	return result, err
+}
+
+func (p *Posts) GetList(start int, num int, artdate string) ([]*UserPosts, error) {
 	var posts = make([]*UserPosts, 0)
 	start = (start - 1) * num
 	//err := orm.Limit(num, start).Find(&posts)
@@ -75,6 +80,10 @@ func (p *Posts) GetList(start int, num int) ([]*UserPosts, error) {
 
 	if p.Type > 0 {
 		orm.Where("posts.type = ?", p.Type)
+	}
+
+	if artdate != "" {
+		orm.Where("DATE_FORMAT(posts.created_at,'%Y-%m') = ?", artdate)
 	}
 
 	orm.Desc("posts.id")

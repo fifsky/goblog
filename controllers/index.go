@@ -23,6 +23,14 @@ func IndexGet(c *gin.Context) {
 		cate.Get()
 	}
 
+	artdate := ""
+	year := c.Param("year")
+	month := c.Param("month")
+
+	if year != "" && month != "" {
+		artdate = year + "-" + month
+	}
+
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
 	postModel := new(models.Posts)
 	if cate.Id > 0 {
@@ -30,7 +38,7 @@ func IndexGet(c *gin.Context) {
 	}
 
 	postModel.Type = 1
-	posts, err := postModel.GetList(page, num)
+	posts, err := postModel.GetList(page, num, artdate)
 
 	h := defaultH(c)
 	h["Posts"] = posts

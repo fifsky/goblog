@@ -11,7 +11,73 @@
     </div>
 
     <div class="sect">
-        <div id="blog-calendar"><table class="canlender"><tbody><tr><td><a href="javascript:void(0);" class="_cal_handel _prev_year">&lt;&lt;</a></td><td><a href="javascript:void(0);" class="_cal_handel _prev_month">&lt;</a></td><td colspan="3">2017-08</td><td><a href="javascript:void(0);" class="_cal_handel _next_month">&gt;</a></td><td><a href="javascript:void(0);" class="_cal_handel _next_year">&gt;&gt;</a></td></tr><tr><td class="happy">日</td><td>一</td><td>二</td><td>三</td><td>四</td><td>五</td><td class="happy">六</td></tr><tr><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr><tr><td>13</td><td>14</td><td>15</td><td class="today">16</td><td>17</td><td>18</td><td>19</td></tr><tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr><tr><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td></tr></tbody></table></div>
+        <div id="blog-calendar">
+            <table class="canlender">
+                <tbody>
+                <tr>
+                    <td><a href="javascript:void(0);" class="_cal_handel _prev_year">&lt;&lt;</a></td>
+                    <td><a href="javascript:void(0);" class="_cal_handel _prev_month">&lt;</a></td>
+                    <td colspan="3">2017-08</td>
+                    <td><a href="javascript:void(0);" class="_cal_handel _next_month">&gt;</a></td>
+                    <td><a href="javascript:void(0);" class="_cal_handel _next_year">&gt;&gt;</a></td>
+                </tr>
+                <tr>
+                    <td class="happy">日</td>
+                    <td>一</td>
+                    <td>二</td>
+                    <td>三</td>
+                    <td>四</td>
+                    <td>五</td>
+                    <td class="happy">六</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                    <td>11</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>14</td>
+                    <td>15</td>
+                    <td class="today">16</td>
+                    <td>17</td>
+                    <td>18</td>
+                    <td>19</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>21</td>
+                    <td>22</td>
+                    <td>23</td>
+                    <td>24</td>
+                    <td>25</td>
+                    <td>26</td>
+                </tr>
+                <tr>
+                    <td>27</td>
+                    <td>28</td>
+                    <td>29</td>
+                    <td>30</td>
+                    <td>31</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="sect">
@@ -29,7 +95,9 @@
     <div class="sect">
         <h2>历史存档</h2>
         <ul class="tlist">
-            <li><a href="/date/2015/12">2015年12月(1)</a></li>
+            {{ range .Archives }}
+            <li><a href="/date/{{.ym}}">{{.ym}}({{.total}})</a></li>
+            {{ end }}
         </ul>
     </div>
 

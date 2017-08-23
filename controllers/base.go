@@ -40,9 +40,16 @@ func defaultH(c *gin.Context) gin.H {
 			logrus.Error(err)
 		}
 
+		postModel := new(models.Posts)
+		archives, err := postModel.Archive()
+		if err != nil {
+			logrus.Error(err)
+		}
+
 		h["Mood"] = mood
 		h["Cates"] = cates
 		h["Links"] = links
+		h["Archives"] = archives
 
 		h["IsAdminPage"] = false
 	} else {

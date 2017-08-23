@@ -69,7 +69,7 @@ func LoginPost(c *gin.Context) {
 	user, has := userModel.Get()
 
 	if has {
-		HandleMessage(c,"用户不存在","您访问的用户不存在或已经删除！")
+		HandleMessage(c, "用户不存在", "您访问的用户不存在或已经删除！")
 		return
 	}
 
@@ -96,7 +96,7 @@ func AdminArticlesGet(c *gin.Context) {
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
 	postModel := new(models.Posts)
-	posts, err := postModel.GetList(page, num)
+	posts, err := postModel.GetList(page, num, "")
 
 	cateModel := new(models.Cates)
 	cates, err := cateModel.All()
@@ -534,7 +534,7 @@ func AdminUserGet(c *gin.Context) {
 		userModel := &models.Users{Id: id}
 		user, has := userModel.Get()
 		if has {
-			HandleMessage(c,"用户不存在","您访问的用户不存在或已经删除！")
+			HandleMessage(c, "用户不存在", "您访问的用户不存在或已经删除！")
 			return
 		}
 		h["User"] = user

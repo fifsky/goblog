@@ -53,6 +53,7 @@ func main() {
 	router.GET("/about", controllers.AboutGet)
 	router.GET("/article/:id", controllers.ArticleGet)
 	router.GET("/categroy/:domain", controllers.IndexGet)
+	router.GET("/date/:year/:month", controllers.IndexGet)
 
 	//管理后台
 	admin := router.Group("/admin")
