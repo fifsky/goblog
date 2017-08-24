@@ -199,9 +199,7 @@ func authLogin() gin.HandlerFunc {
 		}
 
 		logrus.Warnf("User not authorized to visit %s", c.Request.RequestURI)
-		c.JSON(http.StatusForbidden, gin.H{
-			"message": "Forbidden!",
-		})
-		c.Abort()
+
+		c.Redirect(http.StatusFound, "/admin/login")
 	}
 }
