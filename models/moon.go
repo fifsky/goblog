@@ -21,9 +21,10 @@ func (UserMoods) TableName() string {
 	return "moods"
 }
 
-func (m *Moods) Frist() (*Moods, error) {
-	_, err := orm.Limit(1).Desc("id").Get(m)
-	return m, err
+func (m *Moods) Frist() (*UserMoods, error) {
+	var mood = &UserMoods{}
+	_, err := orm.Select("moods.*, users.nick_name").Join("LEFT OUTER", "users", "moods.user_id = users.id").Limit(1).Desc("id").Get(mood)
+	return mood, err
 }
 
 func (m *Moods) Get() (*Moods, bool) {
