@@ -7,3 +7,4 @@ proxy
 rsync.exclude
 rsync.password
 rsync.sh
+blog.pid
