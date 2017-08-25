@@ -114,6 +114,7 @@ func setTemplate(engine *gin.Engine) {
 		"Unescaped":  helpers.Unescaped,
 		"StaticUrl":  helpers.StaticUrl,
 		"IsPage":     helpers.IsPage,
+		"Args":       helpers.Args,
 	}
 
 	engine.SetFuncMap(funcMap)

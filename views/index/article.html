@@ -5,22 +5,30 @@
     {{ template "layout/tabs" . }}
     <div id="content">
         <div class="article-single">
-            {{ template "layout/article" .Post }}
+            {{ template "layout/article" Args "Post" .Post "UrlPath" $.UrlPath }}
+            {{ if not (IsPage .UrlPath "/about") }}
             {{ template "layout/article_nav" . }}
+            {{ end }}
         </div>
         <div class="comment" id="comments">
             <h3><span class="commsty">评论内容</span></h3>
-            <div id="SOHUCS" sid="{{.Post.Id}}"></div>
+            <div id="gitment"></div>
         </div>
     </div>
 </div>
 {{ template "layout/sidebar" . }}
-<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js"></script>
 <script type="text/javascript">
-    window.changyan.api.config({
-        appid: 'cytb6C1ms',
-        conf: 'prod_7f839f2099f531883b136ee323b16f89'
+    const gitment = new Gitment({
+        id: '{{.Post.Id}}', // optional
+        owner: 'fifsky',
+        repo: 'blog.fifsky.com',
+        oauth: {
+            client_id: '7fddf658b4a92d64d2cd',
+            client_secret: '55eeff13e0aa2ed1aef210ce3ca9b162ae1923b6'
+        }
     });
+    gitment.render('gitment')
 </script>
 {{ template "layout/footer" . }}
 {{ end }}

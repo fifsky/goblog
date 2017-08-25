@@ -7,8 +7,8 @@
         <div class="articles">
             {{ $exists := len .Posts}}
             {{ if gt $exists 0 }}
-            {{ range .Posts }}
-            {{ template "layout/article" . }}
+            {{ range $_,$post := .Posts }}
+            {{ template "layout/article" Args "Post" $post "UrlPath" $.UrlPath }}
             {{ end }}
             {{ else }}
             <div class="not_article">

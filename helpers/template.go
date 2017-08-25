@@ -4,6 +4,7 @@ import (
 	"time"
 	"html/template"
 	"strings"
+	"github.com/pkg/errors"
 )
 
 // 格式化时间
@@ -69,4 +70,21 @@ func IsPage(url ...string) bool {
 	}
 
 	return exists
+}
+
+//模板传递多个变量
+//{{template "userlist" Args "Users" .MostPopular "Current" .CurrentUser}}
+func Args(values ...interface{}) (map[string]interface{}, error) {
+	if len(values)%2 != 0 {
+		return nil, errors.New("invalid dict call")
+	}
+	dict := make(map[string]interface{}, len(values)/2)
+	for i := 0; i < len(values); i += 2 {
+		key, ok := values[i].(string)
+		if !ok {
+			return nil, errors.New("dict keys must be strings")
+		}
+		dict[key] = values[i+1]
+	}
+	return dict, nil
 }
