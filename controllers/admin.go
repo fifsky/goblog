@@ -69,7 +69,10 @@ func LoginPost(c *gin.Context) {
 	user, has := userModel.Get()
 
 	if !has {
-		HandleMessage(c, "用户不存在", "您访问的用户不存在或已经删除！")
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "用户名或者密码错误",
+		})
 		return
 	}
 

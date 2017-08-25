@@ -5,14 +5,17 @@ import (
 	"github.com/fifsky/goblog/models"
 	"github.com/sirupsen/logrus"
 	"strings"
+	"fmt"
 )
 
 func defaultH(c *gin.Context) gin.H {
 	user, _ := c.Get("LoginUser")
 	options := c.GetStringMapString("options")
 
+	fmt.Println(options)
+
 	h := gin.H{
-		"SiteTitle":   options["site_title"],
+		"SiteTitle":   options["site_name"],
 		"SiteKeyword": options["site_keyword"],
 		"SiteDesc":    options["site_desc"],
 		"LoginUser":   user,
