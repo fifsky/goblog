@@ -16,6 +16,8 @@ import (
 	"fmt"
 	"flag"
 	"strings"
+	"io/ioutil"
+	"strconv"
 )
 
 func main() {
@@ -94,7 +96,18 @@ func main() {
 		admin.POST("/post/user", controllers.AdminUserPost)
 		admin.GET("/user_status", controllers.AdminUserStatus)
 	}
+
+	setPid(os.Getpid())
+
 	router.Run(":8080")
+}
+
+func setPid(pid int) {
+	d := []byte(strconv.Itoa(pid))
+	err := ioutil.WriteFile("./blog.pid", d, 0644)
+	if err != nil {
+		fmt.Printf("error opening file: %v", err)
+	}
 }
 
 func connectDB() {
