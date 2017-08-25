@@ -1,0 +1,15 @@
+fifsky.com {
+    proxy / 127.0.0.1:8080
+}
+
+# The static file serv
+#s.fifsky.com {
+#    root /home/wwwroot/s.fifsky.com/
+#
+#    header / Strict-Transport-Security "15768000"
+#
+#    gzip {
+#        level 3
+#        ext .css .js
+#    }
+#}

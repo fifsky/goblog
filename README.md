@@ -18,3 +18,8 @@ go run main.go
 ## 登录
 默认登录用户名密码
 test  123456
+
+## 推荐
+如果你要在同一个服务器上运行多个Go服务，或者想使用其他的静态文件服务，推荐使用 [Caddy](https://caddyserver.com/)
+
+详见根目录`Caddyfile`
