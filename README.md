@@ -7,12 +7,15 @@
 
 2、命令行执行
 ```
-go run main.go install
+make install
 ```
 3、运行
 ```
-go run main.go
+make build
+make start
+make stop
 ```
+
 4、访问 127.0.0.1:8080
 
 ## 登录

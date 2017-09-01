@@ -1,4 +1,4 @@
-init:
+install:
 	go run main.go install
 
 stop:
