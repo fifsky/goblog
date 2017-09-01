@@ -35,7 +35,14 @@ func main() {
 		return
 	}
 
-	gin.SetMode(gin.DebugMode)
+	APP_ENV := os.Getenv("APP_ENV")
+
+	if APP_ENV == "local" {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	f := setLogger()
 	defer f.Close()
 
