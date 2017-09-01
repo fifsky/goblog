@@ -108,7 +108,7 @@ func AdminArticlesGet(c *gin.Context) {
 	h["Posts"] = posts
 	h["Cates"] = cates
 
-	total, err := postModel.Count()
+	total, err := postModel.Count("")
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
@@ -391,7 +391,7 @@ func AdminCateDelete(c *gin.Context) {
 	id, _ := helpers.StrTo(c.Query("id")).Uint()
 
 	post := &models.Posts{CateId: id}
-	total, _ := post.Count()
+	total, _ := post.Count("")
 
 	if total > 0 {
 		c.JSON(http.StatusOK, gin.H{

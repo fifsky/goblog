@@ -93,8 +93,13 @@ func (p *Posts) GetList(start int, num int, artdate string) ([]*UserPosts, error
 	return posts, err
 }
 
-func (p *Posts) Count() (int64, error) {
-	total, err := orm.Count(p)
+func (p *Posts) Count(artdate string) (total int64, err error) {
+	if artdate == "" {
+		total, err = orm.Count(p)
+	} else {
+		total, err = orm.Where("DATE_FORMAT(posts.created_at,'%Y-%m') = ?", artdate).Count(p)
+	}
+
 	return total, err
 }
 

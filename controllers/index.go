@@ -43,7 +43,7 @@ func IndexGet(c *gin.Context) {
 	h := defaultH(c)
 	h["Posts"] = posts
 
-	total, err := postModel.Count()
+	total, err := postModel.Count(artdate)
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
