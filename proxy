@@ -1,3 +1,0 @@
-#!/bin/bash
-
-HTTP_PROXY=http://10.64.146.3:8123 HTTPS_PROXY=http://10.64.146.3:8123 "$@"

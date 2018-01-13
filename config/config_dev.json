@@ -1,0 +1,11 @@
+{
+  "database": {
+    "host": "127.0.0.1",
+    "port": "3306",
+    "name": "blog",
+    "user": "root",
+    "password": "123456"
+  },
+  "session_secret": "fifsky",
+  "ding_token":""
+}

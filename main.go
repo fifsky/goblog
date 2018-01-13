@@ -97,6 +97,11 @@ func main() {
 		admin.POST("/links", controllers.AdminLinkPost)
 		admin.GET("/link_delete", controllers.AdminLinkDelete)
 
+		//提醒
+		admin.GET("/remind", controllers.AdminRemindGet)
+		admin.POST("/remind", controllers.AdminRemindPost)
+		admin.GET("/remind_delete", controllers.AdminRemindDelete)
+
 		//用户
 		admin.GET("/users", controllers.AdminUsersGet)
 		admin.GET("/post/user", controllers.AdminUserGet)

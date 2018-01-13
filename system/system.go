@@ -17,7 +17,7 @@ type Configs struct {
 
 //Config contains application configuration for active gin mode
 type Config struct {
-	Database DatabaseConfig
+	Database      DatabaseConfig
 	SessionSecret string `json:"session_secret"`
 }
 
@@ -37,7 +37,17 @@ var config *Config
 func LoadConfig() {
 	configs := &Configs{}
 
-	data, err := ioutil.ReadFile("config/config.json")
+	file := ""
+	switch gin.Mode() {
+	case gin.DebugMode:
+		file = "dev"
+	case gin.ReleaseMode:
+		file = "release"
+	default:
+		panic(fmt.Sprintf("Unknown gin mode %s", gin.Mode()))
+	}
+
+	data, err := ioutil.ReadFile("config/config_" + file + ".json")
 	if err != nil {
 		fmt.Println("ReadFile: ", err.Error())
 		panic(err)
@@ -45,17 +55,6 @@ func LoadConfig() {
 
 	if err := json.Unmarshal(data, configs); err != nil {
 		panic(err)
-	}
-
-	switch gin.Mode() {
-	case gin.DebugMode:
-		config = &configs.Debug
-	case gin.ReleaseMode:
-		config = &configs.Release
-	case gin.TestMode:
-		config = &configs.Test
-	default:
-		panic(fmt.Sprintf("Unknown gin mode %s", gin.Mode()))
 	}
 }
 

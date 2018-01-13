@@ -509,6 +509,104 @@ func AdminLinkDelete(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/admin/links")
 }
 
+
+func AdminRemindGet(c *gin.Context) {
+	h := defaultH(c)
+
+	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	if id > 0 {
+		linkModel := &models.Links{Id: id}
+		link, _ := linkModel.Get()
+		h["Link"] = link
+	}
+
+	num := 10
+
+	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
+	model := new(models.Links)
+	links, err := model.GetList(page, num)
+
+	h["Links"] = links
+
+	total, err := model.Count()
+	pager := pagination.New(int(total), num, page, 3)
+	h["Pager"] = pager
+
+	if err == nil {
+		c.HTML(http.StatusOK, "admin/links", h)
+	} else {
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+}
+
+func AdminRemindPost(c *gin.Context) {
+	links := &models.Links{}
+	if err := c.Bind(links); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "参数错误:" + err.Error(),
+		})
+		return
+	}
+
+	if links.Name == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "连接名称不能为空",
+		})
+		return
+	}
+
+	if links.Url == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "连接地址不能为空",
+		})
+		return
+	}
+
+	if links.Id > 0 {
+		if _, err := links.Update(); err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"statusCode": 201,
+				"message":    "更新失败",
+			})
+			logrus.Error(err)
+			return
+		}
+	} else {
+		if _, err := links.Insert(); err != nil {
+			c.JSON(http.StatusOK, gin.H{
+				"statusCode": 201,
+				"message":    "创建失败",
+			})
+			logrus.Error(err)
+			return
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"statusCode": 200,
+		"message":    "ok",
+	})
+}
+
+func AdminRemindDelete(c *gin.Context) {
+	id, _ := helpers.StrTo(c.Query("id")).Uint()
+
+	link := &models.Links{Id: id}
+	if _, err := link.Delete(); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"statusCode": 201,
+			"message":    "删除失败",
+		})
+		logrus.Error(err)
+		return
+	}
+	c.Redirect(http.StatusFound, "/admin/links")
+}
+
+
 func AdminUsersGet(c *gin.Context) {
 	h := defaultH(c)
 	num := 10

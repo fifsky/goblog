@@ -6,6 +6,7 @@
         <li {{ if IsPage .UrlPath "admin/moods" }}class="current"{{ end }}><a href="/admin/moods">心情</a></li>
         <li {{ if IsPage .UrlPath "admin/cates" }}class="current"{{ end }}><a href="/admin/cates">分类</a></li>
         <li {{ if IsPage .UrlPath "admin/links" }}class="current"{{ end }}><a href="/admin/links">链接</a></li>
+        <li {{ if IsPage .UrlPath "admin/remind" "admin/post/remind" }}class="current"{{ end }}><a href="/admin/remind">提醒</a></li>
         <li {{ if IsPage .UrlPath "admin/users" "admin/post/user" }}class="current"{{ end }}><a href="/admin/users">用户</a></li>
     </ul>
 </div>
