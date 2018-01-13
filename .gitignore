@@ -8,3 +8,4 @@ rsync.exclude
 rsync.password
 rsync.sh
 blog.pid
+/config/config_release.json
