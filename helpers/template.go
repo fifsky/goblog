@@ -12,6 +12,16 @@ func DateFormat(date time.Time, layout string) string {
 	return date.Format(layout)
 }
 
+// 格式化时间
+func DateFormatString(date string, layout string) string {
+	d, err := time.Parse(time.RFC3339, date)
+
+	if err != nil {
+		return err.Error()
+	}
+	return d.Format(layout)
+}
+
 // 截取字符串
 func Substr(source string, start, end int) string {
 	rs := []rune(source)

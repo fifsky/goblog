@@ -1,7 +1,7 @@
 {{ define "admin/remind" }}
 {{ template "layout/header" . }}
 <div id="links" class="admin">
-    {{ template "layout/admin_tabs" . }}
+{{ template "layout/admin_tabs" . }}
     <div id="content" class="clearfix">
         <h2>管理提醒</h2>
         <div class="message">保存成功</div>
@@ -21,16 +21,23 @@
                     <tbody>
                     <tr>
                         <th width="20">&nbsp;</th>
-                        <th width="80">连接名</th>
-                        <th>地址</th>
+                        <th width="80">提醒类别</th>
+                        <th>时间</th>
+                        <th>内容</th>
                         <th width="80">操作</th>
                     </tr>
-                    {{ if .Links }}
-                    {{ range .Links }}
+                    {{ if .Reminds }}
+                    {{ range .Reminds }}
                     <tr>
                         <td><input type="checkbox" name="ids" value="{{.Id}}"/></td>
-                        <td><a href="{{.Url}}">{{.Name}}</a></td>
-                        <td><a href="{{.Url}}">{{.Url}}</a></td>
+                        <td>{{index $.Types .Type}}</td>
+                        <td>
+                        {{$dlayout := index $.Layouts .Type}}
+                        {{if ne $dlayout ""}}
+                            {{DateFormatString .RemindDate $dlayout}}
+                        {{end}}
+                        </td>
+                        <td>{{.Content}}</td>
                         <td><a href="/admin/remind?id={{.Id}}">编辑</a><span class="line">|</span><a
                                 href="/admin/remind_delete?id={{.Id}}" rel="confirmTodo" title="确定要删除该链接？">删除</a></td>
                     </tr>
@@ -51,30 +58,42 @@
                             <option value="女">女</option>
                         </select>
                     </div>
-                    {{ template "layout/pagination" . }}
+                {{ template "layout/pagination" . }}
                 </div>
             </form>
         </div>
         <div class="col-right">
             <form id="link_form" class="vf" action="/admin/remind" method="post"
                   autocomplete="off">
-                <p><label class="label_input">链接名称</label>
-                    <input type="hidden" name="id" value="{{.Link.Id}}"/>
-                    <input class="input_text" size="30" name="name"
-                           value="{{.Link.Name}}"></p>
+                <p><label class="label_input">提醒类别</label>
+                    <input type="hidden" name="id" value="{{.Remind.Id}}"/>
+                    <select name="type">
+                        <option value="0" {{if .Remind}}{{if eq 0 .Remind.Type}}selected{{end}}{{end}}>固定</option>
+                        <option value="1" {{if .Remind}}{{if eq 1 .Remind.Type}}selected{{end}}{{end}}>每分钟</option>
+                        <option value="2" {{if .Remind}}{{if eq 2 .Remind.Type}}selected{{end}}{{end}}>每小时</option>
+                        <option value="3" {{if .Remind}}{{if eq 3 .Remind.Type}}selected{{end}}{{end}}>每天</option>
+                        <option value="4" {{if .Remind}}{{if eq 4 .Remind.Type}}selected{{end}}{{end}}>每周</option>
+                        <option value="5" {{if .Remind}}{{if eq 5 .Remind.Type}}selected{{end}}{{end}}>每月</option>
+                        <option value="6" {{if .Remind}}{{if eq 6 .Remind.Type}}selected{{end}}{{end}}>每年</option>
+                    </select>
+                </p>
 
-                <p><label class="label_input">链接地址</label>
-                    <input class="input_text" size="30" name="url"
-                           value="{{.Link.Url}}">
-                    <span class="hint">例如：http://fifsky.com/</span>
+                <p><label class="label_input">提醒时间</label>
+                    <input class="input_text laydate" size="30" name="remind_date"
+                           value="{{if .Remind}}{{DateFormatString .Remind.RemindDate "2006-01-02 15:04:05"}}{{end}}">
+                </p>
+
+                <p><label class="label_input">手机号</label>
+                    <input class="input_text" size="30" name="at"
+                           value="{{.Remind.At}}">
                 </p>
                 <p>
-                    <label class="label_input">链接描述</label>
-                    <textarea name="desc" rows="5" cols="30">{{.Link.Desc}}</textarea>
+                    <label class="label_input">提醒内容</label>
+                    <textarea name="content" rows="5" cols="30">{{.Remind.Content}}</textarea>
                 </p>
 
                 <p class="act"><input class="formbutton" type="submit"
-                                      value="{{ if .Link}}修改{{else}}添加{{end}}"></p>
+                                      value="{{ if .Remind}}修改{{else}}添加{{end}}"></p>
             </form>
         </div>
     </div>
@@ -84,13 +103,7 @@
 
         var ok = true;
 
-        var $el = $('input[name="name"]');
-        if ($.trim($el.val()) === '') {
-            $el.focus().closest('p').addClass('error');
-            ok = false;
-        }
-
-        $el = $('input[name="url"]');
+        var $el = $('input[name="content"]');
         if ($.trim($el.val()) === '') {
             $el.focus().closest('p').addClass('error');
             ok = false;
@@ -105,16 +118,16 @@
             beforeSend: function (xhr) {
                 $(self).find(':submit').addClass('formdisabled').attr('disabled', true);
             },
-            error: function () {
-                $(self).find(':submit').addClass('formdisabled').attr('disabled', true);
-            },
             success: function (data) {
+                window.console.log(data);
                 if (data.statusCode === 200) {
                     window.location.reload();
                 } else {
                     $('.message').html(data.message).show();
                 }
             }
+        }).always(function () {
+            $(self).find(':submit').removeClass('formdisabled').attr('disabled', false);
         });
 
         return false;

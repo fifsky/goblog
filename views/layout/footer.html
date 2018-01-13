@@ -20,6 +20,12 @@
 </script>
 {{ else }}
 <script type="text/javascript" src="{{ StaticUrl }}style/js/admin.js"></script>
+<script>
+    laydate.render({
+        elem: '.laydate'
+        ,type: 'datetime'
+    });
+</script>
 {{ end }}
 </div>
 </body>

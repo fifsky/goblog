@@ -6,19 +6,14 @@ import (
 	"io/ioutil"
 
 	"github.com/gin-gonic/gin"
+	"github.com/fifsky/goblog/core/ding"
 )
-
-//Configs contains application configurations for all gin modes
-type Configs struct {
-	Debug   Config
-	Release Config
-	Test    Config
-}
 
 //Config contains application configuration for active gin mode
 type Config struct {
 	Database      DatabaseConfig
 	SessionSecret string `json:"session_secret"`
+	DingToken     string `json:"ding_token"`
 }
 
 //DatabaseConfig contains database connection info
@@ -35,7 +30,7 @@ var config *Config
 
 //LoadConfig unmarshals config for current GIN_MODE
 func LoadConfig() {
-	configs := &Configs{}
+	config = &Config{}
 
 	file := ""
 	switch gin.Mode() {
@@ -53,9 +48,11 @@ func LoadConfig() {
 		panic(err)
 	}
 
-	if err := json.Unmarshal(data, configs); err != nil {
+	if err := json.Unmarshal(data, config); err != nil {
 		panic(err)
 	}
+
+	ding.DING_TALK_TOKEN = config.DingToken
 }
 
 //GetConfig returns actual config

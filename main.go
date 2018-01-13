@@ -18,6 +18,7 @@ import (
 	"strings"
 	"io/ioutil"
 	"strconv"
+	"github.com/fifsky/goblog/core/ding"
 )
 
 func main() {
@@ -111,7 +112,70 @@ func main() {
 
 	setPid(os.Getpid())
 
+	go startCron()
+
 	router.Run(":8080")
+}
+
+func startCron() {
+	t := time.NewTicker(60 * time.Second)
+
+	for {
+		select {
+		case t1 := <-t.C:
+			dingRemind(t1)
+		}
+	}
+}
+
+func dingRemind(t time.Time) {
+	remind_model := models.Reminds{}
+	reminds, err := remind_model.All()
+	if err != nil {
+		logrus.Error(err)
+	}
+
+	fmt.Println(reminds)
+
+	for _, v := range reminds {
+		remind_date, _ := time.Parse(time.RFC3339, v.RemindDate)
+
+		at := make([]string, 0)
+		if v.At != "" {
+			at = append(at, v.At)
+		}
+
+		fmt.Println(v, t.Format("2006-01-02 15:04:00"), remind_date.Format("2006-01-02 15:04:00"))
+
+		switch v.Type {
+		case 0: //固定时间
+			if t.Format("2006-01-02 15:04:00") == remind_date.Format("2006-01-02 15:04:00") {
+				ding.Alarm(v.Content, at)
+			}
+		case 1: //每分钟
+			ding.Alarm(v.Content, at)
+		case 2: //每小时
+			if t.Format("04:00") == remind_date.Format("04:00") {
+				ding.Alarm(v.Content, at)
+			}
+		case 3: //每天
+			if t.Format("15:04:00") == remind_date.Format("15:04:00") {
+				ding.Alarm(v.Content, at)
+			}
+		case 4: //每周
+			if t.Weekday().String() == t.Weekday().String() && t.Format("15:04:00") == remind_date.Format("15:04:00") {
+				ding.Alarm(v.Content, at)
+			}
+		case 5: //每月
+			if t.Format("02 15:04:00") == remind_date.Format("02 15:04:00") {
+				ding.Alarm(v.Content, at)
+			}
+		case 6: //每年
+			if t.Format("01-02 15:04:00") == remind_date.Format("01-02 15:04:00") {
+				ding.Alarm(v.Content, at)
+			}
+		}
+	}
 }
 
 func setPid(pid int) {
@@ -133,13 +197,14 @@ func connectDB() {
 func setTemplate(engine *gin.Engine) {
 
 	funcMap := template.FuncMap{
-		"DateFormat": helpers.DateFormat,
-		"Substr":     helpers.Substr,
-		"Truncate":   helpers.Truncate,
-		"Unescaped":  helpers.Unescaped,
-		"StaticUrl":  helpers.StaticUrl,
-		"IsPage":     helpers.IsPage,
-		"Args":       helpers.Args,
+		"DateFormatString": helpers.DateFormatString,
+		"DateFormat":       helpers.DateFormat,
+		"Substr":           helpers.Substr,
+		"Truncate":         helpers.Truncate,
+		"Unescaped":        helpers.Unescaped,
+		"StaticUrl":        helpers.StaticUrl,
+		"IsPage":           helpers.IsPage,
+		"Args":             helpers.Args,
 	}
 
 	engine.SetFuncMap(funcMap)

@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/sirupsen/logrus"
+	"github.com/gin-gonic/gin/binding"
 )
 
 func AdminIndex(c *gin.Context) {
@@ -509,39 +510,58 @@ func AdminLinkDelete(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/admin/links")
 }
 
-
 func AdminRemindGet(c *gin.Context) {
 	h := defaultH(c)
 
 	id, _ := helpers.StrTo(c.Query("id")).Uint()
 	if id > 0 {
-		linkModel := &models.Links{Id: id}
-		link, _ := linkModel.Get()
-		h["Link"] = link
+		m := &models.Reminds{Id: id}
+		remind, _ := m.Get()
+		h["Remind"] = remind
 	}
 
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	model := new(models.Links)
-	links, err := model.GetList(page, num)
+	model := new(models.Reminds)
+	reminds, err := model.GetList(page, num)
 
-	h["Links"] = links
+	h["Reminds"] = reminds
 
 	total, err := model.Count()
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
+	h["Types"] = map[int]string{
+		0: "固定",
+		1: "每分钟",
+		2: "每小时",
+		3: "每天",
+		4: "每周",
+		5: "每月",
+		6: "每年",
+	}
+
+	h["Layouts"] = map[int]string{
+		0: "2006-01-02 15:04:05",
+		1: "",
+		2: "",
+		3: "15:04:00",
+		4: "15:04:00",
+		5: "02日15:04:05",
+		6: "01月02日15:04:05",
+	}
+
 	if err == nil {
-		c.HTML(http.StatusOK, "admin/links", h)
+		c.HTML(http.StatusOK, "admin/remind", h)
 	} else {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}
 }
 
 func AdminRemindPost(c *gin.Context) {
-	links := &models.Links{}
-	if err := c.Bind(links); err != nil {
+	reminds := &models.Reminds{}
+	if err := c.ShouldBindWith(reminds,binding.Form); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
 			"message":    "参数错误:" + err.Error(),
@@ -549,33 +569,25 @@ func AdminRemindPost(c *gin.Context) {
 		return
 	}
 
-	if links.Name == "" {
+	if reminds.Content == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
-			"message":    "连接名称不能为空",
+			"message":    "提醒内容不能为空",
 		})
 		return
 	}
 
-	if links.Url == "" {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "连接地址不能为空",
-		})
-		return
-	}
-
-	if links.Id > 0 {
-		if _, err := links.Update(); err != nil {
+	if reminds.Id > 0 {
+		if _, err := reminds.Update(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
-				"message":    "更新失败",
+				"message":    "更新失败:" + err.Error(),
 			})
 			logrus.Error(err)
 			return
 		}
 	} else {
-		if _, err := links.Insert(); err != nil {
+		if _, err := reminds.Insert(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "创建失败",
@@ -594,8 +606,8 @@ func AdminRemindPost(c *gin.Context) {
 func AdminRemindDelete(c *gin.Context) {
 	id, _ := helpers.StrTo(c.Query("id")).Uint()
 
-	link := &models.Links{Id: id}
-	if _, err := link.Delete(); err != nil {
+	remind := &models.Reminds{Id: id}
+	if _, err := remind.Delete(); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
 			"message":    "删除失败",
@@ -603,9 +615,8 @@ func AdminRemindDelete(c *gin.Context) {
 		logrus.Error(err)
 		return
 	}
-	c.Redirect(http.StatusFound, "/admin/links")
+	c.Redirect(http.StatusFound, "/admin/remind")
 }
-
 
 func AdminUsersGet(c *gin.Context) {
 	h := defaultH(c)
