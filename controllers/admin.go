@@ -9,6 +9,7 @@ import (
 	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/sirupsen/logrus"
 	"github.com/gin-gonic/gin/binding"
+	"time"
 )
 
 func AdminIndex(c *gin.Context) {
@@ -552,6 +553,8 @@ func AdminRemindGet(c *gin.Context) {
 		6: "01月02日15:04:05",
 	}
 
+	h["CurrDate"] = time.Now().Format("2006-01-02 15:04:05")
+
 	if err == nil {
 		c.HTML(http.StatusOK, "admin/remind", h)
 	} else {
@@ -561,7 +564,7 @@ func AdminRemindGet(c *gin.Context) {
 
 func AdminRemindPost(c *gin.Context) {
 	reminds := &models.Reminds{}
-	if err := c.ShouldBindWith(reminds,binding.Form); err != nil {
+	if err := c.ShouldBindWith(reminds, binding.Form); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
 			"message":    "参数错误:" + err.Error(),

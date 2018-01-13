@@ -6,7 +6,6 @@ stop:
 
 start:
 	./blog > /dev/null 2>&1 &
-	caddy
 
 restart:
 	make stop

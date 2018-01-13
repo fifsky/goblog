@@ -22,6 +22,15 @@ import (
 )
 
 func main() {
+	APP_ENV := os.Getenv("APP_ENV")
+	if APP_ENV == "local" {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	fmt.Println("Run Mode:", gin.Mode())
+
 	system.LoadConfig()
 	connectDB()
 
@@ -34,14 +43,6 @@ func main() {
 			logrus.Error(err)
 		}
 		return
-	}
-
-	APP_ENV := os.Getenv("APP_ENV")
-
-	if APP_ENV == "local" {
-		gin.SetMode(gin.DebugMode)
-	} else {
-		gin.SetMode(gin.ReleaseMode)
 	}
 
 	f := setLogger()
@@ -147,32 +148,34 @@ func dingRemind(t time.Time) {
 
 		fmt.Println(v, t.Format("2006-01-02 15:04:00"), remind_date.Format("2006-01-02 15:04:00"))
 
+		content := "提醒时间:" + remind_date.Format("2006-01-02 15:04:00") + "\n提醒内容:" + v.Content
+
 		switch v.Type {
 		case 0: //固定时间
 			if t.Format("2006-01-02 15:04:00") == remind_date.Format("2006-01-02 15:04:00") {
-				ding.Alarm(v.Content, at)
+				ding.Alarm(content, at)
 			}
 		case 1: //每分钟
-			ding.Alarm(v.Content, at)
+			ding.Alarm(content, at)
 		case 2: //每小时
 			if t.Format("04:00") == remind_date.Format("04:00") {
-				ding.Alarm(v.Content, at)
+				ding.Alarm(content, at)
 			}
 		case 3: //每天
 			if t.Format("15:04:00") == remind_date.Format("15:04:00") {
-				ding.Alarm(v.Content, at)
+				ding.Alarm(content, at)
 			}
 		case 4: //每周
 			if t.Weekday().String() == t.Weekday().String() && t.Format("15:04:00") == remind_date.Format("15:04:00") {
-				ding.Alarm(v.Content, at)
+				ding.Alarm(content, at)
 			}
 		case 5: //每月
 			if t.Format("02 15:04:00") == remind_date.Format("02 15:04:00") {
-				ding.Alarm(v.Content, at)
+				ding.Alarm(content, at)
 			}
 		case 6: //每年
 			if t.Format("01-02 15:04:00") == remind_date.Format("01-02 15:04:00") {
-				ding.Alarm(v.Content, at)
+				ding.Alarm(content, at)
 			}
 		}
 	}
@@ -197,14 +200,15 @@ func connectDB() {
 func setTemplate(engine *gin.Engine) {
 
 	funcMap := template.FuncMap{
-		"DateFormatString": helpers.DateFormatString,
-		"DateFormat":       helpers.DateFormat,
-		"Substr":           helpers.Substr,
-		"Truncate":         helpers.Truncate,
-		"Unescaped":        helpers.Unescaped,
-		"StaticUrl":        helpers.StaticUrl,
-		"IsPage":           helpers.IsPage,
-		"Args":             helpers.Args,
+		"WeekDayFormatString": helpers.WeekDayFormatString,
+		"DateFormatString":    helpers.DateFormatString,
+		"DateFormat":          helpers.DateFormat,
+		"Substr":              helpers.Substr,
+		"Truncate":            helpers.Truncate,
+		"Unescaped":           helpers.Unescaped,
+		"StaticUrl":           helpers.StaticUrl,
+		"IsPage":              helpers.IsPage,
+		"Args":                helpers.Args,
 	}
 
 	engine.SetFuncMap(funcMap)

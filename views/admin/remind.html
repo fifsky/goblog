@@ -33,8 +33,12 @@
                         <td>{{index $.Types .Type}}</td>
                         <td>
                         {{$dlayout := index $.Layouts .Type}}
-                        {{if ne $dlayout ""}}
+                        {{if and (ne $dlayout "") (ne .Type 4)}}
                             {{DateFormatString .RemindDate $dlayout}}
+                        {{end}}
+
+                        {{if eq .Type 4}}
+                            {{WeekDayFormatString .RemindDate}} {{DateFormatString .RemindDate $dlayout}}
                         {{end}}
                         </td>
                         <td>{{.Content}}</td>
@@ -45,7 +49,7 @@
 
                     {{ else }}
                     <tr>
-                        <td colspan="4" align="center">还没有链接！</td>
+                        <td colspan="4" align="center">还没有提醒！</td>
                     </tr>
                     {{ end }}
                     </tbody>
@@ -67,7 +71,7 @@
                   autocomplete="off">
                 <p><label class="label_input">提醒类别</label>
                     <input type="hidden" name="id" value="{{.Remind.Id}}"/>
-                    <select name="type">
+                    <select name="type" id="remind_type">
                         <option value="0" {{if .Remind}}{{if eq 0 .Remind.Type}}selected{{end}}{{end}}>固定</option>
                         <option value="1" {{if .Remind}}{{if eq 1 .Remind.Type}}selected{{end}}{{end}}>每分钟</option>
                         <option value="2" {{if .Remind}}{{if eq 2 .Remind.Type}}selected{{end}}{{end}}>每小时</option>
@@ -78,7 +82,7 @@
                     </select>
                 </p>
 
-                <p><label class="label_input">提醒时间</label>
+                <p id="remind_date"><label class="label_input">提醒时间</label>
                     <input class="input_text laydate" size="30" name="remind_date"
                            value="{{if .Remind}}{{DateFormatString .Remind.RemindDate "2006-01-02 15:04:05"}}{{end}}">
                 </p>
@@ -119,7 +123,6 @@
                 $(self).find(':submit').addClass('formdisabled').attr('disabled', true);
             },
             success: function (data) {
-                window.console.log(data);
                 if (data.statusCode === 200) {
                     window.location.reload();
                 } else {
@@ -131,6 +134,25 @@
         });
 
         return false;
+    });
+
+    $('#remind_type').on("change", function () {
+        var $rd = $('#remind_date');
+        $rd.find("input").val('');
+        $rd.show();
+        window.console.log($(this).val());
+        switch ($(this).val()) {
+            case "1":
+            case "2":
+                $rd.find("input").val("{{.CurrDate}}");
+                $rd.hide();
+                break;
+        }
+    });
+
+    laydate.render({
+        elem: '.laydate'
+        , type: 'datetime'
     });
 </script>
 {{ template "layout/footer" . }}
