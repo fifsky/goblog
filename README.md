@@ -26,3 +26,9 @@ test  123456
 如果你要在同一个服务器上运行多个Go服务，或者想使用其他的静态文件服务，推荐使用 [Caddy](https://caddyserver.com/)
 
 详见根目录`Caddyfile`
+
+## 配置文件
+```
+config_dev.json 开发环境
+config_release.json 线上环境
+```
