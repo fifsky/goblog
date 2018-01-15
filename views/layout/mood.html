@@ -3,7 +3,7 @@
     <div id="avatar"><img title="莫一哲" alt="莫一哲" src="{{ StaticUrl }}style/images/faceicon.jpg"></div>
     <div id="latest">
         <p class="current">
-            {{ .Content }}
+            {{ .Content | Unescaped }}
             <span class="stamp">
                 <span class="method">{{ DateFormat .CreatedAt "2006-01-02 15:04" }} by {{.NickName}}</span>
             </span>
