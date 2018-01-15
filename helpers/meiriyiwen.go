@@ -7,10 +7,11 @@ import (
 	"fmt"
 	"time"
 	"github.com/fifsky/goblog/models"
+	"github.com/fifsky/goblog/helpers/beary"
 )
 
 func SaveMeiRiYiWen(t time.Time) {
-	if t.Format("15:04") != "17:40" {
+	if t.Format("15:04") != "10:00" {
 		return
 	}
 
@@ -32,11 +33,26 @@ func SaveMeiRiYiWen(t time.Time) {
 		m.Title = ret.Get("data.title").String()
 
 		m.Insert()
+
+		msg := make([]beary.Message, 0)
+		msg = append(msg, beary.Message{
+			Title: m.Title,
+			Url:   fmt.Sprintf("https://fifsky.com/article/%d", m.Id),
+			Color: "#1FBECA",
+		})
+
+		req := &beary.Request{
+			Text:        "发表了每日一文",
+			Channel:     "豆爸的私人助理",
+			Attachments: msg,
+		}
+		beary.Send(req)
 	}
+
 }
 
 func SaveMeiRiYiJu(t time.Time) {
-	if t.Format("15:04") != "07:00" {
+	if t.Format("15:04") != "09:00" {
 		return
 	}
 
@@ -51,8 +67,21 @@ func SaveMeiRiYiJu(t time.Time) {
 		ret := gjson.ParseBytes(data)
 
 		m := &models.Moods{}
-		m.Content = ret.Get("content").String() +"<br>"+ ret.Get("note").String()
+		m.Content = ret.Get("content").String() + "<br>" + ret.Get("note").String()
 		m.UserId = 1
 		m.Insert()
+
+		msg := make([]beary.Message, 0)
+		msg = append(msg, beary.Message{
+			Text:  m.Content,
+			Color: "#95B9B3",
+		})
+
+		req := &beary.Request{
+			Text:        "发表了每日一句",
+			Channel:     "豆爸的私人助理",
+			Attachments: msg,
+		}
+		beary.Send(req)
 	}
 }
