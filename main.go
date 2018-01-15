@@ -166,7 +166,7 @@ func dingRemind(t time.Time) {
 				ding.Alarm(content, at)
 			}
 		case 4: //每周
-			if t.Weekday().String() == t.Weekday().String() && t.Format("15:04:00") == remind_date.Format("15:04:00") {
+			if t.Weekday().String() == remind_date.Weekday().String() && t.Format("15:04:00") == remind_date.Format("15:04:00") {
 				ding.Alarm(content, at)
 			}
 		case 5: //每月
