@@ -18,7 +18,7 @@ import (
 	"strings"
 	"io/ioutil"
 	"strconv"
-	"github.com/fifsky/goblog/core/ding"
+	"github.com/fifsky/goblog/helpers/beary"
 )
 
 func main() {
@@ -65,6 +65,9 @@ func main() {
 	router.GET("/article/:id", controllers.ArticleGet)
 	router.GET("/categroy/:domain", controllers.IndexGet)
 	router.GET("/date/:year/:month", controllers.IndexGet)
+
+	//Robot
+	router.POST("/robot/bearychat", controllers.BearyChat)
 
 	//管理后台
 	admin := router.Group("/admin")
@@ -146,41 +149,38 @@ func dingRemind(t time.Time) {
 	for _, v := range reminds {
 		remind_date, _ := time.Parse(time.RFC3339, v.RemindDate)
 
-		at := make([]string, 0)
-		if v.At != "" {
-			at = append(at, v.At)
-		}
-
 		fmt.Println(v, t.Format("2006-01-02 15:04:00"), remind_date.Format("2006-01-02 15:04:00"))
 
 		content := "提醒时间:" + remind_date.Format("2006-01-02 15:04:00") + "\n提醒内容:" + v.Content
 
+		beray_channel := "豆爸的私人助理"
+
 		switch v.Type {
 		case 0: //固定时间
 			if t.Format("2006-01-02 15:04:00") == remind_date.Format("2006-01-02 15:04:00") {
-				ding.Alarm(content, at)
+				beary.Alarm(content, beray_channel, v.At)
 			}
 		case 1: //每分钟
-			ding.Alarm(content, at)
+			beary.Alarm(content,beray_channel, v.At)
 		case 2: //每小时
 			if t.Format("04:00") == remind_date.Format("04:00") {
-				ding.Alarm(content, at)
+				beary.Alarm(content, beray_channel, v.At)
 			}
 		case 3: //每天
 			if t.Format("15:04:00") == remind_date.Format("15:04:00") {
-				ding.Alarm(content, at)
+				beary.Alarm(content, beray_channel, v.At)
 			}
 		case 4: //每周
 			if t.Weekday().String() == remind_date.Weekday().String() && t.Format("15:04:00") == remind_date.Format("15:04:00") {
-				ding.Alarm(content, at)
+				beary.Alarm(content, beray_channel, v.At)
 			}
 		case 5: //每月
 			if t.Format("02 15:04:00") == remind_date.Format("02 15:04:00") {
-				ding.Alarm(content, at)
+				beary.Alarm(content, beray_channel, v.At)
 			}
 		case 6: //每年
 			if t.Format("01-02 15:04:00") == remind_date.Format("01-02 15:04:00") {
-				ding.Alarm(content, at)
+				beary.Alarm(content, beray_channel, v.At)
 			}
 		}
 	}

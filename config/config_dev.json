@@ -7,5 +7,6 @@
     "password": "123456"
   },
   "session_secret": "fifsky",
-  "ding_token":""
+  "ding_token": "",
+  "bearychat_token": ""
 }

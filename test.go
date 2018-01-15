@@ -5,9 +5,7 @@ import (
 	"os"
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/system"
-	"github.com/fifsky/goblog/helpers"
-	"time"
-	"github.com/fifsky/goblog/models"
+	"github.com/fifsky/goblog/helpers/beary"
 )
 
 func main() {
@@ -22,7 +20,7 @@ func main() {
 	fmt.Println("Run Mode:", gin.Mode())
 
 	system.LoadConfig()
-	models.InitDB()
 
-	helpers.SaveMeiRiYiWen(time.Now())
+	err := beary.Alarm("测试测试", "豆爸的私人助理", "fifsky")
+	fmt.Println(err)
 }

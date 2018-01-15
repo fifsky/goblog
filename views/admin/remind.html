@@ -21,8 +21,9 @@
                     <tbody>
                     <tr>
                         <th width="20">&nbsp;</th>
-                        <th width="80">提醒类别</th>
-                        <th>时间</th>
+                        <th width="60">提醒类别</th>
+                        <th width="130">时间</th>
+                        <th width="80">@谁</th>
                         <th>内容</th>
                         <th width="80">操作</th>
                     </tr>
@@ -41,6 +42,7 @@
                             {{WeekDayFormatString .RemindDate}} {{DateFormatString .RemindDate $dlayout}}
                         {{end}}
                         </td>
+                        <td>@{{.At}}</td>
                         <td>{{.Content}}</td>
                         <td><a href="/admin/remind?id={{.Id}}">编辑</a><span class="line">|</span><a
                                 href="/admin/remind_delete?id={{.Id}}" rel="confirmTodo" title="确定要删除该链接？">删除</a></td>
@@ -87,9 +89,11 @@
                            value="{{if .Remind}}{{DateFormatString .Remind.RemindDate "2006-01-02 15:04:05"}}{{end}}">
                 </p>
 
-                <p><label class="label_input">手机号</label>
-                    <input class="input_text" size="30" name="at"
-                           value="{{.Remind.At}}">
+                <p>
+                    <label class="label_input">@谁</label>
+                    <select name="at">
+                        <option value="fifsky" {{if .Remind}}{{if eq "fifsky" .Remind.At}}selected{{end}}{{end}}>fifsky</option>
+                    </select>
                 </p>
                 <p>
                     <label class="label_input">提醒内容</label>

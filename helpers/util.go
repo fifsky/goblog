@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 	"io"
 	"os"
+	"encoding/json"
 )
 
 // 计算字符串的md5值
@@ -16,6 +17,11 @@ func Md5(source string) string {
 	md5h := md5.New()
 	md5h.Write([]byte(source))
 	return hex.EncodeToString(md5h.Sum(nil))
+}
+
+func JsonEncode(v interface{}) string {
+	str, _ := json.Marshal(v)
+	return string(str)
 }
 
 func PanicIf(err error) {
