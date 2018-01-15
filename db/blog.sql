@@ -188,6 +188,20 @@ VALUES
 UNLOCK TABLES;
 
 
+# Dump of table reminds
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `reminds`;
+
+CREATE TABLE `reminds` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` int(11) NOT NULL COMMENT '0固定，1每分钟，2每个小时，3每周，4，每天，5，每月，6，每年',
+  `at` varchar(20) NOT NULL DEFAULT '' COMMENT '@手机号',
+  `content` varchar(255) NOT NULL DEFAULT '' COMMENT '内容',
+  `remind_date` datetime NOT NULL COMMENT '提醒日期',
+  `created_at` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
