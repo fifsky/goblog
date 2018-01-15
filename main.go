@@ -136,7 +136,10 @@ func dingRemind(t time.Time) {
 		logrus.Error(err)
 	}
 
-	fmt.Println(reminds)
+	//天气预报
+	go helpers.SendWeather(t)
+	//每日一文
+	go helpers.SaveMeiRiYiWen(t)
 
 	for _, v := range reminds {
 		remind_date, _ := time.Parse(time.RFC3339, v.RemindDate)

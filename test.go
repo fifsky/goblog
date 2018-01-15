@@ -1,22 +1,28 @@
 package main
 
+import (
+	"fmt"
+	"os"
+	"github.com/gin-gonic/gin"
+	"github.com/fifsky/goblog/system"
+	"github.com/fifsky/goblog/helpers"
+	"time"
+	"github.com/fifsky/goblog/models"
+)
 
 func main() {
-	//c := make(chan int)
-	//o := make(chan bool)
-	//
-	//go func() {
-	//	for {
-	//		select {
-	//		case v := <-c:
-	//			println(v)
-	//		case <-time.After(5 * time.Second):
-	//			println("timeout")
-	//			o <- true
-	//			break
-	//		}
-	//	}
-	//}()
-	//<-o
 
+	APP_ENV := os.Getenv("APP_ENV")
+	if APP_ENV == "local" {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	fmt.Println("Run Mode:", gin.Mode())
+
+	system.LoadConfig()
+	models.InitDB()
+
+	helpers.SaveMeiRiYiWen(time.Now())
 }
