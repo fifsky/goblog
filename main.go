@@ -140,6 +140,8 @@ func dingRemind(t time.Time) {
 	go helpers.SendWeather(t)
 	//每日一文
 	go helpers.SaveMeiRiYiWen(t)
+	//每日一句
+	go helpers.SaveMeiRiYiJu(t)
 
 	for _, v := range reminds {
 		remind_date, _ := time.Parse(time.RFC3339, v.RemindDate)

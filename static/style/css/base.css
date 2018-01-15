@@ -283,6 +283,10 @@ table.canlender td.happy{
 	border-left: 3px solid rgb(204, 204, 204);
 }
 
+.article .entry p{
+    line-height:30px;
+}
+
 .article-single {
     margin-bottom: 10px;
 }
