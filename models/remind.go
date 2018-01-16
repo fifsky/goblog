@@ -26,7 +26,7 @@ func (l *Reminds) Get() (*Reminds, bool) {
 func (l *Reminds) GetList(start int, num int) ([]*Reminds, error) {
 	var links = make([]*Reminds, 0)
 	start = (start - 1) * num
-	err := orm.Limit(num, start).Find(&links)
+	err := orm.Limit(num, start).OrderBy("id desc").Find(&links)
 	return links, err
 }
 
