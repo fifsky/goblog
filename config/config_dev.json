@@ -8,5 +8,6 @@
   },
   "session_secret": "fifsky",
   "ding_token": "",
-  "bearychat_token": ""
+  "bearychat_token": "",
+  "tuling_token": ""
 }

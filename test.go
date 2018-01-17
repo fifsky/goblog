@@ -5,7 +5,7 @@ import (
 	"os"
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/system"
-	"github.com/fifsky/goblog/helpers/beary"
+	"github.com/fifsky/goblog/helpers/tuling"
 )
 
 func main() {
@@ -21,6 +21,6 @@ func main() {
 
 	system.LoadConfig()
 
-	err := beary.Alarm("测试测试", "豆爸的私人助理", "fifsky")
-	fmt.Println(err)
+	content, err := tuling.Say("测试测试", "")
+	fmt.Println(content,err)
 }

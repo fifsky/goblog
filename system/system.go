@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/core/ding"
 	"github.com/fifsky/goblog/helpers/beary"
+	"github.com/fifsky/goblog/helpers/tuling"
 )
 
 //Config contains application configuration for active gin mode
@@ -16,6 +17,7 @@ type Config struct {
 	SessionSecret  string `json:"session_secret"`
 	DingToken      string `json:"ding_token"`
 	BearyChatToken string `json:"bearychat_token"`
+	TuLingToken    string `json:"tuling_token"`
 }
 
 //DatabaseConfig contains database connection info
@@ -56,6 +58,7 @@ func LoadConfig() {
 
 	ding.DING_TALK_TOKEN = config.DingToken
 	beary.TOKEN = config.BearyChatToken
+	tuling.TOKEN = config.TuLingToken
 }
 
 //GetConfig returns actual config
