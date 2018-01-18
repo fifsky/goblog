@@ -156,7 +156,4 @@
             $('#scroll_top').hide();
         }
     });
-    $('#scroll_top').click(function(){
-        $.scrollTo($('body'),200);
-    })
 })(jQuery);
