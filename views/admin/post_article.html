@@ -123,7 +123,6 @@
                 $(self).find(':submit').removeClass('formdisabled').attr('disabled', false);
             },
             success: function (data) {
-                $.scrollTo($('body'), 200);
                 if (data.statusCode === 200) {
                     $('.message').html(data.message).show();
                     if (!$(self).find('input[name="post_id"]').val()) {

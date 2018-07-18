@@ -22,13 +22,7 @@ func DateFormatString(date string, layout string) string {
 	return d.Format(layout)
 }
 
-// 格式化时间
-func WeekDayFormatString(date string) string {
-	d, err := time.Parse(time.RFC3339, date)
-	if err != nil {
-		return err.Error()
-	}
-
+func WeekDayFormat(date time.Time) string {
 	m := map[time.Weekday]string{
 		0: "星期日",
 		1: "星期一",
@@ -39,7 +33,7 @@ func WeekDayFormatString(date string) string {
 		6: "星期六",
 	}
 
-	return m[d.Weekday()]
+	return m[date.Weekday()]
 }
 
 // 截取字符串

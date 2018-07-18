@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/ilibs/gosql"
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/core/ding"
 	"github.com/fifsky/goblog/helpers/beary"
@@ -13,20 +14,11 @@ import (
 
 //Config contains application configuration for active gin mode
 type Config struct {
-	Database       DatabaseConfig
+	Database       *gosql.Config
 	SessionSecret  string `json:"session_secret"`
 	DingToken      string `json:"ding_token"`
 	BearyChatToken string `json:"bearychat_token"`
 	TuLingToken    string `json:"tuling_token"`
-}
-
-//DatabaseConfig contains database connection info
-type DatabaseConfig struct {
-	Host     string
-	Port     string
-	Name     string //database name
-	User     string
-	Password string
 }
 
 //current loaded config

@@ -80,8 +80,6 @@ func Send(req *Request) error {
 
 func PostJson(url string, data []byte) (*http.Response, error) {
 
-	fmt.Println(string(data))
-
 	body := bytes.NewBuffer(data)
 	req, err := http.NewRequest("POST", url, body)
 	if err != nil {

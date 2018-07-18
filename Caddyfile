@@ -13,3 +13,14 @@ fifsky.com {
 #        ext .css .js
 #    }
 #}
+
+chibaole.com {
+    root /home/wwwroot/chibaole.com/
+
+    header / Strict-Transport-Security "15768000"
+
+    gzip {
+        level 3
+        ext .css .js
+    }
+}

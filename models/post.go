@@ -2,118 +2,123 @@ package models
 
 import (
 	"time"
-	"github.com/sirupsen/logrus"
+	"github.com/ilibs/gosql"
 )
 
-// table posts
 type Posts struct {
-	Id        uint         `form:"id" xorm:"pk" json:"id"`
-	CateId    uint         `form:"cate_id" xorm:"notnull" json:"cate_id"`
-	Type      uint8        `form:"type" xorm:"notnull" json:"type"`
-	UserId    uint         `form:"-" xorm:"notnull" json:"user_id"`
-	Title     string       `form:"title" xorm:"varchar(200) notnull" json:"title"`
-	Url       string       `form:"url" xorm:"varchar(100) notnull" json:"url"`
-	Content   string       `form:"content" xorm:"longtext notnull" json:"content"`
-	CreatedAt time.Time    `form:"-" xorm:"created notnull"`
-	UpdatedAt time.Time    `form:"-" xorm:"updated notnull"`
+	Id        int       `form:"id" json:"id" db:"id"`
+	CateId    int       `form:"cate_id" json:"cate_id" db:"cate_id"`
+	Type      int       `form:"type" json:"type" db:"type"`
+	UserId    int       `form:"user_id" json:"user_id" db:"user_id"`
+	Title     string    `form:"title" json:"title" db:"title"`
+	Url       string    `form:"url" json:"url" db:"url"`
+	Content   string    `form:"content" json:"content" db:"content"`
+	CreatedAt time.Time `form:"-" json:"created_at" db:"created_at"`
+	UpdatedAt time.Time `form:"-" json:"updated_at" db:"updated_at"`
 }
 
-type UserPosts struct {
-	Posts    `xorm:"extends"`
-	Name     string
-	NickName string
-	Domain   string
+func (p *Posts) DbName() string {
+	return "default"
 }
 
-func (UserPosts) TableName() string {
+func (p *Posts) TableName() string {
 	return "posts"
 }
 
-func (p *Posts) Get() (*Posts, bool) {
-	has, err := orm.Get(p)
-	if err != nil {
-		logrus.Error(err)
-		return p, false
+func (p *Posts) PK() string {
+	return "id"
+}
+
+type UserPosts struct {
+	Posts
+	Name     string `db:"name"`
+	NickName string `db:"nick_name"`
+	Domain   string `db:"domain"`
+}
+
+func PostPrev(id int) (*Posts, error) {
+	m := &Posts{
+		Id:   id,
+		Type: 1,
 	}
-	return p, has
-}
-
-func (p *Posts) Prev(id uint) (*Posts, bool) {
-	post := &Posts{}
-	has, err := orm.Where("id < ? and type = 1", id).Desc("id").Limit(1).Get(post)
+	err := gosql.Model(m).OrderBy("id desc").Limit(1).Get()
 	if err != nil {
-		logrus.Error(err)
-		return post, false
+		return nil, err
 	}
-	return post, has
+	return m, nil
 }
 
-func (p *Posts) Next(id uint) (*Posts, bool) {
-	post := &Posts{}
-	has, err := orm.Where("id > ? and type = 1", id).Asc("id").Limit(1).Get(post)
+func PostNext(id int) (*Posts, error) {
+	m := &Posts{
+		Id:   id,
+		Type: 1,
+	}
+	err := gosql.Model(m).OrderBy("id asc").Limit(1).Get()
+
 	if err != nil {
-		logrus.Error(err)
-		return post, false
+		return nil, err
 	}
-	return post, has
+	return m, nil
 }
 
-func (p *Posts) Archive() ([]map[string]string, error) {
-	result, err := orm.QueryString("select ym,count(ym) total from (select DATE_FORMAT(created_at,'%Y/%m') as ym from posts where type = 1) s group by ym order by ym desc")
-	return result, err
+func PostArchive() ([]map[string]string, error) {
+	m := make([]map[string]string, 0)
+	result, err := gosql.Queryx("select ym,count(ym) total from (select DATE_FORMAT(created_at,'%Y/%m') as ym from posts where type = 1) s group by ym order by ym desc")
+
+	if err != nil {
+		return nil, err
+	}
+
+	for result.Next() {
+		var ym, total string
+		result.Scan(&ym, &total)
+		m = append(m, map[string]string{
+			"ym":    ym,
+			"total": total,
+		})
+	}
+
+	return m, err
 }
 
-func (p *Posts) GetList(start int, num int, artdate string) ([]*UserPosts, error) {
+func PostGetList(p *Posts, start int, num int, artdate string) ([]*UserPosts, error) {
 	var posts = make([]*UserPosts, 0)
 	start = (start - 1) * num
-	//err := orm.Limit(num, start).Find(&posts)
-	//下面这个方式拼接WHERE太麻烦
-	//err := orm.SQL("select p.*, c.name,u.nick_name,c.domain from posts p left join users u on p.user_id = u.id left join cates c on p.cate_id = c.id order by p.id desc limit ?,?", start, num).Find(&posts)
 
-	orm := orm.Select("posts.*, cates.name,users.nick_name,cates.domain")
-	orm.Join("LEFT OUTER", "users", "posts.user_id = users.id")
-	orm.Join("LEFT OUTER", "cates", "posts.cate_id = cates.id")
+	args := make([]interface{}, 0)
+	where := "where 1 = 1 "
 
 	if p.CateId > 0 {
-		orm.Where("posts.cate_id = ?", p.CateId)
+		where += " and p.cate_id = ?"
+		args = append(args, p.CateId)
 	}
 
 	if p.Type > 0 {
-		orm.Where("posts.type = ?", p.Type)
+		where += " and p.type = ?"
+		args = append(args, p.Type)
 	}
 
 	if artdate != "" {
-		orm.Where("DATE_FORMAT(posts.created_at,'%Y-%m') = ?", artdate)
+		where += " and DATE_FORMAT(p.created_at,'%Y-%m') = ?"
+		args = append(args, artdate)
 	}
 
-	orm.Desc("posts.id")
-	orm.Limit(num, start)
+	args = append(args, start, num)
 
-	err := orm.Find(&posts)
+	rows, err := gosql.Queryx("select p.*,c.name,u.nick_name,c.domain from posts p left join users u on p.user_id = u.id left join cates c on p.cate_id = c.id "+where+" order by p.id desc limit ?,?", args...)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		m := &UserPosts{}
+		err := rows.StructScan(m)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, m)
+	}
+
 	return posts, err
-}
-
-func (p *Posts) Count(artdate string) (total int64, err error) {
-	if artdate == "" {
-		total, err = orm.Count(p)
-	} else {
-		total, err = orm.Where("DATE_FORMAT(posts.created_at,'%Y-%m') = ?", artdate).Count(p)
-	}
-
-	return total, err
-}
-
-func (p *Posts) Insert() (int64, error) {
-	affected, err := orm.Insert(p)
-	return affected, err
-}
-
-func (p *Posts) Update() (int64, error) {
-	affected, err := orm.Id(p.Id).Update(p)
-	return affected, err
-}
-
-func (p *Posts) Delete() (int64, error) {
-	affected, err := orm.Id(p.Id).Delete(p)
-	return affected, err
 }

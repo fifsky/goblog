@@ -85,7 +85,6 @@
                 $(self).find(':submit').removeClass('formdisabled').attr('disabled',false);
             },
             success: function(data) {
-                $.scrollTo($('body'),0);
                 if (data.statusCode === 200){
                     $('.message').html(data.message).show();
                     window.location.href = '/admin/users';

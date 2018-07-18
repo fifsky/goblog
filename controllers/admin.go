@@ -1,15 +1,19 @@
 package controllers
 
 import (
-	"github.com/gin-gonic/gin"
+	"time"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/models"
 	"github.com/fifsky/goblog/helpers"
-	"github.com/gin-gonic/contrib/sessions"
+	"github.com/ilibs/sessions"
 	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/sirupsen/logrus"
 	"github.com/gin-gonic/gin/binding"
-	"time"
+	"github.com/ilibs/gosql"
+	"fmt"
+	"github.com/fifsky/goblog/core"
 )
 
 func AdminIndex(c *gin.Context) {
@@ -23,10 +27,16 @@ func AdminIndexPost(c *gin.Context) {
 	options := c.Request.PostForm
 
 	for k, v := range options {
-		optionModel := &models.Options{}
-		optionModel.OptionKey = k
-		optionModel.OptionValue = v[0]
-		optionModel.Update()
+		gosql.Model(&models.Options{
+			OptionValue: v[0],
+		}).Where("option_key = ?", k).Update()
+	}
+
+	o, err := models.GetOptions()
+
+	if err == nil {
+		fmt.Println("====>",o)
+		core.Global.Store("options", o)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -67,10 +77,10 @@ func LoginPost(c *gin.Context) {
 		return
 	}
 
-	userModel := &models.Users{Name: user_name}
-	user, has := userModel.Get()
+	user := &models.Users{Name: user_name}
+	err := gosql.Model(user).Get()
 
-	if !has {
+	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
 			"message":    "用户名或者密码错误",
@@ -100,17 +110,16 @@ func AdminArticlesGet(c *gin.Context) {
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	postModel := new(models.Posts)
-	posts, err := postModel.GetList(page, num, "")
+	posts, err := models.PostGetList(&models.Posts{}, page, num, "")
 
-	cateModel := new(models.Cates)
-	cates, err := cateModel.All()
+	cates := make([]*models.Cates, 0)
+	gosql.Model(&cates).All()
 
 	h := defaultH(c)
 	h["Posts"] = posts
 	h["Cates"] = cates
 
-	total, err := postModel.Count("")
+	total, err := gosql.Model(&models.Posts{}).Count()
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
@@ -123,22 +132,22 @@ func AdminArticlesGet(c *gin.Context) {
 
 func AdminArticleGet(c *gin.Context) {
 	h := defaultH(c)
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	id := helpers.StrTo(c.Query("id")).MustInt()
 
 	if id > 0 {
-		postModel := &models.Posts{Id: id}
-		post, _ := postModel.Get()
-		cateModel := &models.Cates{Id: post.CateId}
-		cate, _ := cateModel.Get()
+		post := &models.Posts{Id: id}
+		gosql.Model(post).Get()
+		cate := &models.Cates{Id: post.CateId}
+		gosql.Model(cate).Get()
+		user := &models.Users{Id: post.UserId}
+		gosql.Model(user).Get()
 
-		userModel := &models.Users{Id: post.UserId}
-		user, _ := userModel.Get()
 		newpost := &models.UserPosts{Posts: *post, Name: cate.Name, Domain: cate.Domain, NickName: user.NickName}
 		h["Post"] = newpost
 	}
 
-	cateModel2 := &models.Cates{}
-	cates, err := cateModel2.All()
+	cates := make([]*models.Cates, 0)
+	err := gosql.Model(&cates).All()
 	h["Cates"] = cates
 
 	if err == nil {
@@ -172,7 +181,7 @@ func AdminArticlePost(c *gin.Context) {
 	}
 
 	if post.Id > 0 {
-		if _, err := post.Update(); err != nil {
+		if _, err := gosql.Model(post).Update(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "更新文章失败",
@@ -182,7 +191,7 @@ func AdminArticlePost(c *gin.Context) {
 			return
 		}
 	} else {
-		if _, err := post.Insert(); err != nil {
+		if _, err := gosql.Model(post).Create(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "发表文章失败",
@@ -201,10 +210,10 @@ func AdminArticlePost(c *gin.Context) {
 }
 
 func AdminArticleDelete(c *gin.Context) {
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	id := helpers.StrTo(c.Query("id")).MustInt()
 
 	post := &models.Posts{Id: id}
-	if _, err := post.Delete(); err != nil {
+	if _, err := gosql.Model(post).Delete(); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
 			"message":    "删除失败",
@@ -219,22 +228,20 @@ func AdminArticleDelete(c *gin.Context) {
 func AdminMoodGet(c *gin.Context) {
 	h := defaultH(c)
 
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	id := helpers.StrTo(c.Query("id")).MustInt()
 	if id > 0 {
-		moodModel := &models.Moods{Id: id}
-		mood, _ := moodModel.Get()
+		mood := &models.Moods{Id: id}
+		gosql.Model(mood).Get()
 		h["Mood"] = mood
 	}
 
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	model := new(models.Moods)
-	moods, err := model.GetList(page, num)
-
+	moods, err := models.MoodGetList(page, num)
 	h["Moods"] = moods
 
-	total, err := model.Count()
+	total, err := gosql.Model(&models.Moods{}).Count()
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
@@ -268,7 +275,7 @@ func AdminMoodPost(c *gin.Context) {
 	}
 
 	if moods.Id > 0 {
-		if _, err := moods.Update(); err != nil {
+		if _, err := gosql.Model(moods).Update(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "更新失败",
@@ -277,7 +284,7 @@ func AdminMoodPost(c *gin.Context) {
 			return
 		}
 	} else {
-		if _, err := moods.Insert(); err != nil {
+		if _, err := gosql.Model(moods).Create(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "发表失败",
@@ -294,10 +301,10 @@ func AdminMoodPost(c *gin.Context) {
 }
 
 func AdminMoodDelete(c *gin.Context) {
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	id := helpers.StrTo(c.Query("id")).MustInt()
 
 	mood := &models.Moods{Id: id}
-	if _, err := mood.Delete(); err != nil {
+	if _, err := gosql.Model(mood).Delete(); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
 			"message":    "删除失败",
@@ -311,22 +318,20 @@ func AdminMoodDelete(c *gin.Context) {
 func AdminCateGet(c *gin.Context) {
 	h := defaultH(c)
 
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	id := helpers.StrTo(c.Query("id")).MustInt()
 	if id > 0 {
-		cateModel := &models.Cates{Id: id}
-		cate, _ := cateModel.Get()
+		cate := &models.Cates{Id: id}
+		gosql.Model(cate).Get()
 		h["Cate"] = cate
 	}
 
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	model := new(models.Cates)
-	cates, err := model.GetList(page, num)
-
+	cates, err := models.CateGetList(page, num)
 	h["Cates"] = cates
 
-	total, err := model.Count()
+	total, err := gosql.Model(&models.Cates{}).Count()
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
@@ -364,7 +369,7 @@ func AdminCatePost(c *gin.Context) {
 	}
 
 	if cates.Id > 0 {
-		if _, err := cates.Update(); err != nil {
+		if _, err := gosql.Model(cates).Update(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "更新失败",
@@ -373,7 +378,7 @@ func AdminCatePost(c *gin.Context) {
 			return
 		}
 	} else {
-		if _, err := cates.Insert(); err != nil {
+		if _, err := gosql.Model(cates).Create(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "创建失败",
@@ -390,10 +395,8 @@ func AdminCatePost(c *gin.Context) {
 }
 
 func AdminCateDelete(c *gin.Context) {
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
-
-	post := &models.Posts{CateId: id}
-	total, _ := post.Count("")
+	id := helpers.StrTo(c.Query("id")).MustInt()
+	total, _ := gosql.Model(&models.Posts{}).Where("cate_id = ?", id).Count()
 
 	if total > 0 {
 		c.JSON(http.StatusOK, gin.H{
@@ -403,8 +406,7 @@ func AdminCateDelete(c *gin.Context) {
 		return
 	}
 
-	mood := &models.Cates{Id: id}
-	if _, err := mood.Delete(); err != nil {
+	if _, err := gosql.Model(&models.Cates{Id: id}).Delete(); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
 			"message":    "删除失败",
@@ -418,22 +420,20 @@ func AdminCateDelete(c *gin.Context) {
 func AdminLinkGet(c *gin.Context) {
 	h := defaultH(c)
 
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	id, _ := helpers.StrTo(c.Query("id")).Int()
 	if id > 0 {
-		linkModel := &models.Links{Id: id}
-		link, _ := linkModel.Get()
+		link := &models.Links{Id: id}
+		gosql.Model(link).Get()
 		h["Link"] = link
 	}
 
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	model := new(models.Links)
-	links, err := model.GetList(page, num)
-
+	links, err := models.LinkGetList(page, num)
 	h["Links"] = links
 
-	total, err := model.Count()
+	total, err := gosql.Model(&models.Links{}).Count()
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
@@ -471,7 +471,7 @@ func AdminLinkPost(c *gin.Context) {
 	}
 
 	if links.Id > 0 {
-		if _, err := links.Update(); err != nil {
+		if _, err := gosql.Model(links).Update(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "更新失败",
@@ -480,7 +480,7 @@ func AdminLinkPost(c *gin.Context) {
 			return
 		}
 	} else {
-		if _, err := links.Insert(); err != nil {
+		if _, err := gosql.Model(links).Create(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "创建失败",
@@ -497,10 +497,9 @@ func AdminLinkPost(c *gin.Context) {
 }
 
 func AdminLinkDelete(c *gin.Context) {
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	id := helpers.StrTo(c.Query("id")).MustInt()
 
-	link := &models.Links{Id: id}
-	if _, err := link.Delete(); err != nil {
+	if _, err := gosql.Model(&models.Links{Id: id}).Delete(); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
 			"message":    "删除失败",
@@ -514,22 +513,21 @@ func AdminLinkDelete(c *gin.Context) {
 func AdminRemindGet(c *gin.Context) {
 	h := defaultH(c)
 
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	id := helpers.StrTo(c.Query("id")).MustInt()
 	if id > 0 {
-		m := &models.Reminds{Id: id}
-		remind, _ := m.Get()
+		remind := &models.Reminds{Id: id}
+		gosql.Model(remind).Get()
 		h["Remind"] = remind
 	}
 
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	model := new(models.Reminds)
-	reminds, err := model.GetList(page, num)
+	reminds, err := models.RemindGetList(page, num)
 
 	h["Reminds"] = reminds
 
-	total, err := model.Count()
+	total, err := gosql.Model(&models.Reminds{}).Count()
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
@@ -581,7 +579,7 @@ func AdminRemindPost(c *gin.Context) {
 	}
 
 	if reminds.Id > 0 {
-		if _, err := reminds.Update(); err != nil {
+		if _, err := gosql.Model(reminds).Update(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "更新失败:" + err.Error(),
@@ -590,7 +588,7 @@ func AdminRemindPost(c *gin.Context) {
 			return
 		}
 	} else {
-		if _, err := reminds.Insert(); err != nil {
+		if _, err := gosql.Model(reminds).Create(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "创建失败",
@@ -607,10 +605,9 @@ func AdminRemindPost(c *gin.Context) {
 }
 
 func AdminRemindDelete(c *gin.Context) {
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	id := helpers.StrTo(c.Query("id")).MustInt()
 
-	remind := &models.Reminds{Id: id}
-	if _, err := remind.Delete(); err != nil {
+	if _, err := gosql.Model(&models.Reminds{Id: id}).Delete(); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
 			"message":    "删除失败",
@@ -626,12 +623,11 @@ func AdminUsersGet(c *gin.Context) {
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	model := new(models.Users)
-	users, err := model.GetList(page, num)
+	users, err := models.UserGetList(page, num)
 
 	h["Users"] = users
 
-	total, err := model.Count()
+	total, err := gosql.Model(&models.Users{}).Count()
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
@@ -644,11 +640,11 @@ func AdminUsersGet(c *gin.Context) {
 
 func AdminUserGet(c *gin.Context) {
 	h := defaultH(c)
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
+	id := helpers.StrTo(c.Query("id")).MustInt()
 	if id > 0 {
-		userModel := &models.Users{Id: id}
-		user, has := userModel.Get()
-		if !has {
+		user := &models.Users{Id: id}
+		err := gosql.Model(user).Get()
+		if err != nil {
 			HandleMessage(c, "用户不存在", "您访问的用户不存在或已经删除！")
 			return
 		}
@@ -695,7 +691,7 @@ func AdminUserPost(c *gin.Context) {
 	users.Password = helpers.Md5(users.Password)
 
 	if users.Id > 0 {
-		if _, err := users.Update(); err != nil {
+		if _, err := gosql.Model(users).Update(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "更新失败",
@@ -704,7 +700,7 @@ func AdminUserPost(c *gin.Context) {
 			return
 		}
 	} else {
-		if _, err := users.Insert(); err != nil {
+		if _, err := gosql.Model(users).Create(); err != nil {
 			c.JSON(http.StatusOK, gin.H{
 				"statusCode": 201,
 				"message":    "创建失败",
@@ -721,11 +717,10 @@ func AdminUserPost(c *gin.Context) {
 }
 
 func AdminUserStatus(c *gin.Context) {
-	id, _ := helpers.StrTo(c.Query("id")).Uint()
-	status, _ := helpers.StrTo(c.Query("status")).Uint8()
+	id := helpers.StrTo(c.Query("id")).MustInt()
+	status := helpers.StrTo(c.Query("status")).MustInt()
 
-	user := &models.Users{Id: id, Status: status}
-	if _, err := user.Delete(); err != nil {
+	if _, err := gosql.Model(&models.Users{}).Where("id = ? and status = ?", id, status).Delete(); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"statusCode": 201,
 			"message":    "删除失败",

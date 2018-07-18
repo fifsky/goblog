@@ -79,7 +79,7 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `moods`;
 
 CREATE TABLE `moods` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `content` varchar(255) NOT NULL DEFAULT '',
   `user_id` int(10) unsigned NOT NULL,
   `created_at` datetime NOT NULL,
@@ -118,7 +118,7 @@ VALUES
 	(1,'site_name','無處告別'),
 	(2,'site_desc','回首往事，珍重眼前人'),
 	(3,'site_keyword','fifsky,rita,生活,博客,豆豆'),
-	(4,'post_num','10'),
+	(4,'post_num','10');
 
 /*!40000 ALTER TABLE `options` ENABLE KEYS */;
 UNLOCK TABLES;

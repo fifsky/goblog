@@ -8,6 +8,7 @@ import (
 	"time"
 	"github.com/fifsky/goblog/models"
 	"github.com/fifsky/goblog/helpers/beary"
+	"github.com/ilibs/gosql"
 )
 
 func SaveMeiRiYiWen(t time.Time) {
@@ -32,7 +33,7 @@ func SaveMeiRiYiWen(t time.Time) {
 		m.UserId = 1
 		m.Title = ret.Get("data.title").String()
 
-		m.Insert()
+		gosql.Model(m).Create()
 
 		msg := make([]beary.Message, 0)
 		msg = append(msg, beary.Message{
@@ -69,7 +70,7 @@ func SaveMeiRiYiJu(t time.Time) {
 		m := &models.Moods{}
 		m.Content = ret.Get("content").String() + "<br>" + ret.Get("note").String()
 		m.UserId = 1
-		m.Insert()
+		gosql.Model(m).Create()
 
 		msg := make([]beary.Message, 0)
 		msg = append(msg, beary.Message{

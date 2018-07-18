@@ -1,31 +1,23 @@
 package models
 
 import (
-	"fmt"
-	"net/url"
-	"github.com/fifsky/goblog/system"
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/go-xorm/xorm"
 	"database/sql"
+
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/ilibs/gosql"
+	"github.com/fifsky/goblog/system"
 )
 
-var orm *xorm.Engine
-
-func InitDB() (*xorm.Engine, error) {
+func InitDB() (error) {
 	config := system.GetConfig()
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=", config.Database.User, config.Database.Password, config.Database.Host, config.Database.Port, config.Database.Name)
-	dsn += url.QueryEscape("Asia/Shanghai")
+	configs := make(map[string]*gosql.Config)
+	configs["default"] = config.Database
 
-	var err error
-	orm, err = xorm.NewEngine("mysql", dsn)
-	orm.SetMaxIdleConns(200)
-	orm.SetMaxOpenConns(200)
-	orm.ShowSQL(true)
-	return orm, err
+	return gosql.Connect(configs)
 }
 
 func ImportDB() ([]sql.Result, error) {
 	sqlpath := "./db/blog.sql"
-	rst, err := orm.ImportFile(sqlpath)
+	rst, err := gosql.Import(sqlpath)
 	return rst, err
 }

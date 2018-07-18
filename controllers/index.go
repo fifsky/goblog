@@ -1,11 +1,13 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/models"
-	"net/http"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/helpers/pagination"
+	"github.com/ilibs/gosql"
 )
 
 func IndexGet(c *gin.Context) {
@@ -20,7 +22,7 @@ func IndexGet(c *gin.Context) {
 
 	if domain != "" {
 		cate.Domain = domain
-		cate.Get()
+		gosql.Model(cate).Get()
 	}
 
 	artdate := ""
@@ -32,18 +34,23 @@ func IndexGet(c *gin.Context) {
 	}
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	postModel := new(models.Posts)
+	post := &models.Posts{}
 	if cate.Id > 0 {
-		postModel.CateId = cate.Id
+		post.CateId = cate.Id
 	}
 
-	postModel.Type = 1
-	posts, err := postModel.GetList(page, num, artdate)
-
+	post.Type = 1
+	posts, err := models.PostGetList(post,page, num, artdate)
 	h := defaultH(c)
 	h["Posts"] = posts
 
-	total, err := postModel.Count(artdate)
+	builder := gosql.Model(post)
+
+	if artdate != "" {
+		builder.Where("DATE_FORMAT(created_at,'%Y-%m') = ?",artdate)
+	}
+
+	total, err := builder.Count()
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
@@ -55,26 +62,26 @@ func IndexGet(c *gin.Context) {
 }
 
 func ArticleGet(c *gin.Context) {
-	id, _ := helpers.StrTo(c.Param("id")).Uint()
+	id := helpers.StrTo(c.Param("id")).MustInt()
 	url := c.GetString("url")
-	postModel := &models.Posts{Id: id}
+	post := &models.Posts{Id: id}
 
 	if url != "" {
-		postModel.Url = url
+		post.Url = url
 	}
 
-	post, has := postModel.Get()
+	err := gosql.Model(post).Get()
 
-	if !has {
+	if err != nil {
 		HandleMessage(c, "文章不存在", "您访问的文章不存在或已经删除！")
 		return
 	}
 
-	cateModel := &models.Cates{Id: post.CateId}
-	cate, _ := cateModel.Get()
+	cate := &models.Cates{Id: post.CateId}
+	gosql.Model(cate).Get()
 
-	userModel := &models.Users{Id: post.UserId}
-	user, _ := userModel.Get()
+	user := &models.Users{Id: post.UserId}
+	gosql.Model(user).Get()
 
 	newpost := &models.UserPosts{Posts: *post, Name: cate.Name, Domain: cate.Domain, NickName: user.NickName}
 
@@ -83,12 +90,12 @@ func ArticleGet(c *gin.Context) {
 	h["Post"] = newpost
 
 	if url == "" {
-		prev, has := postModel.Prev(post.Id)
-		if has {
+		prev, err := models.PostPrev(post.Id)
+		if err != nil {
 			h["Prev"] = prev
 		}
-		next, has := postModel.Next(post.Id)
-		if has {
+		next, err := models.PostNext(post.Id)
+		if err != nil {
 			h["Next"] = next
 		}
 	}

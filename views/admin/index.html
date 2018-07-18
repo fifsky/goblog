@@ -49,7 +49,6 @@
                 $(self).find(':submit').addClass('formdisabled').attr('disabled',true);
             },
             success: function(data) {
-                $.scrollTo($('body'),0);
                 if (data.statusCode == 200){
                     $('.message').html(data.message).show().delay(2000).fadeOut(500);
                     $(self).find(':submit').removeClass('formdisabled').attr('disabled',false);

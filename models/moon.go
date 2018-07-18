@@ -2,70 +2,63 @@ package models
 
 import (
 	"time"
-	"github.com/sirupsen/logrus"
+	"github.com/ilibs/gosql"
 )
 
 type Moods struct {
-	Id        uint        `form:"id" xorm:"pk"`
-	Content   string      `form:"content" xorm:"varchar(255) notnull"`
-	UserId    uint        `form:"-" xorm:"notnull"`
-	CreatedAt time.Time   `form:"-" xorm:"created notnull"`
+	Id        int       `form:"id" json:"id" db:"id"`
+	Content   string    `form:"content" json:"content" db:"content"`
+	UserId    int       `form:"user_id" json:"user_id" db:"user_id"`
+	CreatedAt time.Time `form:"-" json:"created_at" db:"created_at"`
 }
 
-type UserMoods struct {
-	Moods    `xorm:"extends"`
-	NickName string
+func (m *Moods) DbName() string {
+	return "default"
 }
 
-func (UserMoods) TableName() string {
+func (m *Moods) TableName() string {
 	return "moods"
 }
 
-func (m *Moods) Frist() (*UserMoods, error) {
-	var mood = &UserMoods{}
-	_, err := orm.Select("moods.*, users.nick_name").Join("LEFT OUTER", "users", "moods.user_id = users.id").Limit(1).Desc("id").Get(mood)
-	return mood, err
+func (m *Moods) PK() string {
+	return "id"
 }
 
-func (m *Moods) Get() (*Moods, bool) {
-	has, err := orm.Get(m)
+type UserMoods struct {
+	Moods
+	NickName string `db:"nick_name"`
+}
+
+func MoodFrist() (*UserMoods, error) {
+	m := &UserMoods{}
+
+	err := gosql.QueryRowx("select m.*,u.nick_name from moods m left join users u on m.user_id = u.id order by m.id desc limit 1").StructScan(m)
+
 	if err != nil {
-		logrus.Error(err)
-		return m, false
+		return nil, err
 	}
-	return m, has
+	return m, nil
 }
 
-func (m *Moods) GetList(start int, num int) ([]*UserMoods, error) {
+func MoodGetList(start int, num int) ([]*UserMoods, error) {
 	var moods = make([]*UserMoods, 0)
 	start = (start - 1) * num
 
-	orm := orm.Select("moods.*, users.nick_name")
-	orm.Join("LEFT OUTER", "users", "moods.user_id = users.id")
+	rows, err := gosql.Queryx("select m.*,u.nick_name from moods m left join users u on m.user_id = u.id order by m.id desc limit ?,?", start, num)
 
-	orm.Desc("moods.id")
-	orm.Limit(num, start)
+	if err != nil {
+		return nil, err
+	}
 
-	err := orm.Find(&moods)
+	for rows.Next() {
+		m := &UserMoods{}
+		err := rows.StructScan(m)
+		if err != nil {
+			return nil, err
+		}
+
+		moods = append(moods, m)
+	}
+
 	return moods, err
-}
-
-func (m *Moods) Count() (int64, error) {
-	total, err := orm.Count(m)
-	return total, err
-}
-
-func (m *Moods) Insert() (int64, error) {
-	affected, err := orm.Insert(m)
-	return affected, err
-}
-
-func (m *Moods) Update() (int64, error) {
-	affected, err := orm.Id(m.Id).Update(m)
-	return affected, err
-}
-
-func (m *Moods) Delete() (int64, error) {
-	affected, err := orm.Id(m.Id).Delete(m)
-	return affected, err
 }
