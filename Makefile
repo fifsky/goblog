@@ -1,3 +1,6 @@
+build:
+	go build -o blog main.go
+
 install:
 	go run main.go install
 
@@ -10,6 +13,3 @@ start:
 restart:
 	make stop
 	make start
-
-build:
-	go build -o blog main.go

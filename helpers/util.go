@@ -12,7 +12,6 @@ import (
 	"encoding/json"
 )
 
-// 计算字符串的md5值
 func Md5(source string) string {
 	md5h := md5.New()
 	md5h.Write([]byte(source))
@@ -22,12 +21,6 @@ func Md5(source string) string {
 func JsonEncode(v interface{}) string {
 	str, _ := json.Marshal(v)
 	return string(str)
-}
-
-func PanicIf(err error) {
-	if err != nil {
-		panic(err)
-	}
 }
 
 func PathExists(path string) (bool, error) {
@@ -103,13 +96,4 @@ func Encrypt(plaintext []byte, keystring string) ([]byte, error) {
 	stream.XORKeyStream(ciphertext[aes.BlockSize:], plaintext)
 
 	return ciphertext, nil
-}
-
-func InArray(find string , arr []string) bool {
-	for _ ,s := range arr{
-		if s == find {
-			return  true
-		}
-	}
-	return false
 }

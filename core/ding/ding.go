@@ -23,7 +23,7 @@ type DingTalkResponse struct {
 	Errmsg  string `json:"errmsg"`
 }
 
-func Alarm(content string, at ...[]string) error {
+func Alarm(content string, at ...string) error {
 	dingtalk := &DingTalkRequest{
 		Msgtype: "text",
 		Text: map[string]string{
@@ -77,7 +77,7 @@ func PostJson(url string, data []byte) (*http.Response, error) {
 	return resp, err
 }
 
-func (this *DingTalkRequest) paserResp(data []byte) {
+func (d *DingTalkRequest) paserResp(data []byte) {
 	ret := new(DingTalkResponse)
 	err := json.Unmarshal(data, ret)
 	if err != nil || ret.Errcode != 0 {

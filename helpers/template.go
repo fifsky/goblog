@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"strings"
 	"github.com/pkg/errors"
+	"github.com/gin-gonic/gin"
 )
 
 // 格式化时间
@@ -111,4 +112,23 @@ func Args(values ...interface{}) (map[string]interface{}, error) {
 		dict[key] = values[i+1]
 	}
 	return dict, nil
+}
+
+
+func SetTemplate(engine *gin.Engine) {
+
+	funcMap := template.FuncMap{
+		"WeekDayFormat":    WeekDayFormat,
+		"DateFormatString": DateFormatString,
+		"DateFormat":       DateFormat,
+		"Substr":           Substr,
+		"Truncate":         Truncate,
+		"Unescaped":        Unescaped,
+		"StaticUrl":        StaticUrl,
+		"IsPage":           IsPage,
+		"Args":             Args,
+	}
+
+	engine.SetFuncMap(funcMap)
+	engine.LoadHTMLGlob("views/**/*")
 }

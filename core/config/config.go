@@ -1,24 +1,22 @@
-package system
+package config
 
 import (
 	"encoding/json"
+	"os"
 	"fmt"
 	"io/ioutil"
 
 	"github.com/ilibs/gosql"
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/core/ding"
-	"github.com/fifsky/goblog/helpers/beary"
-	"github.com/fifsky/goblog/helpers/tuling"
+	"database/sql"
 )
 
 //Config contains application configuration for active gin mode
 type Config struct {
-	Database       *gosql.Config
+	Database       map[string]*gosql.Config
 	SessionSecret  string `json:"session_secret"`
 	DingToken      string `json:"ding_token"`
-	BearyChatToken string `json:"bearychat_token"`
-	TuLingToken    string `json:"tuling_token"`
 }
 
 //current loaded config
@@ -26,6 +24,13 @@ var config *Config
 
 //LoadConfig unmarshals config for current GIN_MODE
 func LoadConfig() {
+	env := os.Getenv("APP_ENV")
+	if env == "local" {
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	config = &Config{}
 
 	file := ""
@@ -49,11 +54,15 @@ func LoadConfig() {
 	}
 
 	ding.DING_TALK_TOKEN = config.DingToken
-	beary.TOKEN = config.BearyChatToken
-	tuling.TOKEN = config.TuLingToken
 }
 
 //GetConfig returns actual config
 func GetConfig() *Config {
 	return config
+}
+
+func ImportDB() ([]sql.Result, error) {
+	sqlpath := "./db/blog.sql"
+	rst, err := gosql.Import(sqlpath)
+	return rst, err
 }

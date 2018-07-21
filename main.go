@@ -1,46 +1,34 @@
 package main
 
 import (
-	"html/template"
 	"net/http"
 	"os"
 	"time"
 	"fmt"
 	"flag"
-	"strings"
 	"io/ioutil"
 	"strconv"
 
-	"github.com/fifsky/goblog/helpers/beary"
-	"github.com/fifsky/goblog/core"
-	"github.com/sirupsen/logrus"
-	"github.com/ilibs/sessions"
-	"github.com/ilibs/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+
+	"github.com/fifsky/goblog/core"
+	"github.com/fifsky/goblog/core/config"
 	"github.com/fifsky/goblog/controllers"
-	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
-	"github.com/fifsky/goblog/system"
+	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/gosql"
 )
 
 func main() {
-	APP_ENV := os.Getenv("APP_ENV")
-	if APP_ENV == "local" {
-		gin.SetMode(gin.DebugMode)
-	} else {
-		gin.SetMode(gin.ReleaseMode)
-	}
-
+	config.LoadConfig()
 	fmt.Println("Run Mode:", gin.Mode())
-
-	system.LoadConfig()
-	connectDB()
+	gosql.Connect(config.GetConfig().Database)
 
 	flag.Parse()
 	cmd := flag.Arg(0)
 	if cmd == "install" {
-		_, err := models.ImportDB()
+		_, err := config.ImportDB()
 		if err != nil {
 			fmt.Println("Import DB Error:" + err.Error())
 			logrus.Error(err)
@@ -53,11 +41,11 @@ func main() {
 
 	router := gin.Default()
 	router.Use(core.Ginrus(logrus.StandardLogger(), time.RFC3339, true))
-	setTemplate(router)
-	setSessions(router)
+	helpers.SetTemplate(router)
+	core.SetSessions(router)
 
 	//中间件
-	router.Use(sharedData())
+	router.Use(core.SharedData())
 
 	//静态文件
 	router.Static("/static", "./static")
@@ -68,9 +56,6 @@ func main() {
 	router.GET("/article/:id", controllers.ArticleGet)
 	router.GET("/categroy/:domain", controllers.IndexGet)
 	router.GET("/date/:year/:month", controllers.IndexGet)
-
-	//Robot
-	router.POST("/robot/bearychat", controllers.BearyChat)
 
 	//管理后台
 	admin := router.Group("/admin")
@@ -119,73 +104,9 @@ func main() {
 
 	setPid(os.Getpid())
 
-	go startCron()
+	go core.StartCron()
 
 	router.Run(":8080")
-}
-
-func startCron() {
-	t := time.NewTicker(60 * time.Second)
-
-	for {
-		select {
-		case t1 := <-t.C:
-			dingRemind(t1)
-		}
-	}
-}
-
-func dingRemind(t time.Time) {
-	reminds := make([]*models.Reminds, 0)
-	err := gosql.Model(&reminds).All()
-	if err != nil {
-		logrus.Error(err)
-	}
-
-	//天气预报
-	//go helpers.SendWeather(t)
-	//每日一文
-	//go helpers.SaveMeiRiYiWen(t)
-	//每日一句
-	//go helpers.SaveMeiRiYiJu(t)
-
-	for _, v := range reminds {
-		remind_date := v.RemindDate
-		//fmt.Println(v, t.Format("2006-01-02 15:04:00"), remind_date.Format("2006-01-02 15:04:00"))
-
-		content := "提醒时间:" + remind_date.Format("2006-01-02 15:04:00") + "\n提醒内容:" + v.Content
-
-		beray_channel := "豆爸的私人助理"
-
-		switch v.Type {
-		case 0: //固定时间
-			if t.Format("2006-01-02 15:04:00") == remind_date.Format("2006-01-02 15:04:00") {
-				beary.Alarm(content, beray_channel, v.At)
-			}
-		case 1: //每分钟
-			beary.Alarm(content, beray_channel, v.At)
-		case 2: //每小时
-			if t.Format("04:00") == remind_date.Format("04:00") {
-				beary.Alarm(content, beray_channel, v.At)
-			}
-		case 3: //每天
-			if t.Format("15:04:00") == remind_date.Format("15:04:00") {
-				beary.Alarm(content, beray_channel, v.At)
-			}
-		case 4: //每周
-			if t.Weekday().String() == remind_date.Weekday().String() && t.Format("15:04:00") == remind_date.Format("15:04:00") {
-				beary.Alarm(content, beray_channel, v.At)
-			}
-		case 5: //每月
-			if t.Format("02 15:04:00") == remind_date.Format("02 15:04:00") {
-				beary.Alarm(content, beray_channel, v.At)
-			}
-		case 6: //每年
-			if t.Format("01-02 15:04:00") == remind_date.Format("01-02 15:04:00") {
-				beary.Alarm(content, beray_channel, v.At)
-			}
-		}
-	}
 }
 
 func setPid(pid int) {
@@ -194,32 +115,6 @@ func setPid(pid int) {
 	if err != nil {
 		fmt.Printf("error opening file: %v", err)
 	}
-}
-
-func connectDB() {
-	err := models.InitDB()
-	if err != nil {
-		logrus.Error("err open databases", err)
-		panic(err)
-	}
-}
-
-func setTemplate(engine *gin.Engine) {
-
-	funcMap := template.FuncMap{
-		"WeekDayFormat":    helpers.WeekDayFormat,
-		"DateFormatString": helpers.DateFormatString,
-		"DateFormat":       helpers.DateFormat,
-		"Substr":           helpers.Substr,
-		"Truncate":         helpers.Truncate,
-		"Unescaped":        helpers.Unescaped,
-		"StaticUrl":        helpers.StaticUrl,
-		"IsPage":           helpers.IsPage,
-		"Args":             helpers.Args,
-	}
-
-	engine.SetFuncMap(funcMap)
-	engine.LoadHTMLGlob("views/**/*")
 }
 
 func setLogger() *os.File {
@@ -235,47 +130,6 @@ func setLogger() *os.File {
 		logrus.SetLevel(logrus.InfoLevel)
 	}
 	return f
-}
-
-func setSessions(router *gin.Engine) {
-	config := system.GetConfig()
-	store := cookie.NewStore([]byte(config.SessionSecret))
-	store.Options(sessions.Options{HttpOnly: true, MaxAge: 7 * 86400, Path: "/"}) //Also set Secure: true if using SSL, you should though
-	router.Use(sessions.Sessions("gin-session", store))
-}
-
-//middlewares
-func sharedData() gin.HandlerFunc {
-	return func(c *gin.Context) {
-
-		if !strings.HasPrefix(c.Request.URL.Path, "/static") {
-			//网站全局配置
-			options, ok := core.Global.Load("options")
-			if !ok {
-				options, _ = models.GetOptions()
-				core.Global.Store("options", options)
-				c.Set("options", options)
-			} else {
-				c.Set("options", options.(map[string]string))
-			}
-
-			session := sessions.Default(c)
-			if uid := session.Get("UserId"); uid != nil {
-				if user, ok := core.Global.Load("LoginUser"); ok {
-					c.Set("LoginUser", user.(*models.Users))
-				} else {
-					user = &models.Users{}
-					err := gosql.Model(user).Where("id = ?", uid).Get()
-					if err == nil {
-						core.Global.Store("LoginUser", user)
-						c.Set("LoginUser", user)
-					}
-				}
-			}
-		}
-
-		c.Next()
-	}
 }
 
 func authLogin() gin.HandlerFunc {
