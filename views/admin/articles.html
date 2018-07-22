@@ -58,7 +58,7 @@
                     </td>
                     <td>{{.NickName}}</td>
                     <td><a href="/category/{{.Domain}}" target="_blank">{{.Name}}</a></td>
-                    <td>{{ if eq .Type 1 }}文章{{else}}页面{{end}}</a></td>
+                    <td>{{ if eq .Type 1 }}文章{{else}}页面{{end}}</td>
                     <td>{{ DateFormat .UpdatedAt "2006-01-02" }}</td>
                     <td><a href="/admin/post/article?id={{.Id}}">编辑</a><span class="line">|</span><a
                             href="/admin/post/article_delete?id={{.Id}}"

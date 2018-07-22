@@ -17,18 +17,5 @@
     </div>
 </div>
 {{ template "layout/sidebar" . }}
-<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js"></script>
-<script type="text/javascript">
-    const gitment = new Gitment({
-        id: '{{.Post.Id}}', // optional
-        owner: 'fifsky',
-        repo: 'blog.fifsky.com',
-        oauth: {
-            client_id: '7fddf658b4a92d64d2cd',
-            client_secret: '55eeff13e0aa2ed1aef210ce3ca9b162ae1923b6'
-        }
-    });
-    gitment.render('gitment')
-</script>
 {{ template "layout/footer" . }}
 {{ end }}
