@@ -42,6 +42,7 @@ func Load(args map[string]string) {
 	if env == "local" {
 		gin.SetMode(gin.DebugMode)
 	} else {
+		env = "prod"
 		gin.SetMode(gin.ReleaseMode)
 	}
 
