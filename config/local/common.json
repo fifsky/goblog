@@ -1,0 +1,7 @@
+{
+  "env": "local",
+  "debug": "off",
+  "storage_path": "storage/",
+  "session_secret": "fifsky",
+  "dingtoken": "c72ca852c035ce9c6a4fd9d3c35ec7a178ad60eb2facc54265299577684a67d0"
+}

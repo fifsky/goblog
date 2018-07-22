@@ -4,22 +4,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
+	"github.com/ilibs/logger"
 )
 
-type loggerEntryWithFields interface {
-	WithFields(fields logrus.Fields) *logrus.Entry
-}
-
-// Ginrus returns a gin.HandlerFunc (middleware) that logs requests using logrus.
-//
-// Requests with errors are logged using logrus.Error().
-// Requests without errors are logged using logrus.Info().
-//
-// It receives:
-//   1. A time package format string (e.g. time.RFC3339).
-//   2. A boolean stating whether to use UTC time zone or local.
-func Ginrus(logger loggerEntryWithFields, timeFormat string, utc bool) gin.HandlerFunc {
+func Ginrus() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
 		// some evil middlewares modify this values
@@ -28,25 +16,23 @@ func Ginrus(logger loggerEntryWithFields, timeFormat string, utc bool) gin.Handl
 
 		end := time.Now()
 		latency := end.Sub(start)
-		if utc {
-			end = end.UTC()
-		}
+		end = end.Local()
 
-		entry := logger.WithFields(logrus.Fields{
+		info := map[string]interface{}{
 			"status":     c.Writer.Status(),
 			"method":     c.Request.Method,
 			"path":       path,
 			"ip":         c.ClientIP(),
 			"latency":    latency,
 			"user-agent": c.Request.UserAgent(),
-			"time":       end.Format(timeFormat),
-		})
+			"time":       end.Format("2006-01-02 15:04:05"),
+		}
 
 		if len(c.Errors) > 0 {
 			// Append error field if this is an erroneous request.
-			entry.Error(c.Errors.String())
+			logger.Errorf(c.Errors.String(),info)
 		} else {
-			entry.Info()
+			logger.Info("%v",info)
 		}
 	}
 }

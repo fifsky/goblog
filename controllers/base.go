@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/models"
-	"github.com/sirupsen/logrus"
+	"github.com/ilibs/logger"
 	"github.com/ilibs/gosql"
 )
 
@@ -27,24 +27,24 @@ func defaultH(c *gin.Context) gin.H {
 		mood ,err := models.MoodFrist()
 
 		if err != nil {
-			logrus.Error(err)
+			logger.Error(err)
 		}
 
 		cates := make([]*models.Cates, 0)
 		err = gosql.Model(&cates).All()
 		if err != nil {
-			logrus.Error(err)
+			logger.Error(err)
 		}
 
 		links :=  make([]*models.Links, 0)
 		err = gosql.Model(&links).All()
 		if err != nil {
-			logrus.Error(err)
+			logger.Error(err)
 		}
 
 		archives, err := models.PostArchive()
 		if err != nil {
-			logrus.Error(err)
+			logger.Error(err)
 		}
 
 		h["Mood"] = mood

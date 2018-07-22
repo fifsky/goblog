@@ -9,11 +9,10 @@ import (
 	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/sessions"
 	"github.com/fifsky/goblog/helpers/pagination"
-	"github.com/sirupsen/logrus"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/ilibs/gosql"
-	"fmt"
 	"github.com/fifsky/goblog/core"
+	"github.com/ilibs/logger"
 )
 
 func AdminIndex(c *gin.Context) {
@@ -35,7 +34,6 @@ func AdminIndexPost(c *gin.Context) {
 	o, err := models.GetOptions()
 
 	if err == nil {
-		fmt.Println("====>",o)
 		core.Global.Store("options", o)
 	}
 
@@ -187,7 +185,7 @@ func AdminArticlePost(c *gin.Context) {
 				"message":    "更新文章失败",
 				"post":       post,
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	} else {
@@ -197,7 +195,7 @@ func AdminArticlePost(c *gin.Context) {
 				"message":    "发表文章失败",
 				"post":       post,
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	}
@@ -219,7 +217,7 @@ func AdminArticleDelete(c *gin.Context) {
 			"message":    "删除失败",
 			"post":       post,
 		})
-		logrus.Error(err)
+		logger.Error(err)
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/articles")
@@ -280,7 +278,7 @@ func AdminMoodPost(c *gin.Context) {
 				"statusCode": 201,
 				"message":    "更新失败",
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	} else {
@@ -289,7 +287,7 @@ func AdminMoodPost(c *gin.Context) {
 				"statusCode": 201,
 				"message":    "发表失败",
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	}
@@ -309,7 +307,7 @@ func AdminMoodDelete(c *gin.Context) {
 			"statusCode": 201,
 			"message":    "删除失败",
 		})
-		logrus.Error(err)
+		logger.Error(err)
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/moods")
@@ -374,7 +372,7 @@ func AdminCatePost(c *gin.Context) {
 				"statusCode": 201,
 				"message":    "更新失败",
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	} else {
@@ -383,7 +381,7 @@ func AdminCatePost(c *gin.Context) {
 				"statusCode": 201,
 				"message":    "创建失败",
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	}
@@ -411,7 +409,7 @@ func AdminCateDelete(c *gin.Context) {
 			"statusCode": 201,
 			"message":    "删除失败",
 		})
-		logrus.Error(err)
+		logger.Error(err)
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/cates")
@@ -476,7 +474,7 @@ func AdminLinkPost(c *gin.Context) {
 				"statusCode": 201,
 				"message":    "更新失败",
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	} else {
@@ -485,7 +483,7 @@ func AdminLinkPost(c *gin.Context) {
 				"statusCode": 201,
 				"message":    "创建失败",
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	}
@@ -504,7 +502,7 @@ func AdminLinkDelete(c *gin.Context) {
 			"statusCode": 201,
 			"message":    "删除失败",
 		})
-		logrus.Error(err)
+		logger.Error(err)
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/links")
@@ -584,7 +582,7 @@ func AdminRemindPost(c *gin.Context) {
 				"statusCode": 201,
 				"message":    "更新失败:" + err.Error(),
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	} else {
@@ -593,7 +591,7 @@ func AdminRemindPost(c *gin.Context) {
 				"statusCode": 201,
 				"message":    "创建失败",
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	}
@@ -612,7 +610,7 @@ func AdminRemindDelete(c *gin.Context) {
 			"statusCode": 201,
 			"message":    "删除失败",
 		})
-		logrus.Error(err)
+		logger.Error(err)
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/remind")
@@ -696,7 +694,7 @@ func AdminUserPost(c *gin.Context) {
 				"statusCode": 201,
 				"message":    "更新失败",
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	} else {
@@ -705,7 +703,7 @@ func AdminUserPost(c *gin.Context) {
 				"statusCode": 201,
 				"message":    "创建失败",
 			})
-			logrus.Error(err)
+			logger.Error(err)
 			return
 		}
 	}
@@ -725,7 +723,7 @@ func AdminUserStatus(c *gin.Context) {
 			"statusCode": 201,
 			"message":    "删除失败",
 		})
-		logrus.Error(err)
+		logger.Error(err)
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/users")

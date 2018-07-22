@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/sirupsen/logrus"
+	"github.com/ilibs/logger"
 )
 
 var DING_TALK_TOKEN string
@@ -54,7 +54,7 @@ func Alarm(content string, at ...string) error {
 	}
 
 	if err != nil {
-		logrus.Debug("alarm", err.Error())
+		logger.Debug("alarm", err)
 		return err
 	}
 	return nil
@@ -81,7 +81,7 @@ func (d *DingTalkRequest) paserResp(data []byte) {
 	ret := new(DingTalkResponse)
 	err := json.Unmarshal(data, ret)
 	if err != nil || ret.Errcode != 0 {
-		logrus.Debug("dingtalk", string(data))
+		logger.Debug("dingtalk", string(data))
 		return
 	}
 }

@@ -1,29 +1,43 @@
 package config
 
 import (
-	"encoding/json"
 	"os"
-	"fmt"
-	"io/ioutil"
+	"log"
+	"strings"
+	"path/filepath"
+	"database/sql"
 
 	"github.com/ilibs/gosql"
-	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/core/ding"
-	"database/sql"
+	"github.com/ilibs/logger"
+	"github.com/fifsky/goconf"
+	"github.com/gin-gonic/gin"
 )
 
-//Config contains application configuration for active gin mode
-type Config struct {
-	Database       map[string]*gosql.Config
-	SessionSecret  string `json:"session_secret"`
-	DingToken      string `json:"ding_token"`
+type common struct {
+	Env         string `json:"env"`
+	Debug       string `json:"debug"`
+	ConfigPath  string `json:"config_path"`
+	StoragePath string `json:"storage_path"`
+	DingToken   string `json:"dingtoken"`
+	SessionSecret string `json:"session_secret"`
 }
 
-//current loaded config
-var config *Config
+type app struct {
+	Common common                   `conf:"common"`
+	Log    logger.Config            `conf:"log"`
+	DB     map[string]*gosql.Config `conf:"database"`
+}
 
-//LoadConfig unmarshals config for current GIN_MODE
-func LoadConfig() {
+var App = &app{}
+
+func init() {
+	argsInit()
+	Load(ExtArgs)
+}
+
+func Load(args map[string]string) {
+	//env
 	env := os.Getenv("APP_ENV")
 	if env == "local" {
 		gin.SetMode(gin.DebugMode)
@@ -31,34 +45,61 @@ func LoadConfig() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	config = &Config{}
-
-	file := ""
-	switch gin.Mode() {
-	case gin.DebugMode:
-		file = "dev"
-	case gin.ReleaseMode:
-		file = "release"
-	default:
-		panic(fmt.Sprintf("Unknown gin mode %s", gin.Mode()))
+	appPath := args["config"]
+	if appPath == "" {
+		appPath = "./"
 	}
 
-	data, err := ioutil.ReadFile("config/config_" + file + ".json")
+	appPath = strings.TrimSuffix(appPath, "/") + "/"
+	App.Common.ConfigPath = filepath.Join(appPath, "config") + "/"
+
+	conf, err := goconf.NewConfig(App.Common.ConfigPath + env)
 	if err != nil {
-		fmt.Println("ReadFile: ", err.Error())
-		panic(err)
+		logger.Fatal("json config path error %s", err.Error())
 	}
 
-	if err := json.Unmarshal(data, config); err != nil {
-		panic(err)
+	//load config
+	if err := conf.Load(App); err != nil {
+		log.Fatal("Config Error:", err)
 	}
 
-	ding.DING_TALK_TOKEN = config.DingToken
-}
+	if !filepath.IsAbs(App.Common.StoragePath) {
+		App.Common.StoragePath = filepath.Join(appPath, App.Common.StoragePath) + "/"
+	}
 
-//GetConfig returns actual config
-func GetConfig() *Config {
-	return config
+	ding.DING_TALK_TOKEN = App.Common.DingToken
+
+	//debug model
+	if args["debug"] != "" {
+		App.Common.Debug = args["debug"]
+	}
+
+	//debug
+	if App.Common.Debug == "on" {
+		//log level
+		App.Log.LogLevel = "debug"
+		//log model
+		App.Log.LogMode = "std"
+	}
+
+	if args["show-sql"] == "on" {
+		for _, d := range App.DB {
+			d.ShowSql = true
+		}
+	} else if args["show-sql"] == "off" {
+		for _, d := range App.DB {
+			d.ShowSql = false
+		}
+	}
+
+	logger.Setting(func(c *logger.Config) {
+		c.LogMode = App.Log.LogMode
+		c.LogLevel = App.Log.LogLevel
+		c.LogMaxFiles = App.Log.LogMaxFiles
+		c.LogPath = App.Common.StoragePath + "logs/"
+		c.LogSentryDSN = App.Log.LogSentryDSN
+		c.LogSentryType = App.Log.LogSentryType
+	})
 }
 
 func ImportDB() ([]sql.Result, error) {

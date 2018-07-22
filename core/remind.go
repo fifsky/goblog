@@ -6,7 +6,7 @@ import (
 	"github.com/fifsky/goblog/core/ding"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
-	"github.com/sirupsen/logrus"
+	"github.com/ilibs/logger"
 )
 
 func StartCron() {
@@ -24,7 +24,7 @@ func dingRemind(t time.Time) {
 	reminds := make([]*models.Reminds, 0)
 	err := gosql.Model(&reminds).All()
 	if err != nil {
-		logrus.Error(err)
+		logger.Error(err)
 	}
 
 	//天气预报

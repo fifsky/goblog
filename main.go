@@ -1,29 +1,25 @@
 package main
 
 import (
-	"net/http"
 	"os"
-	"time"
 	"fmt"
 	"flag"
 	"io/ioutil"
 	"strconv"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
-
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/core/config"
 	"github.com/fifsky/goblog/controllers"
-	"github.com/fifsky/goblog/models"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/gosql"
+	"github.com/ilibs/logger"
 )
 
 func main() {
-	config.LoadConfig()
 	fmt.Println("Run Mode:", gin.Mode())
-	gosql.Connect(config.GetConfig().Database)
+	gosql.Connect(config.App.DB)
 
 	flag.Parse()
 	cmd := flag.Arg(0)
@@ -31,16 +27,13 @@ func main() {
 		_, err := config.ImportDB()
 		if err != nil {
 			fmt.Println("Import DB Error:" + err.Error())
-			logrus.Error(err)
+			logger.Error(err)
 		}
 		return
 	}
 
-	f := setLogger()
-	defer f.Close()
-
 	router := gin.Default()
-	router.Use(core.Ginrus(logrus.StandardLogger(), time.RFC3339, true))
+	router.Use(core.Ginrus())
 	helpers.SetTemplate(router)
 	core.SetSessions(router)
 
@@ -63,7 +56,7 @@ func main() {
 	admin.POST("/login", controllers.LoginPost)
 	admin.GET("/logout", controllers.LogoutGet)
 
-	admin.Use(authLogin())
+	admin.Use(core.AuthLogin())
 	{
 		//网站设置
 		admin.GET("/index", controllers.AdminIndex)
@@ -114,35 +107,5 @@ func setPid(pid int) {
 	err := ioutil.WriteFile("./blog.pid", d, 0644)
 	if err != nil {
 		fmt.Printf("error opening file: %v", err)
-	}
-}
-
-func setLogger() *os.File {
-	f, err := os.OpenFile("logs/app.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
-	if err != nil {
-		fmt.Printf("error opening file: %v", err)
-	}
-
-	logrus.SetFormatter(&logrus.TextFormatter{})
-	//logrus.SetOutput(os.Stdout)
-	logrus.SetOutput(f)
-	if gin.Mode() == gin.DebugMode {
-		logrus.SetLevel(logrus.InfoLevel)
-	}
-	return f
-}
-
-func authLogin() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if user, _ := c.Get("LoginUser"); user != nil {
-			if _, ok := user.(*models.Users); ok {
-				c.Next()
-				return
-			}
-		}
-
-		logrus.Warnf("User not authorized to visit %s", c.Request.RequestURI)
-
-		c.Redirect(http.StatusFound, "/admin/login")
 	}
 }
