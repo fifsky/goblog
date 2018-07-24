@@ -32,7 +32,7 @@ func Ginrus() gin.HandlerFunc {
 			// Append error field if this is an erroneous request.
 			logger.Errorf(c.Errors.String(),info)
 		} else {
-			logger.Info("%v",info)
+			logger.Info(info)
 		}
 	}
 }

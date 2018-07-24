@@ -43,29 +43,29 @@ func dingRemind(t time.Time) {
 		switch v.Type {
 		case 0: //固定时间
 			if t.Format("2006-01-02 15:04:00") == remind_date.Format("2006-01-02 15:04:00") {
-				ding.Alarm(content, v.At)
+				ding.Alarm(content)
 			}
 		case 1: //每分钟
-			ding.Alarm(content, v.At)
+			ding.Alarm(content)
 		case 2: //每小时
 			if t.Format("04:00") == remind_date.Format("04:00") {
-				ding.Alarm(content, v.At)
+				ding.Alarm(content)
 			}
 		case 3: //每天
 			if t.Format("15:04:00") == remind_date.Format("15:04:00") {
-				ding.Alarm(content, v.At)
+				ding.Alarm(content)
 			}
 		case 4: //每周
 			if t.Weekday().String() == remind_date.Weekday().String() && t.Format("15:04:00") == remind_date.Format("15:04:00") {
-				ding.Alarm(content, v.At)
+				ding.Alarm(content)
 			}
 		case 5: //每月
 			if t.Format("02 15:04:00") == remind_date.Format("02 15:04:00") {
-				ding.Alarm(content, v.At)
+				ding.Alarm(content)
 			}
 		case 6: //每年
 			if t.Format("01-02 15:04:00") == remind_date.Format("01-02 15:04:00") {
-				ding.Alarm(content, v.At)
+				ding.Alarm(content)
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 {
-  "log_mode": "std",
+  "log_mode": "file",
   "log_level": "debug",
   "log_max_files": 15,
   "log_sentry_dsn": "",

@@ -9,7 +9,7 @@ var Args []string
 
 func argsInit() {
 	ExtArgs = make(map[string]string)
-	Args = ParseArgs("config", "debug", "show-sql", "debug-tag")
+	Args = ParseArgs("config", "debug", "show-sql")
 }
 
 func ParseArgs(excludes ...string) []string {

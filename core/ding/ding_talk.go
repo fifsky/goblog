@@ -3,11 +3,11 @@ package ding
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
-
-	"github.com/ilibs/logger"
 )
 
 var DING_TALK_TOKEN string
@@ -50,11 +50,18 @@ func Alarm(content string, at ...string) error {
 	defer resp.Body.Close()
 
 	if data, err := ioutil.ReadAll(resp.Body); err == nil {
-		dingtalk.paserResp(data)
+		ret := &DingTalkResponse{}
+		err := json.Unmarshal(data, ret)
+		if err != nil {
+			return err
+		}
+
+		if ret.Errcode != 0 {
+			return errors.New("ding response error:" + ret.Errmsg + "[" + strconv.Itoa(ret.Errcode) + "]")
+		}
 	}
 
 	if err != nil {
-		logger.Debug("alarm", err)
 		return err
 	}
 	return nil
@@ -75,13 +82,4 @@ func PostJson(url string, data []byte) (*http.Response, error) {
 		return nil, err
 	}
 	return resp, err
-}
-
-func (d *DingTalkRequest) paserResp(data []byte) {
-	ret := new(DingTalkResponse)
-	err := json.Unmarshal(data, ret)
-	if err != nil || ret.Errcode != 0 {
-		logger.Debug("dingtalk", string(data))
-		return
-	}
 }

@@ -3,7 +3,6 @@ package config
 import (
 	"os"
 	"log"
-	"strings"
 	"path/filepath"
 	"database/sql"
 
@@ -51,7 +50,6 @@ func Load(args map[string]string) {
 		appPath = "./"
 	}
 
-	appPath = strings.TrimSuffix(appPath, "/") + "/"
 	App.Common.ConfigPath = filepath.Join(appPath, "config") + "/"
 
 	conf, err := goconf.NewConfig(App.Common.ConfigPath + env)
