@@ -24,3 +24,14 @@ chibaole.com {
         ext .css .js
     }
 }
+
+mdwiki.fifsky.com {
+    root /home/wwwroot/mdwiki/
+
+    header / Strict-Transport-Security "15768000"
+
+    gzip {
+        level 3
+        ext .css .js
+    }
+}
