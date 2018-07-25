@@ -67,6 +67,8 @@ func main() {
 		admin.GET("/post/article", controllers.AdminArticleGet)
 		admin.POST("/post/article", controllers.AdminArticlePost)
 		admin.GET("/post/article_delete", controllers.AdminArticleDelete)
+		admin.POST("/post/upload", controllers.AdminUploadPost)
+
 
 		//心情
 		admin.GET("/moods", controllers.AdminMoodGet)

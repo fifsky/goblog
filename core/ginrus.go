@@ -28,11 +28,15 @@ func Ginrus() gin.HandlerFunc {
 			"time":       end.Format("2006-01-02 15:04:05"),
 		}
 
+		log := logger.NewLogger(func(c *logger.Config) {
+			c.LogName = "access_log"
+		})
+
 		if len(c.Errors) > 0 {
 			// Append error field if this is an erroneous request.
-			logger.Errorf(c.Errors.String(),info)
+			log.Errorf(c.Errors.String(),info)
 		} else {
-			logger.Info(info)
+			log.Info(info)
 		}
 	}
 }

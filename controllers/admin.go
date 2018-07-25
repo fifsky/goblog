@@ -13,6 +13,8 @@ import (
 	"github.com/ilibs/gosql"
 	"github.com/fifsky/goblog/core"
 	"github.com/ilibs/logger"
+	"os"
+	"io"
 )
 
 func AdminIndex(c *gin.Context) {
@@ -221,6 +223,60 @@ func AdminArticleDelete(c *gin.Context) {
 		return
 	}
 	c.Redirect(http.StatusFound, "/admin/articles")
+}
+
+func AdminUploadPost(c *gin.Context) {
+	file, header, err := c.Request.FormFile("wangEditorPasteFile")
+	if err != nil {
+		c.String(http.StatusBadRequest, "Bad request")
+		return
+	}
+	filename := header.Filename
+	day := time.Now().Format("20060102")
+	dir := "static/upload/" + day
+	exists, _ := helpers.PathExists(dir)
+	if !exists {
+		err := os.MkdirAll(dir, 0755)
+		if err != nil {
+			logger.Fatal(err)
+			c.JSON(http.StatusOK, gin.H{
+				"jsonrpc": "2.0",
+				"error": gin.H{
+					"code":    100,
+					"message": "Failed to create directory.",
+				},
+				"id": "id",
+			})
+		}
+	}
+
+	out, err := os.Create(dir + "/" + filename)
+	if err != nil {
+		logger.Fatal(err)
+
+		c.JSON(http.StatusOK, gin.H{
+			"jsonrpc": "2.0",
+			"error": gin.H{
+				"code":    100,
+				"message": "Failed to create file.",
+			},
+			"id": "id",
+		})
+	}
+	defer out.Close()
+	_, err = io.Copy(out, file)
+	if err != nil {
+		logger.Fatal(err)
+		c.JSON(http.StatusOK, gin.H{
+			"jsonrpc": "2.0",
+			"error": gin.H{
+				"code":    100,
+				"message": "Failed to save directory.",
+			},
+			"id": "id",
+		})
+	}
+	c.String(http.StatusOK, "//"+c.Request.Host+"/static/upload/"+day+"/"+filename)
 }
 
 func AdminMoodGet(c *gin.Context) {

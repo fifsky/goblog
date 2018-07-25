@@ -8,3 +8,4 @@ rsync.sh
 blog.pid
 /config/prod
 blog
+/static/upload

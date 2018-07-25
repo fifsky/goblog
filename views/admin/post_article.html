@@ -1,5 +1,13 @@
 {{ define "admin/post_article" }}
 {{ template "layout/header" . }}
+<style>
+    .wangEditor-menu-container .menu-item{
+        width: 31px;
+    }
+    .wangEditor-menu-container .menu-item a {
+        font-size: 1em;
+    }
+</style>
 <div id="articles" class="admin">
     {{ template "layout/admin_tabs" . }}
     <div id="content">
@@ -50,7 +58,7 @@
                 </div>
             </div>
             <p>
-                <textarea id="kindeditor" name="content"
+                <textarea id="editor" name="content"
                           style="width:100%;height:400px;visibility:hidden;">{{ if .Post }}{{.Post.Content | Unescaped}}{{ end }}</textarea>
             </p>
 
@@ -62,17 +70,18 @@
     </div>
 </div>
 
-<script src="{{ StaticUrl }}public/kindeditor/kindeditor-min.js"></script>
-<script src="{{ StaticUrl }}public/kindeditor/lang/zh_CN.js"></script>
+<script src="{{ StaticUrl }}public/wangEditor-2.1.23/dist/js/wangEditor.min.js"></script>
 <script>
-    var editor;
-    KindEditor.ready(function (K) {
-        editor = K.create('#kindeditor', {
-            uploadJson: '/admin/post/upload',
-            filterMode: false,
-            cssPath: '{{ StaticUrl }}style/css/editor.css'
-        });
+    var editor = new wangEditor('editor');
+    editor.config.uploadImgUrl = '/admin/post/upload';
+    editor.config.menus = $.map(wangEditor.config.menus, function(item, key) {
+        if (item === 'bgcolor' || item === 'fontfamily' || item === 'fontfamily') {
+            return null;
+        }
+        return item;
     });
+
+    editor.create();
 
     $('select[name="power"]').change(function () {
         var $password = $('input[name="post_password"]');
@@ -95,8 +104,6 @@
 
     $('#article_form').submit(function () {
         var self = this;
-        editor.sync();
-
         var $el = $('input[name="title"]');
         if ($.trim($el.val()) === '') {
             $el.focus().closest('p').addClass('error');
