@@ -1,6 +1,6 @@
-# 一个简单的Go Blog
+# A Simple Go Blog
 
-基于gin + xorm构建的简单的博客，编写这个博客主要是为了学习Go语言
+基于gin构建的简单的博客，编写这个博客主要是为了学习Go语言
 
 ## 初始化
 1、创建数据库blog
@@ -29,6 +29,6 @@ test  123456
 
 ## 配置文件
 ```
-config_dev.json 开发环境
-config_release.json 线上环境
+config/local 开发环境
+config/prod 线上环境
 ```
