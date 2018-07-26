@@ -34,6 +34,10 @@
 
 [[constraint]]
   branch = "master"
+  name = "github.com/ilibs/logger"
+
+[[constraint]]
+  branch = "master"
   name = "github.com/gin-gonic/gin"
 
 [[constraint]]
