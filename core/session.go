@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ilibs/sessions"
 	"github.com/ilibs/sessions/cookie"
-	"github.com/fifsky/goblog/core/config"
+	"github.com/fifsky/goblog/config"
 )
 
 func SetSessions(router *gin.Engine) {
