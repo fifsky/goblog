@@ -44,20 +44,10 @@ func MoodGetList(start int, num int) ([]*UserMoods, error) {
 	var moods = make([]*UserMoods, 0)
 	start = (start - 1) * num
 
-	rows, err := gosql.Queryx("select m.*,u.nick_name from moods m left join users u on m.user_id = u.id order by m.id desc limit ?,?", start, num)
+	err := gosql.Select(&moods,"select m.*,u.nick_name from moods m left join users u on m.user_id = u.id order by m.id desc limit ?,?", start, num)
 
 	if err != nil {
 		return nil, err
-	}
-
-	for rows.Next() {
-		m := &UserMoods{}
-		err := rows.StructScan(m)
-		if err != nil {
-			return nil, err
-		}
-
-		moods = append(moods, m)
 	}
 
 	return moods, err
