@@ -23,7 +23,7 @@ func AdminCateGet(c *gin.Context) {
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	cates, err := models.CateGetList(page, num)
+	cates, err := models.CateArtivleCountGetList(page, num)
 	h["Cates"] = cates
 
 	total, err := gosql.Model(&models.Cates{}).Count()

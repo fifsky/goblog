@@ -26,10 +26,25 @@ func (c *Cates) PK() string {
 	return "id"
 }
 
+type CateArtivleCount struct {
+	Cates
+	Num int `db:"num"`
+}
+
 func CateGetList(start int, num int) ([]*Cates, error) {
 	var m = make([]*Cates, 0)
 	start = (start - 1) * num
 	err := gosql.Model(&m).OrderBy("id desc").Limit(num).Offset(start).All()
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func CateArtivleCountGetList(start int, num int) ([]*CateArtivleCount, error) {
+	var m = make([]*CateArtivleCount, 0)
+	start = (start - 1) * num
+	err := gosql.Select(&m, "select c.*,ifnull(a.num,0) num from cates c left join (select count(*) num,cate_id from posts group by cate_id) a on c.id = a.cate_id order by c.id desc limit ?,?", start, num)
 	if err != nil {
 		return nil, err
 	}
