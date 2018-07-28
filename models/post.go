@@ -81,7 +81,7 @@ func PostArchive() ([]map[string]string, error) {
 	return m, err
 }
 
-func PostGetList(p *Posts, start int, num int, artdate string) ([]*UserPosts, error) {
+func PostGetList(p *Posts, start int, num int, artdate, keyword string) ([]*UserPosts, error) {
 	var posts = make([]*UserPosts, 0)
 	start = (start - 1) * num
 
@@ -101,6 +101,11 @@ func PostGetList(p *Posts, start int, num int, artdate string) ([]*UserPosts, er
 	if artdate != "" {
 		where += " and DATE_FORMAT(p.created_at,'%Y-%m') = ?"
 		args = append(args, artdate)
+	}
+
+	if keyword != "" {
+		where += " and p.title like ?"
+		args = append(args, "%"+keyword+"%")
 	}
 
 	args = append(args, start, num)

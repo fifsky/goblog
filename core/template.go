@@ -6,6 +6,8 @@ import (
 	"strings"
 	"github.com/pkg/errors"
 	"github.com/gin-gonic/gin"
+	"net/url"
+	"strconv"
 )
 
 // 格式化时间
@@ -71,6 +73,17 @@ func StaticUrl(url ...string) string {
 	return "/static/"
 }
 
+func PageUrl(uri string, page int) string {
+	u, err := url.Parse(uri)
+	if err != nil {
+		return uri
+	}
+	uv := u.Query()
+	uv.Set("page", strconv.Itoa(page))
+	u.RawQuery = uv.Encode()
+	return u.String()
+}
+
 func IsPage(url ...string) bool {
 
 	if len(url) < 2 {
@@ -114,7 +127,6 @@ func Args(values ...interface{}) (map[string]interface{}, error) {
 	return dict, nil
 }
 
-
 func SetTemplate(engine *gin.Engine) {
 
 	funcMap := template.FuncMap{
@@ -127,6 +139,7 @@ func SetTemplate(engine *gin.Engine) {
 		"StaticUrl":        StaticUrl,
 		"IsPage":           IsPage,
 		"Args":             Args,
+		"PageUrl":          PageUrl,
 	}
 
 	engine.SetFuncMap(funcMap)

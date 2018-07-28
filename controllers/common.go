@@ -23,6 +23,7 @@ func defaultH(c *gin.Context) gin.H {
 
 	url := strings.Split(c.Request.URL.Path, "/")
 	h["UrlPath"] = c.Request.URL.Path
+	h["URI"] = c.Request.RequestURI
 
 	if url[1] != "admin" {
 		mood, err := models.MoodFrist()

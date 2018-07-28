@@ -39,15 +39,21 @@ func IndexGet(c *gin.Context) {
 		post.CateId = cate.Id
 	}
 
+	keyword := c.Query("keyword")
+
 	post.Type = 1
-	posts, err := models.PostGetList(post,page, num, artdate)
+	posts, err := models.PostGetList(post, page, num, artdate, keyword)
 	h := defaultH(c)
 	h["Posts"] = posts
 
 	builder := gosql.Model(post)
 
 	if artdate != "" {
-		builder.Where("DATE_FORMAT(created_at,'%Y-%m') = ?",artdate)
+		builder.Where("DATE_FORMAT(created_at,'%Y-%m') = ?", artdate)
+	}
+
+	if keyword != "" {
+		builder.Where("title like ?", "%"+keyword+"%")
 	}
 
 	total, err := builder.Count()

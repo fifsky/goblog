@@ -11,6 +11,7 @@ import (
 	"github.com/ilibs/logger"
 	"github.com/fifsky/goconf"
 	"github.com/gin-gonic/gin"
+	"strings"
 )
 
 type common struct {
@@ -47,7 +48,11 @@ func Load(args map[string]string) {
 
 	appPath := args["config"]
 	if appPath == "" {
-		appPath = "./"
+		//获得程序路径从里面获取到goblog的路径
+		execpath, err := os.Getwd()
+		if err == nil {
+			appPath = execpath[0: strings.Index(execpath, "/goblog")+7]
+		}
 	}
 
 	App.Common.ConfigPath = filepath.Join(appPath, "config") + "/"

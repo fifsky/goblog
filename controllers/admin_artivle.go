@@ -19,7 +19,7 @@ func AdminArticlesGet(c *gin.Context) {
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	posts, err := models.PostGetList(&models.Posts{}, page, num, "")
+	posts, err := models.PostGetList(&models.Posts{}, page, num, "","")
 
 	cates := make([]*models.Cates, 0)
 	gosql.Model(&cates).All()

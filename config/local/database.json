@@ -5,6 +5,6 @@
     "dsn":"root:123456@tcp(127.0.0.1:3306)/blog?charset=utf8&parseTime=True&loc=Asia%2FShanghai",
     "max_open_conns": 10,
     "max_idle_conns": 20,
-    "show_sql": true
+    "show_sql": false
   }
 }
