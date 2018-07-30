@@ -185,5 +185,5 @@ func AdminUploadPost(c *gin.Context) {
 			"id": "id",
 		})
 	}
-	c.String(http.StatusOK, "//"+c.Request.Host+"/static/upload/"+day+"/"+filename)
+	c.String(http.StatusOK, "/static/upload/"+day+"/"+filename)
 }
