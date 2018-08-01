@@ -2,8 +2,8 @@ package route
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/fifsky/goblog/controllers"
 	"github.com/fifsky/goblog/core"
+	"github.com/fifsky/goblog/handler"
 )
 
 func Route(router *gin.Engine)  {
@@ -11,59 +11,59 @@ func Route(router *gin.Engine)  {
 	//静态文件
 	router.Static("/static", "./static")
 
-	router.NoRoute(controllers.Handle404)
-	router.GET("/", controllers.IndexGet)
-	router.GET("/about", controllers.AboutGet)
-	router.GET("/article/:id", controllers.ArticleGet)
-	router.GET("/categroy/:domain", controllers.IndexGet)
-	router.GET("/date/:year/:month", controllers.IndexGet)
-	router.GET("/search", controllers.IndexGet)
+	router.NoRoute(handler.Handle404)
+	router.GET("/", handler.IndexGet)
+	router.GET("/about", handler.AboutGet)
+	router.GET("/article/:id", handler.ArticleGet)
+	router.GET("/categroy/:domain", handler.IndexGet)
+	router.GET("/date/:year/:month", handler.IndexGet)
+	router.GET("/search", handler.IndexGet)
 
 
 	//管理后台
 	admin := router.Group("/admin")
-	admin.GET("/login", controllers.LoginGet)
-	admin.POST("/login", controllers.LoginPost)
-	admin.GET("/logout", controllers.LogoutGet)
+	admin.GET("/login", handler.LoginGet)
+	admin.POST("/login", handler.LoginPost)
+	admin.GET("/logout", handler.LogoutGet)
 
 	admin.Use(core.AuthLogin())
 	{
 		//网站设置
-		admin.GET("/index", controllers.AdminIndex)
-		admin.POST("/index", controllers.AdminIndexPost)
+		admin.GET("/index", handler.AdminIndex)
+		admin.POST("/index", handler.AdminIndexPost)
 
 		//文章管理
-		admin.GET("/articles", controllers.AdminArticlesGet)
-		admin.GET("/post/article", controllers.AdminArticleGet)
-		admin.POST("/post/article", controllers.AdminArticlePost)
-		admin.GET("/post/article_delete", controllers.AdminArticleDelete)
-		admin.POST("/post/upload", controllers.AdminUploadPost)
+		admin.GET("/articles", handler.AdminArticlesGet)
+		admin.GET("/post/article", handler.AdminArticleGet)
+		admin.POST("/post/article", handler.AdminArticlePost)
+		admin.GET("/post/article_delete", handler.AdminArticleDelete)
+		admin.POST("/post/upload", handler.AdminUploadPost)
 
 
 		//心情
-		admin.GET("/moods", controllers.AdminMoodGet)
-		admin.POST("/moods", controllers.AdminMoodPost)
-		admin.GET("/mood_delete", controllers.AdminMoodDelete)
+		admin.GET("/moods", handler.AdminMoodGet)
+		admin.POST("/moods", handler.AdminMoodPost)
+		admin.GET("/mood_delete", handler.AdminMoodDelete)
 
 		//分类
-		admin.GET("/cates", controllers.AdminCateGet)
-		admin.POST("/cates", controllers.AdminCatePost)
-		admin.GET("/cate_delete", controllers.AdminCateDelete)
+		admin.GET("/cates", handler.AdminCateGet)
+		admin.POST("/cates", handler.AdminCatePost)
+		admin.GET("/cate_delete", handler.AdminCateDelete)
 
 		//链接
-		admin.GET("/links", controllers.AdminLinkGet)
-		admin.POST("/links", controllers.AdminLinkPost)
-		admin.GET("/link_delete", controllers.AdminLinkDelete)
+		admin.GET("/links", handler.AdminLinkGet)
+		admin.POST("/links", handler.AdminLinkPost)
+		admin.GET("/link_delete", handler.AdminLinkDelete)
 
 		//提醒
-		admin.GET("/remind", controllers.AdminRemindGet)
-		admin.POST("/remind", controllers.AdminRemindPost)
-		admin.GET("/remind_delete", controllers.AdminRemindDelete)
+		admin.GET("/remind", handler.AdminRemindGet)
+		admin.POST("/remind", handler.AdminRemindPost)
+		admin.GET("/remind_delete", handler.AdminRemindDelete)
 
 		//用户
-		admin.GET("/users", controllers.AdminUsersGet)
-		admin.GET("/post/user", controllers.AdminUserGet)
-		admin.POST("/post/user", controllers.AdminUserPost)
-		admin.GET("/user_status", controllers.AdminUserStatus)
+		admin.GET("/users", handler.AdminUsersGet)
+		admin.GET("/post/user", handler.AdminUserGet)
+		admin.POST("/post/user", handler.AdminUserPost)
+		admin.GET("/user_status", handler.AdminUserStatus)
 	}
 }
