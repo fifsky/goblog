@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"os"
-	"io"
 	"time"
 	"net/http"
 
@@ -12,6 +11,8 @@ import (
 	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
+	"image/png"
+	"github.com/nfnt/resize"
 )
 
 func AdminArticlesGet(c *gin.Context) {
@@ -173,7 +174,16 @@ func AdminUploadPost(c *gin.Context) {
 		})
 	}
 	defer out.Close()
-	_, err = io.Copy(out, file)
+
+	img, err :=  png.Decode(file)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	file.Close()
+
+	m := resize.Resize(800, 0, img, resize.Lanczos3)
+	err = png.Encode(out,m)
+
 	if err != nil {
 		logger.Fatal(err)
 		c.JSON(http.StatusOK, gin.H{
