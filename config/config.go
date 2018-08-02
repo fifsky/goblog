@@ -15,11 +15,11 @@ import (
 )
 
 type common struct {
-	Env         string `json:"env"`
-	Debug       string `json:"debug"`
-	ConfigPath  string `json:"config_path"`
-	StoragePath string `json:"storage_path"`
-	DingToken   string `json:"dingtoken"`
+	Env           string `json:"env"`
+	Debug         string `json:"debug"`
+	ConfigPath    string `json:"config_path"`
+	StoragePath   string `json:"storage_path"`
+	DingToken     string `json:"dingtoken"`
 	SessionSecret string `json:"session_secret"`
 }
 
@@ -51,7 +51,7 @@ func Load(args map[string]string) {
 		//获得程序路径从里面获取到goblog的路径
 		execpath, err := os.Getwd()
 		if err == nil {
-			appPath = execpath[0: strings.Index(execpath, "/goblog")+7]
+			appPath = execpath[0 : strings.Index(execpath, "/goblog")+7]
 		}
 	}
 
@@ -103,6 +103,7 @@ func Load(args map[string]string) {
 		c.LogPath = App.Common.StoragePath + "logs/"
 		c.LogSentryDSN = App.Log.LogSentryDSN
 		c.LogSentryType = App.Log.LogSentryType
+		c.LogDetail = App.Log.LogDetail
 	})
 }
 

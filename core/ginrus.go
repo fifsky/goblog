@@ -30,6 +30,7 @@ func Ginrus() gin.HandlerFunc {
 
 		log := logger.NewLogger(func(c *logger.Config) {
 			c.LogName = "access_log"
+			c.LogDetail = false
 		})
 
 		if len(c.Errors) > 0 {
