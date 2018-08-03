@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"os"
 )
 
 type SystemInfo struct {
+	ServerName   string
 	Runtime      string //运行时间
 	GoroutineNum string //goroutine数量
 	CpuNum       string //cpu核数
@@ -35,7 +37,10 @@ func NewSystemInfo(startTime time.Time) *SystemInfo {
 		afterLastGC = "0"
 	}
 
+	serverName, _ := os.Hostname()
+
 	return &SystemInfo{
+		ServerName:   serverName,
 		Runtime:      fmt.Sprintf("%d天%d小时%d分%d秒", costTime/(3600*24), costTime%(3600*24)/3600, costTime%3600/60, costTime%(60)),
 		GoroutineNum: strconv.Itoa(runtime.NumGoroutine()),
 		CpuNum:       strconv.Itoa(runtime.NumCPU()),

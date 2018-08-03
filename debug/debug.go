@@ -12,7 +12,8 @@ import (
 func InfoHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		m := NewSystemInfo(config.App.StartTime)
-		info := fmt.Sprintf("%s:%s\n", "运行时间", m.Runtime)
+		info := fmt.Sprintf("%s:%s\n", "服务器", m.ServerName)
+		info += fmt.Sprintf("%s:%s\n", "运行时间", m.Runtime)
 		info += fmt.Sprintf("%s:%s\n", "goroutine数量", m.GoroutineNum)
 		info += fmt.Sprintf("%s:%s\n", "CPU核数", m.CpuNum)
 		info += fmt.Sprintf("%s:%s\n", "当前内存使用量", m.UsedMem)
