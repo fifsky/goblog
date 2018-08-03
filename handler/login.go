@@ -8,11 +8,10 @@ import (
 	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/sessions"
 	"github.com/fifsky/goblog/core"
-	"github.com/fifsky/goblog/context"
 )
 
-var LoginGet core.HandlerFunc = func(c *context.Context) core.Response {
-	h := defaultH(c)
+var LoginGet core.HandlerFunc = func(c *core.Context) core.Response {
+	h := defaultH(c.Context)
 	if h["LoginUser"] != nil {
 		return c.Redirect(http.StatusFound, "/admin/index")
 	}

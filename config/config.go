@@ -7,11 +7,12 @@ import (
 	"database/sql"
 
 	"github.com/ilibs/gosql"
-	"github.com/fifsky/goblog/core/ding"
+	"github.com/fifsky/goblog/ding"
 	"github.com/ilibs/logger"
 	"github.com/fifsky/goconf"
 	"github.com/gin-gonic/gin"
 	"strings"
+	"time"
 )
 
 type common struct {
@@ -24,12 +25,15 @@ type common struct {
 }
 
 type app struct {
-	Common common                   `conf:"common"`
-	Log    logger.Config            `conf:"log"`
-	DB     map[string]*gosql.Config `conf:"database"`
+	Common    common                   `conf:"common"`
+	Log       logger.Config            `conf:"log"`
+	DB        map[string]*gosql.Config `conf:"database"`
+	StartTime time.Time
 }
 
-var App = &app{}
+var App = &app{
+	StartTime: time.Now(),
+}
 
 func init() {
 	argsInit()
@@ -108,7 +112,7 @@ func Load(args map[string]string) {
 }
 
 func ImportDB() ([]sql.Result, error) {
-	sqlpath := "./db/blog.sql"
+	sqlpath := "./config/blog.sql"
 	rst, err := gosql.Import(sqlpath)
 	return rst, err
 }

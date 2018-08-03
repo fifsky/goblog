@@ -31,13 +31,6 @@ func main() {
 	}
 
 	router := gin.Default()
-	core.SetTemplate(router)
-	core.SetSessions(router)
-
-	//中间件
-	router.Use(core.Ginrus())
-	router.Use(core.SharedData())
-
 	//路由
 	route.Route(router)
 	setPid(os.Getpid())

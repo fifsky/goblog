@@ -2,16 +2,15 @@ package core
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/fifsky/goblog/context"
 )
 
 type IHandler interface {
-	Handle(c *context.Context) Response
+	Handle(c *Context) Response
 }
 
-type HandlerFunc func(c *context.Context) Response
+type HandlerFunc func(c *Context) Response
 
-func (h HandlerFunc) Handle(c *context.Context) Response {
+func (h HandlerFunc) Handle(c *Context) Response {
 	return h(c)
 }
 
@@ -36,16 +35,16 @@ func Middware(handler IHandler) gin.HandlerFunc {
 	}
 }
 
-func getContext(c *gin.Context) *context.Context {
+func getContext(c *gin.Context) *Context {
 	ctx, ok := c.Get(contextKey)
-	var ctx1 *context.Context
+	var ctx1 *Context
 	if !ok {
-		ctx1 = &context.Context{
+		ctx1 = &Context{
 			Context: c,
 		}
 		c.Set(contextKey, ctx1)
 	} else {
-		ctx1 = ctx.(*context.Context)
+		ctx1 = ctx.(*Context)
 	}
 	return ctx1
 }

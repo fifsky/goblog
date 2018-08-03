@@ -1,4 +1,4 @@
-package core
+package middleware
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,8 +7,8 @@ import (
 	"github.com/fifsky/goblog/config"
 )
 
-func SetSessions(router *gin.Engine) {
+func Sessions() gin.HandlerFunc {
 	store := cookie.NewStore([]byte(config.App.Common.SessionSecret))
 	store.Options(sessions.Options{HttpOnly: true, MaxAge: 7 * 86400, Path: "/"}) //Also set Secure: true if using SSL, you should though
-	router.Use(sessions.Sessions("gin-session", store))
+	return sessions.Sessions("gin-session", store)
 }

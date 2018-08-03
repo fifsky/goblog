@@ -8,10 +8,9 @@ import (
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
-	"github.com/fifsky/goblog/context"
 )
 
-func defaultH(c *ctx.Context) gin.H {
+func defaultH(c *gin.Context) gin.H {
 	user, _ := c.Get("LoginUser")
 	options := c.GetStringMapString("options")
 

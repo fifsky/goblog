@@ -3,7 +3,7 @@ package core
 import (
 	"time"
 
-	"github.com/fifsky/goblog/core/ding"
+	"github.com/fifsky/goblog/ding"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"

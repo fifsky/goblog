@@ -4,9 +4,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/handler"
+	"github.com/fifsky/goblog/debug"
+	"github.com/fifsky/goblog/route/middleware"
 )
 
 func Route(router *gin.Engine)  {
+	core.SetTemplate(router)
+
+	//中间件
+	router.Use(middleware.Sessions())
+	router.Use(middleware.Ginrus())
+	router.Use(middleware.SharedData())
 
 	//静态文件
 	router.Static("/static", "./static")
@@ -26,7 +34,7 @@ func Route(router *gin.Engine)  {
 	admin.POST("/login", handler.LoginPost)
 	admin.GET("/logout", handler.LogoutGet)
 
-	admin.Use(core.AuthLogin())
+	admin.Use(middleware.AuthLogin())
 	{
 		//网站设置
 		admin.GET("/index", handler.AdminIndex)
@@ -65,5 +73,21 @@ func Route(router *gin.Engine)  {
 		admin.GET("/post/user", handler.AdminUserGet)
 		admin.POST("/post/user", handler.AdminUserPost)
 		admin.GET("/user_status", handler.AdminUserStatus)
+	}
+
+	debugger := router.Group("/debug")
+	{
+		debugger.Use(middleware.AuthLogin())
+		debugger.GET("/info", debug.InfoHandler())
+		debugger.GET("/pprof/", debug.IndexHandler())
+		debugger.GET("/pprof/heap", debug.HeapHandler())
+		debugger.GET("/pprof/goroutine", debug.GoroutineHandler())
+		debugger.GET("/pprof/block", debug.BlockHandler())
+		debugger.GET("/pprof/threadcreate", debug.ThreadCreateHandler())
+		debugger.GET("/pprof/cmdline", debug.CmdlineHandler())
+		debugger.GET("/pprof/profile", debug.ProfileHandler())
+		debugger.GET("/pprof/symbol", debug.SymbolHandler())
+		debugger.POST("/pprof/symbol", debug.SymbolHandler())
+		debugger.GET("/pprof/trace", debug.TraceHandler())
 	}
 }
