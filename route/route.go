@@ -22,7 +22,7 @@ func Route(router *gin.Engine)  {
 
 	//管理后台
 	admin := router.Group("/admin")
-	admin.GET("/login", handler.LoginGet)
+	admin.GET("/login", core.Handle(handler.LoginGet))
 	admin.POST("/login", handler.LoginPost)
 	admin.GET("/logout", handler.LogoutGet)
 

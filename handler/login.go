@@ -7,16 +7,16 @@ import (
 	"github.com/ilibs/gosql"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/sessions"
+	"github.com/fifsky/goblog/core"
+	"github.com/fifsky/goblog/context"
 )
 
-func LoginGet(c *gin.Context) {
+var LoginGet core.HandlerFunc = func(c *context.Context) core.Response {
 	h := defaultH(c)
 	if h["LoginUser"] != nil {
-		c.Redirect(http.StatusFound, "/admin/index")
-		return
+		return c.Redirect(http.StatusFound, "/admin/index")
 	}
-
-	c.HTML(http.StatusOK, "admin/login", h)
+	return c.HTML(http.StatusOK, "admin/login", h)
 }
 
 func LogoutGet(c *gin.Context) {
