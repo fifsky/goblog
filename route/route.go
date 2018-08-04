@@ -4,11 +4,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/handler"
-	"github.com/fifsky/goblog/debug"
 	"github.com/fifsky/goblog/route/middleware"
+	"github.com/fifsky/goblog/debug"
 )
 
-func Route(router *gin.Engine)  {
+func Route(router *gin.Engine) {
 	core.SetTemplate(router)
 
 	//中间件
@@ -26,7 +26,6 @@ func Route(router *gin.Engine)  {
 	router.GET("/categroy/:domain", handler.IndexGet)
 	router.GET("/date/:year/:month", handler.IndexGet)
 	router.GET("/search", handler.IndexGet)
-
 
 	//管理后台
 	admin := router.Group("/admin")
@@ -46,7 +45,6 @@ func Route(router *gin.Engine)  {
 		admin.POST("/post/article", handler.AdminArticlePost)
 		admin.GET("/post/article_delete", handler.AdminArticleDelete)
 		admin.POST("/post/upload", handler.AdminUploadPost)
-
 
 		//心情
 		admin.GET("/moods", handler.AdminMoodGet)
@@ -75,19 +73,6 @@ func Route(router *gin.Engine)  {
 		admin.GET("/user_status", handler.AdminUserStatus)
 	}
 
-	debugger := router.Group("/debug")
-	{
-		debugger.Use(middleware.AuthLogin())
-		debugger.GET("/info", debug.InfoHandler())
-		debugger.GET("/pprof/", debug.IndexHandler())
-		debugger.GET("/pprof/heap", debug.HeapHandler())
-		debugger.GET("/pprof/goroutine", debug.GoroutineHandler())
-		debugger.GET("/pprof/block", debug.BlockHandler())
-		debugger.GET("/pprof/threadcreate", debug.ThreadCreateHandler())
-		debugger.GET("/pprof/cmdline", debug.CmdlineHandler())
-		debugger.GET("/pprof/profile", debug.ProfileHandler())
-		debugger.GET("/pprof/symbol", debug.SymbolHandler())
-		debugger.POST("/pprof/symbol", debug.SymbolHandler())
-		debugger.GET("/pprof/trace", debug.TraceHandler())
-	}
+	//debug handler
+	debug.Route(router)
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/config"
 	"fmt"
+	"github.com/fifsky/goblog/route/middleware"
 )
 
 // IndexHandler will pass the call from /debug/pprof to pprof
@@ -90,5 +91,24 @@ func SymbolHandler() gin.HandlerFunc {
 func TraceHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		pprof.Trace(c.Writer, c.Request)
+	}
+}
+
+// Route debug handler
+func Route(router *gin.Engine) {
+	debugger := router.Group("/debug")
+	{
+		debugger.Use(middleware.AuthLogin())
+		debugger.GET("/info", InfoHandler())
+		debugger.GET("/pprof/", IndexHandler())
+		debugger.GET("/pprof/heap", HeapHandler())
+		debugger.GET("/pprof/goroutine", GoroutineHandler())
+		debugger.GET("/pprof/block", BlockHandler())
+		debugger.GET("/pprof/threadcreate", ThreadCreateHandler())
+		debugger.GET("/pprof/cmdline", CmdlineHandler())
+		debugger.GET("/pprof/profile", ProfileHandler())
+		debugger.GET("/pprof/symbol", SymbolHandler())
+		debugger.POST("/pprof/symbol", SymbolHandler())
+		debugger.GET("/pprof/trace", TraceHandler())
 	}
 }
