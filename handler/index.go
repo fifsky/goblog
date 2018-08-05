@@ -3,14 +3,14 @@ package handler
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/models"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/ilibs/gosql"
+	"github.com/fifsky/goblog/core"
 )
 
-func IndexGet(c *gin.Context) {
+var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 	options := c.MustGet("options").(map[string]string)
 	num, err := helpers.StrTo(options["post_num"]).Int()
 	if err != nil || num < 1 {
@@ -43,7 +43,7 @@ func IndexGet(c *gin.Context) {
 
 	post.Type = 1
 	posts, err := models.PostGetList(post, page, num, artdate, keyword)
-	h := defaultH(c)
+	h := defaultH(c.Context)
 	h["Posts"] = posts
 
 	builder := gosql.Model(post)
@@ -60,14 +60,14 @@ func IndexGet(c *gin.Context) {
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
-	if err == nil {
-		c.HTML(http.StatusOK, "index/index", h)
-	} else {
+	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
+		return nil
 	}
+	return c.HTML("index/index", h)
 }
 
-func ArticleGet(c *gin.Context) {
+var ArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 	id := helpers.StrTo(c.Param("id")).MustInt()
 	url := c.GetString("url")
 	post := &models.Posts{Id: id}
@@ -79,8 +79,7 @@ func ArticleGet(c *gin.Context) {
 	err := gosql.Model(post).Get()
 
 	if err != nil {
-		HandleMessage(c, "文章不存在", "您访问的文章不存在或已经删除！")
-		return
+		return HandleMessage(c, "文章不存在", "您访问的文章不存在或已经删除！")
 	}
 
 	cate := &models.Cates{Id: post.CateId}
@@ -91,7 +90,7 @@ func ArticleGet(c *gin.Context) {
 
 	newpost := &models.UserPosts{Posts: *post, Name: cate.Name, Domain: cate.Domain, NickName: user.NickName}
 
-	h := defaultH(c)
+	h := defaultH(c.Context)
 	h["Title"] = post.Title
 	h["Post"] = newpost
 
@@ -106,10 +105,10 @@ func ArticleGet(c *gin.Context) {
 		}
 	}
 
-	c.HTML(http.StatusOK, "index/article", h)
+	return c.HTML("index/article", h)
 }
 
-func AboutGet(c *gin.Context) {
+var AboutGet core.HandlerFunc = func(c *core.Context) core.Response {
 	c.Set("url", "about")
-	ArticleGet(c)
+	return ArticleGet(c)
 }

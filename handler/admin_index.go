@@ -1,21 +1,18 @@
 package handler
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
 	"github.com/fifsky/goblog/core"
 )
 
-func AdminIndex(c *gin.Context) {
-	h := defaultH(c)
+var AdminIndex core.HandlerFunc = func(c *core.Context) core.Response {
+	h := defaultH(c.Context)
 	h["Options"] = c.GetStringMapString("options")
-	c.HTML(http.StatusOK, "admin/index", h)
+	return c.HTML("admin/index", h)
 }
 
-func AdminIndexPost(c *gin.Context) {
+var AdminIndexPost core.HandlerFunc = func(c *core.Context) core.Response {
 	c.Request.ParseForm()
 	options := c.Request.PostForm
 
@@ -31,9 +28,5 @@ func AdminIndexPost(c *gin.Context) {
 		core.Global.Store("options", o)
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"statusCode": 200,
-		"message":    "保存成功",
-		"options":    options,
-	})
+	return c.Success(options)
 }

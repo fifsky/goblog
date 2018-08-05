@@ -9,42 +9,55 @@ type Response interface {
 }
 
 type JSONResponse struct {
+	HttpStatus int          `json:"-"`
+	Context    *gin.Context `json:"-"`
+	Data       interface{}  `json:"data"`
+}
+
+func (c *JSONResponse) Render() {
+	c.Context.JSON(c.HttpStatus, c.Data)
+}
+
+type ApiResponse struct {
+	HttpStatus int          `json:"-"`
 	Context    *gin.Context `json:"-"`
 	StatusCode int          `json:"statusCode"`
 	Data       interface{}  `json:"data"`
 	Message    string       `json:"message"`
 }
 
-func (c *JSONResponse) Render() {
-	c.Context.JSON(200, c)
+func (c *ApiResponse) Render() {
+	c.Context.JSON(c.HttpStatus, c)
 }
 
 type RedirectResponse struct {
-	Context  *gin.Context
-	Code     int
-	Location string
+	HttpStatus int          `json:"-"`
+	Context    *gin.Context `json:"-"`
+	Location   string
 }
 
 func (c *RedirectResponse) Render() {
-	c.Context.Redirect(c.Code, c.Location)
+	c.Context.Redirect(c.HttpStatus, c.Location)
 }
 
 type StringResponse struct {
-	Context *gin.Context
-	Name    string
-	Data    interface{}
+	HttpStatus int          `json:"-"`
+	Context    *gin.Context `json:"-"`
+	Name       string
+	Data       []interface{}
 }
 
 func (c *StringResponse) Render() {
-	c.Context.String(200, c.Name, c.Data)
+	c.Context.String(c.HttpStatus, c.Name, c.Data...)
 }
 
 type HTMLResponse struct {
-	Context *gin.Context
-	Name    string
-	Data    interface{}
+	HttpStatus int          `json:"-"`
+	Context    *gin.Context `json:"-"`
+	Name       string
+	Data       interface{}
 }
 
 func (c *HTMLResponse) Render() {
-	c.Context.HTML(200, c.Name, c.Data)
+	c.Context.HTML(c.HttpStatus, c.Name, c.Data)
 }

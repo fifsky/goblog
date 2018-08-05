@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"net/http"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
 	"github.com/fifsky/goblog/helpers"
@@ -11,15 +10,15 @@ import (
 var LoginGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h := defaultH(c.Context)
 	if h["LoginUser"] != nil {
-		return c.Redirect(http.StatusFound, "/admin/index")
+		return c.Redirect("/admin/index")
 	}
-	return c.HTML(http.StatusOK, "admin/login", h)
+	return c.HTML("admin/login", h)
 }
 
 var LogoutGet core.HandlerFunc = func(c *core.Context) core.Response {
 	c.Session().Delete("UserId")
 	c.Session().Save()
-	return c.Redirect(http.StatusFound, "/")
+	return c.Redirect("/")
 }
 
 var LoginPost core.HandlerFunc = func(c *core.Context) core.Response {

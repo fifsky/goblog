@@ -19,13 +19,13 @@ func Route(router *gin.Engine) {
 	//静态文件
 	router.Static("/static", "./static")
 
-	router.NoRoute(handler.Handle404)
-	router.GET("/", handler.IndexGet)
-	router.GET("/about", handler.AboutGet)
-	router.GET("/article/:id", handler.ArticleGet)
-	router.GET("/categroy/:domain", handler.IndexGet)
-	router.GET("/date/:year/:month", handler.IndexGet)
-	router.GET("/search", handler.IndexGet)
+	router.NoRoute(core.Handle(handler.Handle404))
+	router.GET("/", core.Handle(handler.IndexGet))
+	router.GET("/about", core.Handle(handler.AboutGet))
+	router.GET("/article/:id", core.Handle(handler.ArticleGet))
+	router.GET("/categroy/:domain", core.Handle(handler.IndexGet))
+	router.GET("/date/:year/:month", core.Handle(handler.IndexGet))
+	router.GET("/search", core.Handle(handler.IndexGet))
 
 	//管理后台
 	admin := router.Group("/admin")
@@ -36,41 +36,41 @@ func Route(router *gin.Engine) {
 	admin.Use(middleware.AuthLogin())
 	{
 		//网站设置
-		admin.GET("/index", handler.AdminIndex)
-		admin.POST("/index", handler.AdminIndexPost)
+		admin.GET("/index", core.Handle(handler.AdminIndex))
+		admin.POST("/index", core.Handle(handler.AdminIndexPost))
 
 		//文章管理
-		admin.GET("/articles", handler.AdminArticlesGet)
-		admin.GET("/post/article", handler.AdminArticleGet)
-		admin.POST("/post/article", handler.AdminArticlePost)
-		admin.GET("/post/article_delete", handler.AdminArticleDelete)
-		admin.POST("/post/upload", handler.AdminUploadPost)
+		admin.GET("/articles", core.Handle(handler.AdminArticlesGet))
+		admin.GET("/post/article", core.Handle(handler.AdminArticleGet))
+		admin.POST("/post/article", core.Handle(handler.AdminArticlePost))
+		admin.GET("/post/article_delete", core.Handle(handler.AdminArticleDelete))
+		admin.POST("/post/upload", core.Handle(handler.AdminUploadPost))
 
 		//心情
-		admin.GET("/moods", handler.AdminMoodGet)
-		admin.POST("/moods", handler.AdminMoodPost)
-		admin.GET("/mood_delete", handler.AdminMoodDelete)
+		admin.GET("/moods", core.Handle(handler.AdminMoodGet))
+		admin.POST("/moods", core.Handle(handler.AdminMoodPost))
+		admin.GET("/mood_delete", core.Handle(handler.AdminMoodDelete))
 
 		//分类
-		admin.GET("/cates", handler.AdminCateGet)
-		admin.POST("/cates", handler.AdminCatePost)
-		admin.GET("/cate_delete", handler.AdminCateDelete)
+		admin.GET("/cates", core.Handle(handler.AdminCateGet))
+		admin.POST("/cates", core.Handle(handler.AdminCatePost))
+		admin.GET("/cate_delete", core.Handle(handler.AdminCateDelete))
 
 		//链接
-		admin.GET("/links", handler.AdminLinkGet)
-		admin.POST("/links", handler.AdminLinkPost)
-		admin.GET("/link_delete", handler.AdminLinkDelete)
+		admin.GET("/links", core.Handle(handler.AdminLinkGet))
+		admin.POST("/links", core.Handle(handler.AdminLinkPost))
+		admin.GET("/link_delete", core.Handle(handler.AdminLinkDelete))
 
 		//提醒
-		admin.GET("/remind", handler.AdminRemindGet)
-		admin.POST("/remind", handler.AdminRemindPost)
-		admin.GET("/remind_delete", handler.AdminRemindDelete)
+		admin.GET("/remind", core.Handle(handler.AdminRemindGet))
+		admin.POST("/remind", core.Handle(handler.AdminRemindPost))
+		admin.GET("/remind_delete", core.Handle(handler.AdminRemindDelete))
 
 		//用户
-		admin.GET("/users", handler.AdminUsersGet)
-		admin.GET("/post/user", handler.AdminUserGet)
-		admin.POST("/post/user", handler.AdminUserPost)
-		admin.GET("/user_status", handler.AdminUserStatus)
+		admin.GET("/users", core.Handle(handler.AdminUsersGet))
+		admin.GET("/post/user", core.Handle(handler.AdminUserGet))
+		admin.POST("/post/user", core.Handle(handler.AdminUserPost))
+		admin.GET("/user_status", core.Handle(handler.AdminUserStatus))
 	}
 
 	//debug handler

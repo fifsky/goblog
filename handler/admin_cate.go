@@ -1,17 +1,18 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
+	"net/http"
+
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
-	"net/http"
-	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/ilibs/logger"
+	"github.com/fifsky/goblog/core"
+	"github.com/fifsky/goblog/helpers/pagination"
 )
 
-func AdminCateGet(c *gin.Context) {
-	h := defaultH(c)
+var AdminCateGet core.HandlerFunc = func(c *core.Context) core.Response {
+	h := defaultH(c.Context)
 
 	id := helpers.StrTo(c.Query("id")).MustInt()
 	if id > 0 {
@@ -30,84 +31,55 @@ func AdminCateGet(c *gin.Context) {
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
-	if err == nil {
-		c.HTML(http.StatusOK, "admin/cates", h)
-	} else {
+	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
+		return nil
 	}
+
+	return c.HTML("admin/cates", h)
+
 }
 
-func AdminCatePost(c *gin.Context) {
+var AdminCatePost core.HandlerFunc = func(c *core.Context) core.Response {
 	cates := &models.Cates{}
 	if err := c.Bind(cates); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "参数错误:" + err.Error(),
-		})
-		return
+		return c.Fail(201, "参数错误:"+err.Error())
 	}
 
 	if cates.Name == "" {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "分类名不能为空",
-		})
-		return
+		return c.Fail(201, "分类名不能为空")
 	}
 
 	if cates.Domain == "" {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "分类缩略名不能为空",
-		})
-		return
+		return c.Fail(201, "分类缩略名不能为空")
 	}
 
 	if cates.Id > 0 {
 		if _, err := gosql.Model(cates).Update(); err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"statusCode": 201,
-				"message":    "更新失败",
-			})
 			logger.Error(err)
-			return
+			return c.Fail(201, "更新失败")
 		}
 	} else {
 		if _, err := gosql.Model(cates).Create(); err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"statusCode": 201,
-				"message":    "创建失败",
-			})
 			logger.Error(err)
-			return
+			return c.Fail(201, "创建失败")
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"statusCode": 200,
-		"message":    "ok",
-	})
+	return c.Success(nil)
 }
 
-func AdminCateDelete(c *gin.Context) {
+var AdminCateDelete core.HandlerFunc = func(c *core.Context) core.Response {
 	id := helpers.StrTo(c.Query("id")).MustInt()
 	total, _ := gosql.Model(&models.Posts{}).Where("cate_id = ?", id).Count()
 
 	if total > 0 {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "该分类下面还有文章，不能删除",
-		})
-		return
+		return c.Fail(201, "该分类下面还有文章，不能删除")
 	}
 
 	if _, err := gosql.Model(&models.Cates{Id: id}).Delete(); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "删除失败",
-		})
 		logger.Error(err)
-		return
+		return c.Fail(201, "删除失败")
 	}
-	c.Redirect(http.StatusFound, "/admin/cates")
+	return c.Redirect("/admin/cates")
 }

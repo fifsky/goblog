@@ -1,19 +1,20 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
+	"time"
+	"net/http"
+
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
-	"time"
-	"net/http"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/ilibs/logger"
+	"github.com/fifsky/goblog/core"
 )
 
-func AdminRemindGet(c *gin.Context) {
-	h := defaultH(c)
+var AdminRemindGet core.HandlerFunc = func(c *core.Context) core.Response {
+	h := defaultH(c.Context)
 
 	id := helpers.StrTo(c.Query("id")).MustInt()
 	if id > 0 {
@@ -55,67 +56,44 @@ func AdminRemindGet(c *gin.Context) {
 
 	h["CurrDate"] = time.Now().Format("2006-01-02 15:04:05")
 
-	if err == nil {
-		c.HTML(http.StatusOK, "admin/remind", h)
-	} else {
+	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
+		return nil
 	}
+	return c.HTML("admin/remind", h)
 }
 
-func AdminRemindPost(c *gin.Context) {
+var AdminRemindPost core.HandlerFunc = func(c *core.Context) core.Response {
 	reminds := &models.Reminds{}
 	if err := c.ShouldBindWith(reminds, binding.Form); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "参数错误:" + err.Error(),
-		})
-		return
+		return c.Fail(201, "参数错误:"+err.Error())
 	}
 
 	if reminds.Content == "" {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "提醒内容不能为空",
-		})
-		return
+		return c.Fail(201, "提醒内容不能为空")
 	}
 
 	if reminds.Id > 0 {
 		if _, err := gosql.Model(reminds).Update(); err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"statusCode": 201,
-				"message":    "更新失败:" + err.Error(),
-			})
 			logger.Error(err)
-			return
+			return c.Fail(201, "更新失败:"+err.Error())
 		}
 	} else {
 		if _, err := gosql.Model(reminds).Create(); err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"statusCode": 201,
-				"message":    "创建失败",
-			})
 			logger.Error(err)
-			return
+			return c.Fail(201, "创建失败")
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"statusCode": 200,
-		"message":    "ok",
-	})
+	return c.Success(nil)
 }
 
-func AdminRemindDelete(c *gin.Context) {
+var AdminRemindDelete core.HandlerFunc = func(c *core.Context) core.Response {
 	id := helpers.StrTo(c.Query("id")).MustInt()
 
 	if _, err := gosql.Model(&models.Reminds{Id: id}).Delete(); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "删除失败",
-		})
 		logger.Error(err)
-		return
+		return c.Fail(201, "删除失败")
 	}
-	c.Redirect(http.StatusFound, "/admin/remind")
+	return c.Redirect("/admin/remind")
 }

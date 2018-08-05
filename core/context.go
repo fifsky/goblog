@@ -6,12 +6,24 @@ import (
 	"github.com/ilibs/sessions"
 )
 
+func getHttpStatus(c *Context, status int) int {
+	if c.HttpStatus == 0 {
+		return status
+	}
+	return c.HttpStatus
+}
+
 type Context struct {
 	*gin.Context
+	HttpStatus int
 }
 
 func (c *Context) Session() sessions.Session {
 	return sessions.Default(c.Context)
+}
+
+func (c *Context) Status(status int) {
+	c.HttpStatus = status
 }
 
 func (c *Context) Fail(code int, msg interface{}) Response {
@@ -22,7 +34,8 @@ func (c *Context) Fail(code int, msg interface{}) Response {
 		message = helpers.ToStr(msg)
 	}
 
-	return &JSONResponse{
+	return &ApiResponse{
+		HttpStatus: getHttpStatus(c, 200),
 		Context:    c.Context,
 		StatusCode: code,
 		Message:    message,
@@ -30,33 +43,45 @@ func (c *Context) Fail(code int, msg interface{}) Response {
 }
 
 func (c *Context) Success(data interface{}) Response {
-	return &JSONResponse{
+	return &ApiResponse{
+		HttpStatus: getHttpStatus(c, 200),
 		Context:    c.Context,
 		StatusCode: 0,
+		Data:       data,
+		Message:    "ok",
+	}
+}
+
+func (c *Context) JSON(data interface{}) Response {
+	return &JSONResponse{
+		HttpStatus: getHttpStatus(c, 200),
+		Context:    c.Context,
 		Data:       data,
 	}
 }
 
-func (c *Context) Redirect(code int, location string) Response {
+func (c *Context) Redirect(location string) Response {
 	return &RedirectResponse{
-		Context:  c.Context,
-		Code:     code,
-		Location: location,
+		HttpStatus: getHttpStatus(c, 302),
+		Context:    c.Context,
+		Location:   location,
 	}
 }
 
-func (c *Context) String(code int, name string, obj interface{}) Response {
+func (c *Context) String(format string, values ...interface{}) Response {
 	return &StringResponse{
-		Context: c.Context,
-		Name:    name,
-		Data:    obj,
+		HttpStatus: getHttpStatus(c, 200),
+		Context:    c.Context,
+		Name:       format,
+		Data:       values,
 	}
 }
 
-func (c *Context) HTML(code int, name string, obj interface{}) Response {
+func (c *Context) HTML(name string, obj interface{}) Response {
 	return &HTMLResponse{
-		Context: c.Context,
-		Name:    name,
-		Data:    obj,
+		HttpStatus: getHttpStatus(c, 200),
+		Context:    c.Context,
+		Name:       name,
+		Data:       obj,
 	}
 }

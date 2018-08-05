@@ -4,6 +4,7 @@ import (
 	"os"
 	"time"
 	"net/http"
+	"image/png"
 
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/models"
@@ -11,21 +12,20 @@ import (
 	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
-	"image/png"
 	"github.com/nfnt/resize"
+	"github.com/fifsky/goblog/core"
 )
 
-func AdminArticlesGet(c *gin.Context) {
-
+var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	posts, err := models.PostGetList(&models.Posts{}, page, num, "","")
+	posts, err := models.PostGetList(&models.Posts{}, page, num, "", "")
 
 	cates := make([]*models.Cates, 0)
 	gosql.Model(&cates).All()
 
-	h := defaultH(c)
+	h := defaultH(c.Context)
 	h["Posts"] = posts
 	h["Cates"] = cates
 
@@ -33,15 +33,15 @@ func AdminArticlesGet(c *gin.Context) {
 	pager := pagination.New(int(total), num, page, 3)
 	h["Pager"] = pager
 
-	if err == nil {
-		c.HTML(http.StatusOK, "admin/articles", h)
-	} else {
+	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
+		return nil
 	}
+	return c.HTML("admin/articles", h)
 }
 
-func AdminArticleGet(c *gin.Context) {
-	h := defaultH(c)
+var AdminArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
+	h := defaultH(c.Context)
 	id := helpers.StrTo(c.Query("id")).MustInt()
 
 	if id > 0 {
@@ -60,21 +60,17 @@ func AdminArticleGet(c *gin.Context) {
 	err := gosql.Model(&cates).All()
 	h["Cates"] = cates
 
-	if err == nil {
-		c.HTML(http.StatusOK, "admin/post_article", h)
-	} else {
+	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
+		return nil
 	}
+	return c.HTML("admin/post_article", h)
 }
 
-func AdminArticlePost(c *gin.Context) {
+var AdminArticlePost core.HandlerFunc = func(c *core.Context) core.Response {
 	post := &models.Posts{}
 	if err := c.Bind(post); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "参数错误:" + err.Error(),
-		})
-		return
+		return c.Fail(201, "参数错误:"+err.Error())
 	}
 
 	if user, exists := c.Get("LoginUser"); exists {
@@ -82,64 +78,40 @@ func AdminArticlePost(c *gin.Context) {
 	}
 
 	if post.Title == "" {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "文章标题不能为空",
-			"post":       post,
-		})
-		return
+		return c.Fail(201, "文章标题不能为空")
 	}
 
 	if post.Id > 0 {
 		if _, err := gosql.Model(post).Update(); err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"statusCode": 201,
-				"message":    "更新文章失败",
-				"post":       post,
-			})
 			logger.Error(err)
-			return
+			return c.Fail(201, "更新文章失败")
 		}
 	} else {
 		if _, err := gosql.Model(post).Create(); err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"statusCode": 201,
-				"message":    "发表文章失败",
-				"post":       post,
-			})
 			logger.Error(err)
-			return
+			return c.Fail(201, "发表文章失败")
 		}
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"statusCode": 200,
-		"message":    "ok",
-		"post":       post,
-	})
+	return c.Success(post)
 }
 
-func AdminArticleDelete(c *gin.Context) {
+var AdminArticleDelete core.HandlerFunc = func(c *core.Context) core.Response {
 	id := helpers.StrTo(c.Query("id")).MustInt()
 
 	post := &models.Posts{Id: id}
 	if _, err := gosql.Model(post).Delete(); err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "删除失败",
-			"post":       post,
-		})
 		logger.Error(err)
-		return
+		return c.Fail(201, "删除失败")
 	}
-	c.Redirect(http.StatusFound, "/admin/articles")
+	return c.Redirect("/admin/articles")
 }
 
-func AdminUploadPost(c *gin.Context) {
+var AdminUploadPost core.HandlerFunc = func(c *core.Context) core.Response {
 	file, header, err := c.Request.FormFile("wangEditorPasteFile")
 	if err != nil {
-		c.String(http.StatusBadRequest, "Bad request")
-		return
+		c.Status(http.StatusBadRequest)
+		return c.String("Bad request")
 	}
 	filename := header.Filename
 	day := time.Now().Format("20060102")
@@ -149,7 +121,7 @@ func AdminUploadPost(c *gin.Context) {
 		err := os.MkdirAll(dir, 0755)
 		if err != nil {
 			logger.Fatal(err)
-			c.JSON(http.StatusOK, gin.H{
+			return c.JSON(gin.H{
 				"jsonrpc": "2.0",
 				"error": gin.H{
 					"code":    100,
@@ -164,7 +136,7 @@ func AdminUploadPost(c *gin.Context) {
 	if err != nil {
 		logger.Fatal(err)
 
-		c.JSON(http.StatusOK, gin.H{
+		return c.JSON(gin.H{
 			"jsonrpc": "2.0",
 			"error": gin.H{
 				"code":    100,
@@ -175,18 +147,18 @@ func AdminUploadPost(c *gin.Context) {
 	}
 	defer out.Close()
 
-	img, err :=  png.Decode(file)
+	img, err := png.Decode(file)
 	if err != nil {
 		logger.Fatal(err)
 	}
 	file.Close()
 
 	m := resize.Resize(800, 0, img, resize.Lanczos3)
-	err = png.Encode(out,m)
+	err = png.Encode(out, m)
 
 	if err != nil {
 		logger.Fatal(err)
-		c.JSON(http.StatusOK, gin.H{
+		return c.JSON(gin.H{
 			"jsonrpc": "2.0",
 			"error": gin.H{
 				"code":    100,
@@ -195,5 +167,5 @@ func AdminUploadPost(c *gin.Context) {
 			"id": "id",
 		})
 	}
-	c.String(http.StatusOK, "/static/upload/"+day+"/"+filename)
+	return c.String("/static/upload/" + day + "/" + filename)
 }
