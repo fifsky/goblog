@@ -110,13 +110,13 @@
             return false;
         }
 
-        if ($('select[name="power"]') == 1) {
-            $(this).find('input[name="password"]').val('');
-        }
+        // if ($('select[name="power"]') == 1) {
+        //     $(this).find('input[name="password"]').val('');
+        // }
 
-        if (!$('#_save_draft').data('clickme')) {
-            $('input[name="post_status"]').val(1);
-        }
+        // if (!$('#_save_draft').data('clickme')) {
+        //     $('input[name="post_status"]').val(1);
+        // }
 
         $.ajax({
             'url': $(this).attr('action'),
@@ -131,14 +131,13 @@
             },
             success: function (data) {
                 if (data.statusCode === 200) {
-                    $('.message').html(data.message).show();
                     if (!$(self).find('input[name="post_id"]').val()) {
                         self.reset();
                         editor.html('');
                     }
                     window.location.href = "/admin/articles"
                 } else {
-                    $('.message').addClass('notice').html(data.message).show();
+                    alert(data.message);
                 }
             }
         });

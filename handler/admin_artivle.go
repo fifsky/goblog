@@ -67,13 +67,11 @@ var AdminArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 
 var AdminArticlePost core.HandlerFunc = func(c *core.Context) core.Response {
 	post := &models.Posts{}
-	if err := c.Bind(post); err != nil {
+	if err := c.ShouldBind(post); err != nil {
 		return c.Fail(201, "参数错误:"+err.Error())
 	}
 
-	if user, exists := c.Get("LoginUser"); exists {
-		post.UserId = user.(*models.Users).Id
-	}
+	post.UserId = c.Session().Get("UserId").(int)
 
 	if post.Title == "" {
 		return c.Fail(201, "文章标题不能为空")
