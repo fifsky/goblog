@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/config"
-	"github.com/fifsky/goblog/route/middleware"
+	"github.com/fifsky/goblog/router/middleware"
 )
 
 // IndfoHandler will pass the call from /debug/info to systeminfo

@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
-	"github.com/fifsky/goblog/route/middleware"
+	"github.com/fifsky/goblog/core"
 )
 
 func AdminIndex(c *gin.Context) {
@@ -28,7 +28,7 @@ func AdminIndexPost(c *gin.Context) {
 	o, err := models.GetOptions()
 
 	if err == nil {
-		middleware.Global.Store("options", o)
+		core.Global.Store("options", o)
 	}
 
 	c.JSON(http.StatusOK, gin.H{

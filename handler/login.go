@@ -1,12 +1,10 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
 	"github.com/fifsky/goblog/helpers"
-	"github.com/ilibs/sessions"
 	"github.com/fifsky/goblog/core"
 )
 
@@ -18,51 +16,33 @@ var LoginGet core.HandlerFunc = func(c *core.Context) core.Response {
 	return c.HTML(http.StatusOK, "admin/login", h)
 }
 
-func LogoutGet(c *gin.Context) {
-	session := sessions.Default(c)
-	session.Delete("UserId")
-	session.Save()
-	c.Redirect(http.StatusFound, "/")
+var LogoutGet core.HandlerFunc = func(c *core.Context) core.Response {
+	c.Session().Delete("UserId")
+	c.Session().Save()
+	return c.Redirect(http.StatusFound, "/")
 }
 
-func LoginPost(c *gin.Context) {
-	session := sessions.Default(c)
-
+var LoginPost core.HandlerFunc = func(c *core.Context) core.Response {
 	user_name := c.PostForm("user_name")
 	password := c.PostForm("user_pass")
 
 	if user_name == "" || password == "" {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "用户名或密码不能为空",
-		})
-		return
+		return c.Fail(201, "用户名或密码不能为空")
 	}
 
 	user := &models.Users{Name: user_name}
 	err := gosql.Model(user).Get()
 
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "用户名或者密码错误",
-		})
-		return
+		return c.Fail(201, "用户名或者密码错误")
 	}
 
 	if user.Password != helpers.Md5(password) {
-		c.JSON(http.StatusOK, gin.H{
-			"statusCode": 201,
-			"message":    "密码错误",
-		})
-		return
+		return c.Fail(201, "用户名或者密码错误")
 	}
 
-	session.Set("UserId", user.Id)
-	session.Save()
+	c.Session().Set("UserId", user.Id)
+	c.Session().Save()
 
-	c.JSON(http.StatusOK, gin.H{
-		"statusCode": 200,
-		"message":    "ok",
-	})
+	return c.Success(nil)
 }

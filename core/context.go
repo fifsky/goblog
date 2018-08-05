@@ -3,10 +3,15 @@ package core
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/helpers"
+	"github.com/ilibs/sessions"
 )
 
 type Context struct {
 	*gin.Context
+}
+
+func (c *Context) Session() sessions.Session {
+	return sessions.Default(c.Context)
 }
 
 func (c *Context) Fail(code int, msg interface{}) Response {

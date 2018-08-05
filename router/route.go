@@ -1,10 +1,10 @@
-package route
+package router
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/handler"
-	"github.com/fifsky/goblog/route/middleware"
+	"github.com/fifsky/goblog/router/middleware"
 	"github.com/fifsky/goblog/debug"
 )
 
@@ -30,8 +30,8 @@ func Route(router *gin.Engine) {
 	//管理后台
 	admin := router.Group("/admin")
 	admin.GET("/login", core.Handle(handler.LoginGet))
-	admin.POST("/login", handler.LoginPost)
-	admin.GET("/logout", handler.LogoutGet)
+	admin.POST("/login", core.Handle(handler.LoginPost))
+	admin.GET("/logout", core.Handle(handler.LogoutGet))
 
 	admin.Use(middleware.AuthLogin())
 	{

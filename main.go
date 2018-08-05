@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/config"
-	"github.com/fifsky/goblog/route"
+	"github.com/fifsky/goblog/router"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
 )
@@ -30,14 +30,14 @@ func main() {
 		return
 	}
 
-	router := gin.Default()
+	serv := gin.Default()
 	//路由
-	route.Route(router)
+	router.Route(serv)
 	setPid(os.Getpid())
 	//定时提醒
 	go core.StartCron()
 
-	router.Run(":8080")
+	serv.Run(":8080")
 }
 
 func setPid(pid int) {
