@@ -5,7 +5,6 @@ import (
 
 	"github.com/fifsky/goblog/models"
 	"github.com/fifsky/goblog/helpers"
-	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/ilibs/gosql"
 	"github.com/fifsky/goblog/core"
 )
@@ -57,8 +56,7 @@ var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 	}
 
 	total, err := builder.Count()
-	pager := pagination.New(int(total), num, page, 3)
-	h["Pager"] = pager
+	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)

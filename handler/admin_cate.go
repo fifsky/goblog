@@ -8,7 +8,6 @@ import (
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
 	"github.com/fifsky/goblog/core"
-	"github.com/fifsky/goblog/helpers/pagination"
 )
 
 var AdminCateGet core.HandlerFunc = func(c *core.Context) core.Response {
@@ -20,16 +19,13 @@ var AdminCateGet core.HandlerFunc = func(c *core.Context) core.Response {
 		gosql.Model(cate).Get()
 		h["Cate"] = cate
 	}
-
 	num := 10
-
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
 	cates, err := models.CateArtivleCountGetList(page, num)
 	h["Cates"] = cates
 
 	total, err := gosql.Model(&models.Cates{}).Count()
-	pager := pagination.New(int(total), num, page, 3)
-	h["Pager"] = pager
+	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)

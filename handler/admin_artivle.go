@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/models"
 	"github.com/fifsky/goblog/helpers"
-	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
 	"github.com/nfnt/resize"
@@ -30,8 +29,7 @@ var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Cates"] = cates
 
 	total, err := gosql.Model(&models.Posts{}).Count()
-	pager := pagination.New(int(total), num, page, 3)
-	h["Pager"] = pager
+	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)

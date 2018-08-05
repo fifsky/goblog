@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/sessions"
+	"github.com/fifsky/goblog/helpers/pagination"
 )
 
 func getHttpStatus(c *Context, status int) int {
@@ -16,6 +17,10 @@ func getHttpStatus(c *Context, status int) int {
 type Context struct {
 	*gin.Context
 	HttpStatus int
+}
+
+func (c *Context) Pagination(total int64, num, page int) *pagination.Paginater {
+	return pagination.New(int(total), num, page, 3)
 }
 
 func (c *Context) Session() sessions.Session {

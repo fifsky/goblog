@@ -8,7 +8,6 @@ import (
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/ilibs/logger"
 	"github.com/fifsky/goblog/core"
 )
@@ -31,8 +30,7 @@ var AdminRemindGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Reminds"] = reminds
 
 	total, err := gosql.Model(&models.Reminds{}).Count()
-	pager := pagination.New(int(total), num, page, 3)
-	h["Pager"] = pager
+	h["Pager"] = c.Pagination(total, num, page)
 
 	h["Types"] = map[int]string{
 		0: "固定",
