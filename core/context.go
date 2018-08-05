@@ -51,7 +51,7 @@ func (c *Context) Success(data interface{}) Response {
 	return &ApiResponse{
 		HttpStatus: getHttpStatus(c, 200),
 		Context:    c.Context,
-		StatusCode: 0,
+		StatusCode: 200,
 		Data:       data,
 		Message:    "ok",
 	}
