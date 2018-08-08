@@ -10,10 +10,7 @@
             {{ template "layout/article_nav" . }}
             {{ end }}
         </div>
-        <div class="comment" id="comments">
-            <h3><span class="commsty">评论内容</span></h3>
-            <div id="gitment"></div>
-        </div>
+        {{ template "layout/comment" . }}
     </div>
 </div>
 {{ template "layout/sidebar" . }}

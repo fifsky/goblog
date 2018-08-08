@@ -324,7 +324,7 @@ span.highlight{
     font-weight: normal;
     line-height: 30px;
 }
-/*
+
 .comment .comment-close{
     text-align: center;
     margin: 10px;
@@ -370,8 +370,7 @@ span.highlight{
 }
 
 .comment .comment-form{
-    margin: 0 auto;
-    width: 450px;
+    width: 100%;
 }
 
 .comment .comment-form p:after{
@@ -409,7 +408,6 @@ span.highlight{
 .comment .replay-entry{
     margin: 0 0 0 40px;
 }
-*/
 
 #scroll_top{
     position: fixed;
