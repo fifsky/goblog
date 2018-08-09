@@ -27,10 +27,10 @@ func (c *Comments) PK() string {
 	return "id"
 }
 
-func PostComments(start int, num int) ([]*Comments, error) {
+func PostComments(postId, start, num int) ([]*Comments, error) {
 	var m = make([]*Comments, 0)
 	start = (start - 1) * num
-	err := gosql.Model(&m).OrderBy("id desc").Limit(num).Offset(start).All()
+	err := gosql.Model(&m).Where("post_id = ?", postId).OrderBy("id desc").Limit(num).Offset(start).All()
 	if err != nil {
 		return nil, err
 	}
