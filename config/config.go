@@ -59,9 +59,9 @@ func Load(args map[string]string) {
 		}
 	}
 
-	App.Common.ConfigPath = filepath.Join(appPath, "config") + "/"
+	App.Common.ConfigPath = filepath.Join(appPath, "config")
 
-	conf, err := goconf.NewConfig(App.Common.ConfigPath + env)
+	conf, err := goconf.NewConfig(filepath.Join(App.Common.ConfigPath, env))
 	if err != nil {
 		logger.Fatal("json config path error %s", err.Error())
 	}
@@ -72,7 +72,7 @@ func Load(args map[string]string) {
 	}
 
 	if !filepath.IsAbs(App.Common.StoragePath) {
-		App.Common.StoragePath = filepath.Join(appPath, App.Common.StoragePath) + "/"
+		App.Common.StoragePath = filepath.Join(appPath, App.Common.StoragePath)
 	}
 
 	ding.DING_TALK_TOKEN = App.Common.DingToken
@@ -104,7 +104,7 @@ func Load(args map[string]string) {
 		c.LogMode = App.Log.LogMode
 		c.LogLevel = App.Log.LogLevel
 		c.LogMaxFiles = App.Log.LogMaxFiles
-		c.LogPath = App.Common.StoragePath + "logs/"
+		c.LogPath = filepath.Join(App.Common.StoragePath, "logs")
 		c.LogSentryDSN = App.Log.LogSentryDSN
 		c.LogSentryType = App.Log.LogSentryType
 		c.LogDetail = App.Log.LogDetail
