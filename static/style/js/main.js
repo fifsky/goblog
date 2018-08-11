@@ -133,11 +133,11 @@
             },
             success: function(data) {
                 if (data.statusCode == 200){
-                    if($('#comment .comment-null').size()){
-                        $('#comment .comment-null').remove();
+                    if($('#comments .comment-null').size()){
+                        $('#comments .comment-null').remove();
                     }
                     var $content = $(data.data.content).hide();
-                    $('#comment ul').append($content);
+                    $('#comments ul').append($content);
                     $content.fadeIn(200);
                     self.reset();
                 }else{
