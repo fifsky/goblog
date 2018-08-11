@@ -18,7 +18,7 @@
         </div>
         {{ if not (IsPage .UrlPath "/about" "/article") }}
         <div class="post-meta">
-            <span class="ds-thread-count" data-thread-key="39">暂无评论</span><span class="line">|</span><a
+            <span class="ds-thread-count">{{ if eq .Post.CommentNum 0 }}暂无评论{{ else }}评论({{ .Post.CommentNum }}){{ end }}</span><span class="line">|</span><a
                 href="/article/{{ .Post.Id }}#comments">发表评论&gt;&gt;</a>
         </div>
         {{ end }}

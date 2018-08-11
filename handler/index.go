@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/fifsky/goblog/models"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/gosql"
@@ -43,6 +41,10 @@ var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 
 	post.Type = 1
 	posts, err := models.PostGetList(post, page, num, artdate, keyword)
+	if err != nil {
+		return HandleMessage(c, "错误", err.Error())
+	}
+
 	h := defaultH(c.Context)
 	h["Posts"] = posts
 
@@ -60,8 +62,7 @@ var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return nil
+		return HandleMessage(c, "错误", err.Error())
 	}
 	return c.HTML("index/index", h)
 }

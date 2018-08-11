@@ -3,6 +3,8 @@ package models
 import (
 	"time"
 	"github.com/ilibs/gosql"
+	"strings"
+	"github.com/fifsky/goblog/helpers"
 )
 
 type Comments struct {
@@ -34,5 +36,32 @@ func PostComments(postId, start, num int) ([]*Comments, error) {
 	if err != nil {
 		return nil, err
 	}
+	return m, nil
+}
+
+func PostCommentNum(postId []int) (map[int]int, error) {
+	postIds := make([]string, 0)
+	for _, v := range postId {
+		postIds = append(postIds, helpers.ToStr(v))
+	}
+
+	rows, err := gosql.Queryx("select count(*) comment_num,post_id from comments where post_id in(" + strings.Join(postIds, ",") + ") group by post_id")
+
+	if err != nil {
+		return nil, err
+	}
+
+	m := make(map[int]int)
+
+	for rows.Next() {
+		var commentNum, postId int
+		err := rows.Scan(&commentNum, &postId)
+		if err != nil {
+			return nil, err
+		}
+
+		m[postId] = commentNum
+	}
+
 	return m, nil
 }

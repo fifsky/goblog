@@ -7,7 +7,6 @@ import (
 	"github.com/ilibs/logger"
 	"time"
 	"github.com/gin-gonic/gin"
-	"fmt"
 )
 
 var CommentPost core.HandlerFunc = func(c *core.Context) core.Response {
@@ -40,8 +39,6 @@ var CommentPost core.HandlerFunc = func(c *core.Context) core.Response {
 	if err != nil {
 		return c.Fail(202, err)
 	}
-
-	fmt.Println(body)
 
 	return c.Success(gin.H{
 		"content": body,

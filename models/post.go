@@ -31,9 +31,10 @@ func (p *Posts) PK() string {
 
 type UserPosts struct {
 	Posts
-	Name     string `db:"name"`
-	NickName string `db:"nick_name"`
-	Domain   string `db:"domain"`
+	Name       string `db:"name"`
+	NickName   string `db:"nick_name"`
+	Domain     string `db:"domain"`
+	CommentNum int    `db:"-"`
 }
 
 func PostPrev(id int) (*Posts, error) {
@@ -116,6 +117,8 @@ func PostGetList(p *Posts, start int, num int, artdate, keyword string) ([]*User
 		return nil, err
 	}
 
+	postIds := make([]int, 0)
+
 	for rows.Next() {
 		m := &UserPosts{}
 		err := rows.StructScan(m)
@@ -123,6 +126,19 @@ func PostGetList(p *Posts, start int, num int, artdate, keyword string) ([]*User
 			return nil, err
 		}
 		posts = append(posts, m)
+		postIds = append(postIds, m.Id)
+	}
+
+	cm, err := PostCommentNum(postIds)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, v := range posts {
+		if c, ok := cm[v.Id]; ok {
+			v.CommentNum = c
+		}
 	}
 
 	return posts, err
