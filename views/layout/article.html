@@ -9,8 +9,8 @@
                 <a href="/article/{{ .Post.Id }}">{{ .Post.Title }}</a>
             </h2>
             <div class="entry-meta">
-                by&nbsp;{{ .NickName }}&nbsp;&nbsp;/&nbsp;&nbsp;<a rel="category tag" title="查看 默认分类 中的全部文章"
-                                                          href="/categroy/default">{{ .Post.Name }}</a>&nbsp;&nbsp;/&nbsp;&nbsp;{{ DateFormat .Post.UpdatedAt "2006-01-02 15:04" }}
+                by&nbsp;{{ .NickName }}&nbsp;&nbsp;/&nbsp;&nbsp;<a rel="category tag" title="查看 {{ .Post.Name }} 中的全部文章"
+                                                          href="/categroy/{{ .Post.Domain }}">{{ .Post.Name }}</a>&nbsp;&nbsp;/&nbsp;&nbsp;{{ DateFormat .Post.UpdatedAt "2006-01-02 15:04" }}
             </div>
         </div>
         <div class="entry">
