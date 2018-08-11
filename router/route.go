@@ -23,6 +23,7 @@ func Route(router *gin.Engine) {
 	router.GET("/", core.Handle(handler.IndexGet))
 	router.GET("/about", core.Handle(handler.AboutGet))
 	router.GET("/article/:id", core.Handle(handler.ArticleGet))
+	router.POST("/post/comment",core.Handle(handler.CommentPost))
 	router.GET("/categroy/:domain", core.Handle(handler.IndexGet))
 	router.GET("/date/:year/:month", core.Handle(handler.IndexGet))
 	router.GET("/search", core.Handle(handler.IndexGet))

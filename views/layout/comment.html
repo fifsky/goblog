@@ -5,35 +5,20 @@
         <li>
             <a title="张三" href="javascript:void(0);" class="avatar"><img width="32" height="32" src=""></a>
             <div class="comment-doc">
-                <h4><a href="javascript:void(0);" class="author">张三</a><span class="actions">2018-08-08 12:32:32<span class="line">|</span><a data-cmt-type="2" class="_del" data-cmt-id="8718339" data-upload-id="185616988" href="javascript:void(0);">回复</a></span></h4>
+                <h4><a href="javascript:void(0);" class="author">张三</a><span class="actions">2018-08-08 12:32:32<span class="line">|</span><a href="javascript:void(0);">回复</a></span></h4>
                 <div class="comment-entry">这里是评论内容</div>
-                <div class="reply-list">
-                    <ul>
-                        <li>
-                            <a class="avatar" href="http://y.pps.tv/27612107/apps/ugc">
-                                <img width="30" height="30" src="http://s1.ppsimg.com/t_images/t/f/0c/c4/27612107/50/d09043509d8767230460c46820861427.jpg" alt="囧rz">
-                            </a>
-                            <div class="reply-info">
-                                <a target="_blank" href="http://y.pps.tv/27612107/apps/ugc">囧rz</a>
-                                <span class="actions">1分钟前</span>
-                            </div>
-                            <div class="replay-entry">sf</div>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </li>
         {{/*<li class="comment-null">还没有评论!</li>*/}}
     </ul>
     <div class="comment-form">
-        <form id="comment_form" action="/admin/post/article" method="post">
-            <p><textarea name="comment_content" placeholder="内容"></textarea>
-            </p>
+        <form id="comment_form" action="/post/comment" method="post">
+            <p><textarea name="content" placeholder="内容"></textarea></p>
             <p>
-                <input type="text" class="input_text" name="comment_author" placeholder="昵称"/>
+                <input type="text" class="input_text" name="name" placeholder="昵称"/>
                 <input type="hidden" name="post_id" value="<?php echo $post_info['post_id'];?>"/>
             </p>
-            <p>                <input class="formbutton" type="submit" value="提交"></p>
+            <p><input class="formbutton" type="submit" value="提交"></p>
         </form>
     </div>
 </div>

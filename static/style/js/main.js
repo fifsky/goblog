@@ -100,23 +100,23 @@
 
     $('#comment_form').submit(function(){
 
-        var $el = $(this).find('input[name="comment_author"]');
+        var $el = $(this).find('input[name="name"]');
         if($.trim($el.val()) == ''){
             $el.focus().closest('p').addClass('error');
             return false;
         }
 
-        $el = $(this).find('input[name="comment_email"]');
-        if(($el.data('require') && $.trim($el.val()) == '') || !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test($el.val())){
-            $el.focus().closest('p').addClass('error');
-            return false;
-        }
+        // $el = $(this).find('input[name="comment_email"]');
+        // if(($el.data('require') && $.trim($el.val()) == '') || !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test($el.val())){
+        //     $el.focus().closest('p').addClass('error');
+        //     return false;
+        // }
 
-        $el = $(this).find('input[name="comment_url"]');
-        if(($el.data('require') && $.trim($el.val()) == '') || !/^https?:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/.test($el.val())){
-            $el.focus().closest('p').addClass('error');
-            return false;
-        }
+        // $el = $(this).find('input[name="comment_url"]');
+        // if(($el.data('require') && $.trim($el.val()) == '') || !/^https?:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/.test($el.val())){
+        //     $el.focus().closest('p').addClass('error');
+        //     return false;
+        // }
 
         var self = this;
 
