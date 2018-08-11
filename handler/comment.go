@@ -7,6 +7,8 @@ import (
 	"github.com/ilibs/logger"
 	"time"
 	"github.com/gin-gonic/gin"
+	"github.com/fifsky/goblog/ding"
+	"fmt"
 )
 
 var CommentPost core.HandlerFunc = func(c *core.Context) core.Response {
@@ -27,6 +29,12 @@ var CommentPost core.HandlerFunc = func(c *core.Context) core.Response {
 		return c.Fail(201, "非法评论")
 	}
 
+	post := &models.Posts{}
+	err := gosql.Model(post).Where("id = ?", comment.PostId).Get()
+	if err != nil {
+		return c.Fail(201, "文章不存在")
+	}
+
 	comment.CreatedAt = time.Now()
 	comment.IP = c.ClientIP()
 
@@ -39,6 +47,15 @@ var CommentPost core.HandlerFunc = func(c *core.Context) core.Response {
 	if err != nil {
 		return c.Fail(202, err)
 	}
+
+	content := "您有新的评论!\n"
+	content += fmt.Sprintf("文章:%s\n", post.Title)
+	content += fmt.Sprintf("评论内容:%s\n", comment.Content)
+	content += fmt.Sprintf("评论昵称:%s\n", comment.Name)
+	content += fmt.Sprintf("评论时间:%s\n", comment.CreatedAt.Format("2006-01-02 15:04:05"))
+	content += fmt.Sprintf("评论IP:%s\n", comment.IP)
+
+	ding.Alarm(content)
 
 	return c.Success(gin.H{
 		"content": body,
