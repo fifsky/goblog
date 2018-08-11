@@ -35,6 +35,7 @@ var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return nil
 	}
+
 	return c.HTML("admin/articles", h)
 }
 

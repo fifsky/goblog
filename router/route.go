@@ -1,12 +1,13 @@
 package router
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/handler"
 	"github.com/fifsky/goblog/router/middleware"
 	"github.com/fifsky/goblog/debug"
+	"github.com/gin-gonic/gin"
 )
+
 
 func Route(router *gin.Engine) {
 	core.SetTemplate(router)
@@ -27,6 +28,7 @@ func Route(router *gin.Engine) {
 	router.GET("/categroy/:domain", core.Handle(handler.IndexGet))
 	router.GET("/date/:year/:month", core.Handle(handler.IndexGet))
 	router.GET("/search", core.Handle(handler.IndexGet))
+	router.GET("/avatar",core.Handle(handler.Avatar))
 
 	//管理后台
 	admin := router.Group("/admin")

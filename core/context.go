@@ -5,6 +5,7 @@ import (
 	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/sessions"
 	"github.com/fifsky/goblog/helpers/pagination"
+	"bytes"
 )
 
 func getHttpStatus(c *Context, status int) int {
@@ -89,4 +90,16 @@ func (c *Context) HTML(name string, obj interface{}) Response {
 		Name:       name,
 		Data:       obj,
 	}
+}
+
+func (c *Context) HTMLRender(name string, obj interface{}) (string, error) {
+	resp := &HTMLRenderResponse{
+		HttpStatus: getHttpStatus(c, 200),
+		Context:    c.Context,
+		Name:       name,
+		Data:       obj,
+		Body:       new(bytes.Buffer),
+	}
+
+	return resp.Render()
 }

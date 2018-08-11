@@ -64,6 +64,9 @@
   branch = "master"
   name = "github.com/pkg/errors"
 
+[[constraint]]
+  branch = "master"
+  name = "github.com/ilibs/identicon"
 
 [prune]
   go-tests = true

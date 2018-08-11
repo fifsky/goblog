@@ -7,6 +7,7 @@ import (
 	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/gosql"
 	"github.com/fifsky/goblog/core"
+	"github.com/ilibs/identicon"
 )
 
 var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
@@ -94,13 +95,19 @@ var ArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 
 	if url == "" {
 		prev, err := models.PostPrev(post.Id)
-		if err != nil {
+		if err == nil {
 			h["Prev"] = prev
 		}
 		next, err := models.PostNext(post.Id)
-		if err != nil {
+		if err == nil {
 			h["Next"] = next
 		}
+	}
+
+	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
+	comments, err := models.PostComments(post.Id, page, 100)
+	if err == nil {
+		h["Comments"] = comments
 	}
 
 	return c.HTML("index/article", h)
@@ -109,4 +116,28 @@ var ArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 var AboutGet core.HandlerFunc = func(c *core.Context) core.Response {
 	c.Set("url", "about")
 	return ArticleGet(c)
+}
+
+var Avatar core.HandlerFunc = func(c *core.Context) core.Response {
+	name := c.DefaultQuery("name", "default")
+
+	// New Generator: Rehuse
+	ig, err := identicon.New(
+		"fifsky", // Namespace
+		5,        // Number of blocks (Size)
+		5,        // Density
+	)
+
+	if err != nil {
+		panic(err) // Invalid Size or Density
+	}
+
+	ii, err := ig.Draw(name) // Generate an IdentIcon
+
+	if err != nil {
+		return nil
+	}
+	// Takes the size in pixels and any io.Writer
+	ii.Png(300, c.Writer) // 300px * 300px
+	return nil
 }

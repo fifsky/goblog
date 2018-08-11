@@ -14,6 +14,7 @@ import (
 	"github.com/fifsky/goblog/router"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
+	"github.com/fifsky/goblog/server"
 )
 
 func main() {
@@ -30,7 +31,7 @@ func main() {
 		return
 	}
 
-	serv := gin.Default()
+	serv := server.Serv()
 	//路由
 	router.Route(serv)
 	setPid(os.Getpid())

@@ -2,21 +2,20 @@
 <div class="comment" id="comment">
     <h3><span class=commsty>评论内容</span></h3>
     <ul>
-        <li>
-            <a title="张三" href="javascript:void(0);" class="avatar"><img width="32" height="32" src=""></a>
-            <div class="comment-doc">
-                <h4><a href="javascript:void(0);" class="author">张三</a><span class="actions">2018-08-08 12:32:32<span class="line">|</span><a href="javascript:void(0);">回复</a></span></h4>
-                <div class="comment-entry">这里是评论内容</div>
-            </div>
-        </li>
-        {{/*<li class="comment-null">还没有评论!</li>*/}}
+    {{ if not .Comments }}
+        <li class="comment-null">还没有评论!</li>
+    {{ else }}
+        {{ range .Comments }}
+            {{ template "layout/comment_item" . }}
+        {{ end }}
+    {{ end }}
     </ul>
     <div class="comment-form">
         <form id="comment_form" action="/post/comment" method="post">
             <p><textarea name="content" placeholder="内容"></textarea></p>
             <p>
                 <input type="text" class="input_text" name="name" placeholder="昵称"/>
-                <input type="hidden" name="post_id" value="<?php echo $post_info['post_id'];?>"/>
+                <input type="hidden" name="post_id" value="{{ .Post.Id }}"/>
             </p>
             <p><input class="formbutton" type="submit" value="提交"></p>
         </form>

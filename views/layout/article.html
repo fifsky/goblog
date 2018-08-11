@@ -16,7 +16,7 @@
         <div class="entry">
             {{ .Post.Content | Unescaped }}
         </div>
-        {{ if not (IsPage .UrlPath "/about") }}
+        {{ if not (IsPage .UrlPath "/about" "/article") }}
         <div class="post-meta">
             <span class="ds-thread-count" data-thread-key="39">暂无评论</span><span class="line">|</span><a
                 href="/article/{{ .Post.Id }}#comments">发表评论&gt;&gt;</a>

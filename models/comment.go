@@ -20,7 +20,7 @@ func (c *Comments) DbName() string {
 }
 
 func (c *Comments) TableName() string {
-	return "links"
+	return "comments"
 }
 
 func (c *Comments) PK() string {
@@ -30,7 +30,7 @@ func (c *Comments) PK() string {
 func PostComments(postId, start, num int) ([]*Comments, error) {
 	var m = make([]*Comments, 0)
 	start = (start - 1) * num
-	err := gosql.Model(&m).Where("post_id = ?", postId).OrderBy("id desc").Limit(num).Offset(start).All()
+	err := gosql.Model(&m).Where("post_id = ?", postId).OrderBy("id asc").Limit(num).Offset(start).All()
 	if err != nil {
 		return nil, err
 	}

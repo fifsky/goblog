@@ -136,7 +136,7 @@
                     if($('#comment .comment-null').size()){
                         $('#comment .comment-null').remove();
                     }
-                    var $content = $(data.content).hide();
+                    var $content = $(data.data.content).hide();
                     $('#comment ul').append($content);
                     $content.fadeIn(200);
                     self.reset();

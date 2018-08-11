@@ -1,0 +1,9 @@
+{{ define "layout/comment_item" }}
+    <li>
+        <a title="{{.Name}}" href="javascript:void(0);" class="avatar"><img width="32" height="32" src="/avatar?name={{.Name}}"></a>
+        <div class="comment-doc">
+            <h4><a href="javascript:void(0);" class="author">{{.Name}}</a><span class="actions">{{ DateFormat .CreatedAt "2006-01-02 15:04"}}</span></h4>
+            <div class="comment-entry">{{.Content}}</div>
+        </div>
+    </li>
+{{ end }}
