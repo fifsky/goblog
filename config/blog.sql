@@ -156,6 +156,22 @@ VALUES
 UNLOCK TABLES;
 
 
+# Dump of table comments
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `comments`;
+
+CREATE TABLE `comments` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `post_id` int(11) NOT NULL COMMENT '文章PID',
+  `pid` int(11) NOT NULL COMMENT '回复评论ID',
+  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '名称',
+  `content` tinytext NOT NULL COMMENT '内容',
+  `ip` varchar(100) NOT NULL DEFAULT '' COMMENT 'IP',
+  `created_at` datetime NOT NULL COMMENT '评论时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+
 # Dump of table users
 # ------------------------------------------------------------
 
