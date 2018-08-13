@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/fifsky/goblog/router"
 )
 
 var serv = gin.Default()
@@ -23,9 +22,6 @@ func Run(port string) {
 		Addr:    port,
 		Handler: serv,
 	}
-
-	//router
-	router.Route(serv)
 
 	go func() {
 		// service connections
