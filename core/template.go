@@ -127,21 +127,20 @@ func Args(values ...interface{}) (map[string]interface{}, error) {
 	return dict, nil
 }
 
+var funcMap = template.FuncMap{
+	"WeekDayFormat":    WeekDayFormat,
+	"DateFormatString": DateFormatString,
+	"DateFormat":       DateFormat,
+	"Substr":           Substr,
+	"Truncate":         Truncate,
+	"Unescaped":        Unescaped,
+	"StaticUrl":        StaticUrl,
+	"IsPage":           IsPage,
+	"Args":             Args,
+	"PageUrl":          PageUrl,
+}
+
 func SetTemplate(engine *gin.Engine) {
-
-	funcMap := template.FuncMap{
-		"WeekDayFormat":    WeekDayFormat,
-		"DateFormatString": DateFormatString,
-		"DateFormat":       DateFormat,
-		"Substr":           Substr,
-		"Truncate":         Truncate,
-		"Unescaped":        Unescaped,
-		"StaticUrl":        StaticUrl,
-		"IsPage":           IsPage,
-		"Args":             Args,
-		"PageUrl":          PageUrl,
-	}
-
 	engine.SetFuncMap(funcMap)
 	engine.LoadHTMLGlob("views/**/*")
 }

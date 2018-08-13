@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/fifsky/goblog/router"
 )
 
 var serv = gin.Default()
@@ -18,6 +19,10 @@ func Serv() *gin.Engine {
 }
 
 func Run(port string) {
+
+	//router
+	router.Route(serv)
+
 	srv := &http.Server{
 		Addr:    port,
 		Handler: serv,

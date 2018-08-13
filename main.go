@@ -14,7 +14,6 @@ import (
 	"github.com/fifsky/goblog/config"
 	"github.com/ilibs/gosql"
 	"github.com/fifsky/goblog/server"
-	"github.com/fifsky/goblog/router"
 )
 
 func main() {
@@ -33,9 +32,6 @@ func main() {
 	setPid(os.Getpid())
 	//定时提醒
 	go core.StartCron()
-
-	//router
-	router.Route(server.Serv())
 	server.Run(":8080")
 }
 

@@ -2,9 +2,8 @@ package core
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"github.com/fifsky/goblog/server"
 	"bytes"
+	"html/template"
 )
 
 type Response interface {
@@ -70,29 +69,16 @@ type HTMLRenderResponse struct {
 	Context    *gin.Context `json:"-"`
 	Name       string
 	Data       interface{}
-	Body       *bytes.Buffer
 }
-
-func (c *HTMLRenderResponse) Header() http.Header {
-	return make(http.Header)
-}
-
-func (c *HTMLRenderResponse) Write(body []byte) (int, error) {
-	if c.Body != nil {
-		c.Body.Write(body)
-	}
-	return len(body), nil
-}
-
-func (c *HTMLRenderResponse) WriteHeader(statusCode int) {}
 
 func (c *HTMLRenderResponse) Render() (string, error) {
-	instance := server.Serv().HTMLRender.Instance(c.Name, c.Data)
-	err := instance.Render(c)
+	templ := template.Must(template.New("").Funcs(funcMap).ParseGlob("views/**/*"))
+	writer := &bytes.Buffer{}
+	err := templ.ExecuteTemplate(writer, c.Name, c.Data)
 
 	if err != nil {
 		return "", err
 	}
 
-	return c.Body.String(), nil
+	return writer.String(), nil
 }
