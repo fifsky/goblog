@@ -1,6 +1,9 @@
 package core
 
 import (
+	"bytes"
+	"html/template"
+
 	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/sessions"
@@ -91,13 +94,13 @@ func (c *Context) HTML(name string, obj interface{}) Response {
 	}
 }
 
-func (c *Context) HTMLRender(name string, obj interface{}) (string, error) {
-	resp := &HTMLRenderResponse{
-		HttpStatus: getHttpStatus(c, 200),
-		Context:    c.Context,
-		Name:       name,
-		Data:       obj,
-	}
+var templ = template.Must(template.New("").Funcs(funcMap).ParseGlob("views/**/*"))
 
-	return resp.Render()
+func (c *Context) HTMLRender(name string, obj interface{}) (string, error) {
+	writer := &bytes.Buffer{}
+	err := templ.ExecuteTemplate(writer, name, obj)
+	if err != nil {
+		return "", err
+	}
+	return writer.String(), nil
 }

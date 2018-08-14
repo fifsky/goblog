@@ -2,8 +2,6 @@ package core
 
 import (
 	"github.com/gin-gonic/gin"
-	"bytes"
-	"html/template"
 )
 
 type Response interface {
@@ -62,23 +60,4 @@ type HTMLResponse struct {
 
 func (c *HTMLResponse) Render() {
 	c.Context.HTML(c.HttpStatus, c.Name, c.Data)
-}
-
-type HTMLRenderResponse struct {
-	HttpStatus int          `json:"-"`
-	Context    *gin.Context `json:"-"`
-	Name       string
-	Data       interface{}
-}
-
-func (c *HTMLRenderResponse) Render() (string, error) {
-	templ := template.Must(template.New("").Funcs(funcMap).ParseGlob("views/**/*"))
-	writer := &bytes.Buffer{}
-	err := templ.ExecuteTemplate(writer, c.Name, c.Data)
-
-	if err != nil {
-		return "", err
-	}
-
-	return writer.String(), nil
 }
