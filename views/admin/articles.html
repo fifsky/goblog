@@ -53,7 +53,7 @@
                 {{ range .Posts }}
                 <tr>
                     <td><input type="checkbox" name="ids" value="{{.Id}}"/></td>
-                    <td class="comment-num"><a href="/article/{{.Id}}#comment" target="_blank">{{ .CommentNum }}</a></td>
+                    <td class="comment-num"><a href="/article/{{.Id}}#comments" target="_blank">{{ .CommentNum }}</a></td>
                     <td><a href="/article/{{.Id}}">{{.Title}}</a>
                     </td>
                     <td>{{.NickName}}</td>
