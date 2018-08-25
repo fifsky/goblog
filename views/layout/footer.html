@@ -9,9 +9,9 @@
 </div>
 <a id="scroll_top" href="#top">返回顶部</a>
 <script src="//cdn.bootcss.com/jquery/1.10.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="{{ StaticUrl }}style/js/main.js"></script>
 {{ if not .IsAdminPage }}
 <script src="{{ StaticUrl }}public/highlight/highlight.pack.js" type="text/javascript"></script>
-<script type="text/javascript" src="{{ StaticUrl }}style/js/main.js"></script>
 <script type="text/javascript">
     hljs.configure({tabReplace: '    '});
     hljs.initHighlightingOnLoad();
