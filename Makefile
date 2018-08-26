@@ -11,5 +11,5 @@ start:
 	./blog > /dev/null 2>&1 &
 
 restart:
-	make stop
-	make start
+	cat blog.pid | xargs kill
+	./blog > /dev/null 2>&1 &
