@@ -32,11 +32,12 @@ func Ginrus() gin.HandlerFunc {
 			c.LogName = "access_log"
 			c.LogDetail = false
 			c.LogSentryDSN = ""
+			c.LogMode = "file"
 		})
 
 		if len(c.Errors) > 0 {
 			// Append error field if this is an erroneous request.
-			log.Errorf(c.Errors.String(),info)
+			log.Errorf(c.Errors.String(), info)
 		} else {
 			log.Info(info)
 		}
