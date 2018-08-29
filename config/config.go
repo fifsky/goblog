@@ -55,7 +55,8 @@ func Load(args map[string]string) {
 		//获得程序路径从里面获取到goblog的路径
 		execpath, err := os.Getwd()
 		if err == nil {
-			appPath = execpath[0 : strings.Index(execpath, "/goblog")+7]
+			src := "/goblog"
+			appPath = execpath[0 : strings.Index(execpath, src)+len(src)]
 		}
 	}
 
