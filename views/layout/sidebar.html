@@ -102,11 +102,20 @@
     </div>
 
     <div class="sect">
+        <h2>最新评论</h2>
+        <ul class="tlist">
+        {{ range .Comments }}
+            <li><a href="/article/{{.PostId}}#comments">{{.Content}}</a></li>
+        {{ end }}
+        </ul>
+    </div>
+
+    <div class="sect">
         <h2>我关注的</h2>
         <ul class="tlist">
             {{ range .Links }}
             <li>
-                <a title="" href="{{.Url}}" target="_blank"><span>{{.Name}}</span></a>
+                <a title="{{.Name}}" href="{{.Url}}" target="_blank"><span>{{.Name}}</span></a>
             </li>
             {{ end }}
         </ul>

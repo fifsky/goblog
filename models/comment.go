@@ -39,6 +39,16 @@ func PostComments(postId, start, num int) ([]*Comments, error) {
 	return m, nil
 }
 
+
+func NewComments() ([]*Comments, error) {
+	var m = make([]*Comments, 0)
+	err := gosql.Model(&m).OrderBy("id desc").Limit(10).All()
+	if err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 func PostCommentNum(postId []int) (map[int]int, error) {
 	postIds := make([]string, 0)
 	for _, v := range postId {

@@ -61,6 +61,13 @@ var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 	total, err := builder.Count()
 	h["Pager"] = c.Pagination(total, num, page)
 
+	comments,err := models.NewComments()
+	if err != nil {
+		return HandleMessage(c, "错误", err.Error())
+	}
+
+	h["Comments"] = comments
+
 	if err != nil {
 		return HandleMessage(c, "错误", err.Error())
 	}
