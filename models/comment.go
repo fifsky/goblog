@@ -39,10 +39,16 @@ func PostComments(postId, start, num int) ([]*Comments, error) {
 	return m, nil
 }
 
+type NewComment struct {
+	Type    int    `db:"type"`
+	PostId  int    `db:"post_id"`
+	Url     string `db:"url"`
+	Content string `db:"content"`
+}
 
-func NewComments() ([]*Comments, error) {
-	var m = make([]*Comments, 0)
-	err := gosql.Model(&m).OrderBy("id desc").Limit(10).All()
+func NewComments() ([]*NewComment, error) {
+	var m = make([]*NewComment, 0)
+	err := gosql.Select(&m, "select p.type,c.post_id,p.url,c.content from comments c left join posts p on c.post_id = p.id order by c.id desc limit 10")
 	if err != nil {
 		return nil, err
 	}
