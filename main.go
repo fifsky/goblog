@@ -1,19 +1,19 @@
 package main
 
 import (
-	"os"
-	"fmt"
 	"flag"
-	"log"
+	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
 	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
 
-	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/config"
-	"github.com/ilibs/gosql"
+	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/server"
+	"github.com/ilibs/gosql"
 )
 
 func main() {
