@@ -1,13 +1,14 @@
 package handler
 
 import (
+	"runtime"
 	"strings"
 
-	"github.com/gin-gonic/gin"
+	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/models"
+	"github.com/gin-gonic/gin"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
-	"github.com/fifsky/goblog/core"
 )
 
 func defaultH(c *gin.Context) gin.H {
@@ -19,6 +20,7 @@ func defaultH(c *gin.Context) gin.H {
 		"SiteKeyword": options["site_keyword"],
 		"SiteDesc":    options["site_desc"],
 		"LoginUser":   user,
+		"GOVERSION":   runtime.Version(),
 	}
 
 	url := strings.Split(c.Request.URL.Path, "/")
