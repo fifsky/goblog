@@ -25,7 +25,7 @@ func Handle(handler IHandler) gin.HandlerFunc {
 	}
 }
 
-func Middlerware(handler IHandler) gin.HandlerFunc {
+func Middleware(handler IHandler) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		response := handler.Handle(getContext(c))
 		if response != nil {
