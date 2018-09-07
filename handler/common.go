@@ -56,6 +56,13 @@ func defaultH(c *gin.Context) gin.H {
 		h["Links"] = links
 		h["Archives"] = archives
 
+		comments,err := models.NewComments()
+		if err != nil {
+			logger.Error(err)
+		}
+
+		h["Comments"] = comments
+
 		h["IsAdminPage"] = false
 	} else {
 		h["IsAdminPage"] = true
