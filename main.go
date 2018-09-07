@@ -32,7 +32,7 @@ func main() {
 	setPid(os.Getpid())
 	//定时提醒
 	go core.StartCron()
-	server.Run(":8080")
+	server.Run(":8888")
 }
 
 func setPid(pid int) {

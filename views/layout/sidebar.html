@@ -104,7 +104,7 @@
     <div class="sect">
         <h2>最新评论</h2>
         <ul class="tlist">
-        {{ range .Comments }}
+        {{ range .NewComments }}
             <li><a href="{{if eq .Type 2}}/{{.Url}}#comments{{else}}/article/{{.PostId}}#comments{{end}}">{{.Content}}</a></li>
         {{ end }}
         </ul>

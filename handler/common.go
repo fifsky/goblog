@@ -61,7 +61,7 @@ func defaultH(c *gin.Context) gin.H {
 			logger.Error(err)
 		}
 
-		h["Comments"] = comments
+		h["NewComments"] = comments
 
 		h["IsAdminPage"] = false
 	} else {
