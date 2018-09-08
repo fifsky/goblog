@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/models"
+	"github.com/gin-gonic/gin"
 	"github.com/ilibs/logger"
 )
 

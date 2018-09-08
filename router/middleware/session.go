@@ -1,10 +1,10 @@
 package middleware
 
 import (
+	"github.com/fifsky/goblog/config"
 	"github.com/gin-gonic/gin"
 	"github.com/ilibs/sessions"
 	"github.com/ilibs/sessions/cookie"
-	"github.com/fifsky/goblog/config"
 )
 
 func Sessions() gin.HandlerFunc {

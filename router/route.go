@@ -2,12 +2,11 @@ package router
 
 import (
 	"github.com/fifsky/goblog/core"
+	"github.com/fifsky/goblog/debug"
 	"github.com/fifsky/goblog/handler"
 	"github.com/fifsky/goblog/router/middleware"
-	"github.com/fifsky/goblog/debug"
 	"github.com/gin-gonic/gin"
 )
-
 
 func Route(router *gin.Engine) {
 	core.SetTemplate(router)
@@ -15,7 +14,7 @@ func Route(router *gin.Engine) {
 	//中间件
 	router.Use(middleware.Sessions())
 	router.Use(middleware.Ginrus())
-	router.Use(middleware.SharedData())
+	router.Use(core.Middleware(middleware.SharedData))
 
 	//静态文件
 	router.Static("/static", "./static")
@@ -24,11 +23,11 @@ func Route(router *gin.Engine) {
 	router.GET("/", core.Handle(handler.IndexGet))
 	router.GET("/about", core.Handle(handler.AboutGet))
 	router.GET("/article/:id", core.Handle(handler.ArticleGet))
-	router.POST("/post/comment",core.Handle(handler.CommentPost))
+	router.POST("/post/comment", core.Handle(handler.CommentPost))
 	router.GET("/categroy/:domain", core.Handle(handler.IndexGet))
 	router.GET("/date/:year/:month", core.Handle(handler.IndexGet))
 	router.GET("/search", core.Handle(handler.IndexGet))
-	router.GET("/avatar",core.Handle(handler.Avatar))
+	router.GET("/avatar", core.Handle(handler.Avatar))
 
 	//管理后台
 	admin := router.Group("/admin")
