@@ -10,16 +10,13 @@
 }
 .admin h2 a{
     margin-left: 10px;
-}
-.admin h2 a{
     font-size: 12px;
     font-weight: normal;
     line-height: 16px;
 }
 
-.admin h2 a img.ico{
-    vertical-align: middle;
-    margin: 2px 3px 4px 0;
+.admin h2 a i{
+    margin-right: 2px;
 }
 
 .operate{

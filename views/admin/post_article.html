@@ -11,8 +11,7 @@
 <div id="articles" class="admin">
     {{ template "layout/admin_tabs" . }}
     <div id="content">
-        <h2>{{ if .Post }}编辑{{ else }}撰写{{ end }}文章<a href="/admin/articles"><img
-                class="ico" src="{{ StaticUrl }}style/images/back.png"/>返回列表</a></h2>
+        <h2>{{ if .Post }}编辑{{ else }}撰写{{ end }}文章<a href="/admin/articles"><i class="iconfont icon-undo" style="color: #444"></i>返回列表</a></h2>
         <div class="message"></div>
         <form id="article_form" class="vf" action="/admin/post/article" method="post"
               autocomplete="off">

@@ -3,7 +3,7 @@
 <div id="users" class="admin">
     {{ template "layout/admin_tabs" . }}
     <div id="content">
-        <h2>{{ if .User}}编辑{{else}}新增{{end}}用户<a href="/admin/users"><img class="ico" src="{{StaticUrl}}style/images/back.png"/>返回列表</a></h2>
+        <h2>{{ if .User}}编辑{{else}}新增{{end}}用户<a href="/admin/users"><i class="iconfont icon-undo" style="color: #444"></i>返回列表</a></h2>
         <div class="message"></div>
         <form id="user_form" class="vf" action="/admin/post/user" method="post" autocomplete="off">
 
