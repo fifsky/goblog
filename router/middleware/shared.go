@@ -23,7 +23,7 @@ var SharedData core.HandlerFunc = func(c *core.Context) core.Response {
 			c.Set("options", options.(map[string]string))
 		}
 
-		session := sessions.Default(c)
+		session := sessions.Default(c.Context)
 		if uid := session.Get("UserId"); uid != nil {
 			if user, ok := core.Global.Load("LoginUser"); ok {
 				c.Set("LoginUser", user.(*models.Users))
