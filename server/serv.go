@@ -1,15 +1,15 @@
 package server
 
 import (
-	"net/http"
+	"context"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
-	"context"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/router"
+	"github.com/gin-gonic/gin"
 )
 
 var serv = gin.Default()

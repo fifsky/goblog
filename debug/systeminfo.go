@@ -1,12 +1,12 @@
 package debug
 
 import (
-	"time"
-	"runtime"
 	"fmt"
 	"math"
-	"strconv"
 	"os"
+	"runtime"
+	"strconv"
+	"time"
 )
 
 type SystemInfo struct {

@@ -6,10 +6,11 @@ import (
 	"crypto/md5"
 	"crypto/rand"
 	"encoding/hex"
-	"github.com/pkg/errors"
+	"encoding/json"
 	"io"
 	"os"
-	"encoding/json"
+
+	"github.com/pkg/errors"
 )
 
 func Md5(source string) string {

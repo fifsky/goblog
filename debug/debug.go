@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http/pprof"
 
-	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/config"
 	"github.com/fifsky/goblog/router/middleware"
+	"github.com/gin-gonic/gin"
 )
 
 // IndfoHandler will pass the call from /debug/info to systeminfo

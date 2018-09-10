@@ -2,6 +2,7 @@ package models
 
 import (
 	"time"
+
 	"github.com/ilibs/gosql"
 )
 
@@ -44,7 +45,7 @@ func MoodGetList(start int, num int) ([]*UserMoods, error) {
 	var moods = make([]*UserMoods, 0)
 	start = (start - 1) * num
 
-	err := gosql.Select(&moods,"select m.*,u.nick_name from moods m left join users u on m.user_id = u.id order by m.id desc limit ?,?", start, num)
+	err := gosql.Select(&moods, "select m.*,u.nick_name from moods m left join users u on m.user_id = u.id order by m.id desc limit ?,?", start, num)
 
 	if err != nil {
 		return nil, err
