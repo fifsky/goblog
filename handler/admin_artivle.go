@@ -32,7 +32,7 @@ var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithError(http.StatusInternalServerError, err)
 		return nil
 	}
 
@@ -60,7 +60,7 @@ var AdminArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Cates"] = cates
 
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithError(http.StatusInternalServerError, err)
 		return nil
 	}
 	return c.HTML("admin/post_article", h)

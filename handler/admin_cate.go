@@ -3,11 +3,11 @@ package handler
 import (
 	"net/http"
 
+	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
-	"github.com/fifsky/goblog/core"
 )
 
 var AdminCateGet core.HandlerFunc = func(c *core.Context) core.Response {
@@ -28,7 +28,7 @@ var AdminCateGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithError(http.StatusInternalServerError, err)
 		return nil
 	}
 

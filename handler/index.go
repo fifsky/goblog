@@ -1,14 +1,17 @@
 package handler
 
 import (
-	"github.com/fifsky/goblog/models"
-	"github.com/fifsky/goblog/helpers"
-	"github.com/ilibs/gosql"
+	"net/http"
+
 	"github.com/fifsky/goblog/core"
+	"github.com/fifsky/goblog/helpers"
+	"github.com/fifsky/goblog/models"
+	"github.com/ilibs/gosql"
 	"github.com/ilibs/identicon"
 )
 
 var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
+
 	options := c.GetStringMapString("options")
 	num, err := helpers.StrTo(options["post_num"]).Int()
 	if err != nil || num < 1 {
@@ -42,7 +45,8 @@ var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 	post.Type = 1
 	posts, err := models.PostGetList(post, page, num, artdate, keyword)
 	if err != nil {
-		return HandleMessage(c, "错误", err.Error())
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return nil
 	}
 
 	h := defaultH(c.Context)
@@ -62,7 +66,8 @@ var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
-		return HandleMessage(c, "错误", err.Error())
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return nil
 	}
 	return c.HTML("index/index", h)
 }

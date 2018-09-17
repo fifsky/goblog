@@ -1,15 +1,15 @@
 package handler
 
 import (
-	"time"
 	"net/http"
+	"time"
 
+	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
-	"github.com/ilibs/gosql"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
-	"github.com/fifsky/goblog/core"
 )
 
 var AdminRemindGet core.HandlerFunc = func(c *core.Context) core.Response {
@@ -55,7 +55,7 @@ var AdminRemindGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["CurrDate"] = time.Now().Format("2006-01-02 15:04:05")
 
 	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
+		c.AbortWithError(http.StatusInternalServerError, err)
 		return nil
 	}
 	return c.HTML("admin/remind", h)
