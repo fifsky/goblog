@@ -25,12 +25,20 @@ func (m *Moods) PK() string {
 	return "id"
 }
 
+func (m *Moods) AfterChange() {
+	Cache.Delete("mood-first")
+}
+
 type UserMoods struct {
 	Moods
 	NickName string `db:"nick_name"`
 }
 
 func MoodFrist() (*UserMoods, error) {
+	if v, ok := Cache.Get("mood-first"); ok {
+		return v.(*UserMoods), nil
+	}
+
 	m := &UserMoods{}
 
 	err := gosql.QueryRowx("select m.*,u.nick_name from moods m left join users u on m.user_id = u.id order by m.id desc limit 1").StructScan(m)
@@ -38,10 +46,14 @@ func MoodFrist() (*UserMoods, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	Cache.Set("mood-first", m, 1*time.Hour)
+
 	return m, nil
 }
 
 func MoodGetList(start int, num int) ([]*UserMoods, error) {
+
 	var moods = make([]*UserMoods, 0)
 	start = (start - 1) * num
 

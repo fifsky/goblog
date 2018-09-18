@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/ilibs/gosql"
+	"github.com/ilibs/logger"
 )
 
 type Cates struct {
@@ -25,6 +26,10 @@ func (c *Cates) TableName() string {
 
 func (c *Cates) PK() string {
 	return "id"
+}
+
+func (c *Cates) AfterChange()  {
+	Cache.Delete("all-cates")
 }
 
 type CateArtivleCount struct {
@@ -50,4 +55,19 @@ func CateArtivleCountGetList(start int, num int) ([]*CateArtivleCount, error) {
 		return nil, err
 	}
 	return m, nil
+}
+
+func GetAllCates() []*Cates {
+	if v, ok := Cache.Get("all-cates"); ok {
+		return v.([]*Cates)
+	}
+	cates := make([]*Cates, 0)
+	err := gosql.Model(&cates).All()
+	if err != nil {
+		logger.Error(err)
+		return nil
+	}
+
+	Cache.Set("all-cates", cates, 1*time.Hour)
+	return cates
 }

@@ -7,7 +7,6 @@ import (
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/models"
 	"github.com/gin-gonic/gin"
-	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
 )
 
@@ -34,18 +33,8 @@ func defaultH(c *gin.Context) gin.H {
 			logger.Error(err)
 		}
 
-		cates := make([]*models.Cates, 0)
-		err = gosql.Model(&cates).All()
-		if err != nil {
-			logger.Error(err)
-		}
-
-		links := make([]*models.Links, 0)
-		err = gosql.Model(&links).All()
-		if err != nil {
-			logger.Error(err)
-		}
-
+		cates := models.GetAllCates()
+		links := models.GetAllLinks()
 		archives, err := models.PostArchive()
 		if err != nil {
 			logger.Error(err)

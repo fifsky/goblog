@@ -30,6 +30,10 @@ func (p *Posts) PK() string {
 	return "id"
 }
 
+func (p *Posts) AfterChange()  {
+	Cache.Delete("post-archive")
+}
+
 type UserPosts struct {
 	Posts
 	Name       string `db:"name"`
@@ -64,6 +68,11 @@ func PostNext(id int) (*Posts, error) {
 }
 
 func PostArchive() ([]map[string]string, error) {
+
+	if v, ok := Cache.Get("post-archive"); ok {
+		return v.([]map[string]string), nil
+	}
+
 	m := make([]map[string]string, 0)
 	result, err := gosql.Queryx("select ym,count(ym) total from (select DATE_FORMAT(created_at,'%Y/%m') as ym from posts where type = 1) s group by ym order by ym desc")
 
@@ -79,6 +88,8 @@ func PostArchive() ([]map[string]string, error) {
 			"total": total,
 		})
 	}
+
+	Cache.Set("post-archive", m, 1*time.Hour)
 
 	return m, err
 }

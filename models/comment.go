@@ -30,6 +30,10 @@ func (c *Comments) PK() string {
 	return "id"
 }
 
+func (c *Comments) AfterChange()  {
+	Cache.Delete("new-comments")
+}
+
 func PostComments(postId, start, num int) ([]*Comments, error) {
 	var m = make([]*Comments, 0)
 	start = (start - 1) * num
@@ -48,11 +52,18 @@ type NewComment struct {
 }
 
 func NewComments() ([]*NewComment, error) {
+	if v, ok := Cache.Get("new-comments"); ok {
+		return v.([]*NewComment), nil
+	}
+
 	var m = make([]*NewComment, 0)
 	err := gosql.Select(&m, "select p.type,c.post_id,p.url,c.content from comments c left join posts p on c.post_id = p.id order by c.id desc limit 10")
 	if err != nil {
 		return nil, err
 	}
+
+	Cache.Set("new-comments", m, 1*time.Hour)
+
 	return m, nil
 }
 

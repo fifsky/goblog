@@ -14,7 +14,7 @@ require (
 	github.com/golang/protobuf v1.2.0 // indirect
 	github.com/gorilla/sessions v1.1.2 // indirect
 	github.com/hpcloud/tail v1.0.0 // indirect
-	github.com/ilibs/gosql v1.0.0
+	github.com/ilibs/gosql v1.0.2
 	github.com/ilibs/identicon v0.0.0-20180626043057-7875f45b0022
 	github.com/ilibs/json5 v0.0.0-20160717195620-7620272ed633 // indirect
 	github.com/ilibs/logger v0.0.0-20180822070604-9b0ffea8fc9a
@@ -31,6 +31,7 @@ require (
 	github.com/nullrocks/identicon v0.0.0-20180626043057-7875f45b0022 // indirect
 	github.com/onsi/ginkgo v1.6.0 // indirect
 	github.com/onsi/gomega v1.4.1 // indirect
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.8.0
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/robertkrimen/otto v0.0.0-20180617131154-15f95af6e78d // indirect
