@@ -21,6 +21,11 @@ var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
 	posts, err := models.PostGetList(&models.Posts{}, page, num, "", "")
 
+	if err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
+		return nil
+	}
+
 	cates := make([]*models.Cates, 0)
 	gosql.Model(&cates).All()
 
