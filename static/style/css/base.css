@@ -158,6 +158,11 @@ form p.inputting .formtip { color:#000;}
 #sidebar { float:right; width:205px; padding:15px 10px 20px 18px; border:1px solid #89d5ef; background:#fff;}
 #sidebar ul { list-style:none;}
 #sidebar ul.tlist {list-style: disc inside none;}
+#sidebar ul.tlist li {
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
 #sidebar .sect { margin:0 0 1.5em;}
 #sidebar h2 { margin:0 0 0 -10px; padding:8px 5px 5px 10px; background:url(../images/secthd.gif) 0 0 no-repeat; font-size:14px; font-weight:normal;}
 #sidebar h3 { font-size:13px; font-weight:normal;}

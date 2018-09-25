@@ -50,6 +50,7 @@ func Substr(source string, start, end int) string {
 	if end > length {
 		end = length
 	}
+
 	return string(rs[start:end])
 }
 
