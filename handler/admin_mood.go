@@ -72,5 +72,5 @@ var AdminMoodDelete core.HandlerFunc = func(c *core.Context) core.Response {
 		logger.Error(err)
 		return c.Fail(201, "删除失败")
 	}
-	return c.Redirect("/admin/moods")
+	return c.Redirect(c.Request.Referer())
 }

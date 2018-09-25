@@ -132,9 +132,8 @@
                 if (data.statusCode === 200) {
                     if (!$(self).find('input[name="post_id"]').val()) {
                         self.reset();
-                        editor.html('');
                     }
-                    window.location.href = "/admin/articles"
+                    window.history.go(-1);
                 } else {
                     alert(data.message);
                 }

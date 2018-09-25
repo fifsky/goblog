@@ -106,7 +106,7 @@ var AdminArticleDelete core.HandlerFunc = func(c *core.Context) core.Response {
 		logger.Error(err)
 		return c.Fail(201, "删除失败")
 	}
-	return c.Redirect("/admin/articles")
+	return c.Redirect(c.Request.Referer())
 }
 
 var AdminUploadPost core.HandlerFunc = func(c *core.Context) core.Response {
