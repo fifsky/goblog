@@ -22,8 +22,7 @@ var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 	posts, err := models.PostGetList(&models.Posts{}, page, num, "", "")
 
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return nil
+		return c.ErrorMessage(err)
 	}
 
 	cates := make([]*models.Cates, 0)
@@ -37,8 +36,7 @@ var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return nil
+		return c.ErrorMessage(err)
 	}
 
 	return c.HTML("admin/articles", h)
@@ -65,8 +63,7 @@ var AdminArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Cates"] = cates
 
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return nil
+		return c.ErrorMessage(err)
 	}
 	return c.HTML("admin/post_article", h)
 }

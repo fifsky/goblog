@@ -61,12 +61,5 @@ func defaultH(c *gin.Context) gin.H {
 }
 
 var Handle404 core.HandlerFunc = func(c *core.Context) core.Response {
-	return HandleMessage(c, "未找到(404 Not Found)", "抱歉，您浏览的页面未找到。")
-}
-
-func HandleMessage(c *core.Context, title string, message string) core.Response {
-	return c.HTML("error/message", gin.H{
-		"Title":   title,
-		"Message": message,
-	})
+	return c.Message("未找到(404 Not Found)", "抱歉，您浏览的页面未找到。")
 }

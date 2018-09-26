@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
@@ -30,8 +28,7 @@ var AdminLinkGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return nil
+		return c.ErrorMessage(err)
 	}
 
 	return c.HTML("admin/links", h)

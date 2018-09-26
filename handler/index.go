@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
@@ -45,8 +43,7 @@ var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 	post.Type = 1
 	posts, err := models.PostGetList(post, page, num, artdate, keyword)
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return nil
+		return c.ErrorMessage(err)
 	}
 
 	h := defaultH(c.Context)
@@ -66,8 +63,7 @@ var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return nil
+		return c.ErrorMessage(err)
 	}
 	return c.HTML("index/index", h)
 }
@@ -84,7 +80,7 @@ var ArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 	err := gosql.Model(post).Get()
 
 	if err != nil {
-		return HandleMessage(c, "文章不存在", "您访问的文章不存在或已经删除！")
+		return c.Message("文章不存在", "您访问的文章不存在或已经删除！")
 	}
 
 	cate := &models.Cates{Id: post.CateId}

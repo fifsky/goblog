@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/fifsky/goblog/core"
@@ -55,8 +54,7 @@ var AdminRemindGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["CurrDate"] = time.Now().Format("2006-01-02 15:04:05")
 
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return nil
+		return c.ErrorMessage(err)
 	}
 	return c.HTML("admin/remind", h)
 }

@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"net/http"
-
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
@@ -23,8 +21,7 @@ var AdminUsersGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h["Pager"] = c.Pagination(total, num, page)
 
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
-		return nil
+		return c.ErrorMessage(err)
 	}
 	return c.HTML("admin/users", h)
 }
@@ -36,7 +33,7 @@ var AdminUserGet core.HandlerFunc = func(c *core.Context) core.Response {
 		user := &models.Users{Id: id}
 		err := gosql.Model(user).Get()
 		if err != nil {
-			return HandleMessage(c, "用户不存在", "您访问的用户不存在或已经删除！")
+			return c.Message("用户不存在", "您访问的用户不存在或已经删除！")
 		}
 		h["User"] = user
 	}

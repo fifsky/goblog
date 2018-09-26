@@ -30,7 +30,7 @@ func (c *Comments) PK() string {
 	return "id"
 }
 
-func (c *Comments) AfterChange()  {
+func (c *Comments) AfterChange() {
 	Cache.Delete("new-comments")
 }
 
@@ -68,9 +68,15 @@ func NewComments() ([]*NewComment, error) {
 }
 
 func PostCommentNum(postId []int) (map[int]int, error) {
+	m := make(map[int]int)
+
 	postIds := make([]string, 0)
 	for _, v := range postId {
 		postIds = append(postIds, helpers.ToStr(v))
+	}
+
+	if len(postIds) == 0 {
+		return m, nil
 	}
 
 	rows, err := gosql.Queryx("select count(*) comment_num,post_id from comments where post_id in(" + strings.Join(postIds, ",") + ") group by post_id")
@@ -78,8 +84,6 @@ func PostCommentNum(postId []int) (map[int]int, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	m := make(map[int]int)
 
 	for rows.Next() {
 		var commentNum, postId int

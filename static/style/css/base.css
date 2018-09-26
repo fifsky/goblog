@@ -139,7 +139,7 @@ form p.inputting .formtip { color:#000;}
 .nf p.err { color:red;}
 
 /* MODULE BLOCKS */
-#container { width:1024px; margin:1em auto 0;}
+#container { width:1024px; margin:1em auto 0;min-height: 500px}
 #main { float:left; width:778px; overflow:hidden;}
 
 /* header */

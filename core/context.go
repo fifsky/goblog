@@ -4,10 +4,10 @@ import (
 	"bytes"
 	"html/template"
 
-	"github.com/gin-gonic/gin"
 	"github.com/fifsky/goblog/helpers"
-	"github.com/ilibs/sessions"
 	"github.com/fifsky/goblog/helpers/pagination"
+	"github.com/gin-gonic/gin"
+	"github.com/ilibs/sessions"
 )
 
 func getHttpStatus(c *Context, status int) int {
@@ -92,6 +92,20 @@ func (c *Context) HTML(name string, obj interface{}) Response {
 		Name:       name,
 		Data:       obj,
 	}
+}
+
+func (c *Context) Message(title, msg string) Response {
+	return c.HTML("error/message", gin.H{
+		"Title":   title,
+		"Message": msg,
+	})
+}
+
+func (c *Context) ErrorMessage(err error) Response {
+	return c.HTML("error/message", gin.H{
+		"Title":   "系统错误",
+		"Message": err.Error(),
+	})
 }
 
 var templ = template.Must(template.New("").Funcs(funcMap).ParseGlob("views/**/*"))
