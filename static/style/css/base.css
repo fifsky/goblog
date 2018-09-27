@@ -485,3 +485,8 @@ span.highlight{
 .icon-feed:before { content: "\e879"; }
 
 .icon-comment:before { content: "\e614"; }
+
+mark{
+    background: orange;
+    color: black;
+}
