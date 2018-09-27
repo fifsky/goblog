@@ -14,7 +14,7 @@ require (
 	github.com/golang/protobuf v1.2.0 // indirect
 	github.com/gorilla/sessions v1.1.2 // indirect
 	github.com/hpcloud/tail v1.0.0 // indirect
-	github.com/ilibs/gosql v1.0.3
+	github.com/ilibs/gosql v1.0.4
 	github.com/ilibs/identicon v0.0.0-20180626043057-7875f45b0022
 	github.com/ilibs/json5 v0.0.0-20160717195620-7620272ed633 // indirect
 	github.com/ilibs/logger v0.0.0-20180822070604-9b0ffea8fc9a
