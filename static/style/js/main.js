@@ -113,18 +113,6 @@
             return false;
         }
 
-        // $el = $(this).find('input[name="comment_email"]');
-        // if(($el.data('require') && $.trim($el.val()) == '') || !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test($el.val())){
-        //     $el.focus().closest('p').addClass('error');
-        //     return false;
-        // }
-
-        // $el = $(this).find('input[name="comment_url"]');
-        // if(($el.data('require') && $.trim($el.val()) == '') || !/^https?:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\':+!]*([^<>\"\"])*$/.test($el.val())){
-        //     $el.focus().closest('p').addClass('error');
-        //     return false;
-        // }
-
         var self = this;
 
         $.ajax({
@@ -140,7 +128,7 @@
             },
             success: function(data) {
                 if (data.statusCode == 200){
-                    if($('#comments .comment-null').size()){
+                    if($('#comments .comment-null').length){
                         $('#comments .comment-null').remove();
                     }
                     var $content = $(data.data.content).hide();
@@ -168,8 +156,7 @@
         $(".entry-title h2").mark(keyword);
         $('input[name="keyword"]').val(keyword);
     }
-})(jQuery);
-(function($){
+
     $(window).scroll(function(){
         if($(this).scrollTop() > 300){
             $('#scroll_top').show();
