@@ -1,18 +1,17 @@
 package handler
 
 import (
+	"github.com/fifsky/goblog/core"
+	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
-	"github.com/fifsky/goblog/helpers"
-	"github.com/fifsky/goblog/core"
 )
 
 var LoginGet core.HandlerFunc = func(c *core.Context) core.Response {
-	h := defaultH(c.Context)
-	if h["LoginUser"] != nil {
+	if _, ok := c.SharedData["LoginUser"]; ok {
 		return c.Redirect("/admin/index")
 	}
-	return c.HTML("admin/login", h)
+	return c.HTML("admin/login")
 }
 
 var LogoutGet core.HandlerFunc = func(c *core.Context) core.Response {

@@ -5,6 +5,7 @@ import (
 	"net/http/pprof"
 
 	"github.com/fifsky/goblog/config"
+	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/router/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -78,7 +79,7 @@ func TraceHandler(c *gin.Context) {
 func Route(router *gin.Engine) {
 	debugger := router.Group("/debug")
 	{
-		debugger.Use(middleware.AuthLogin())
+		debugger.Use(core.Middleware(middleware.AuthLogin))
 		debugger.GET("/info", InfoHandler)
 		debugger.GET("/pprof/", IndexHandler)
 		debugger.GET("/pprof/heap", HeapHandler)

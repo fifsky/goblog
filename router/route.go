@@ -16,6 +16,7 @@ func Route(router *gin.Engine) {
 	router.Use(middleware.Ginrus())
 	router.Use(core.Middleware(middleware.SharedData))
 
+
 	//静态文件
 	router.Static("/static", "./static")
 
@@ -35,7 +36,7 @@ func Route(router *gin.Engine) {
 	admin.POST("/login", core.Handle(handler.LoginPost))
 	admin.GET("/logout", core.Handle(handler.LogoutGet))
 
-	admin.Use(middleware.AuthLogin())
+	admin.Use(core.Middleware(middleware.AuthLogin))
 	{
 		//网站设置
 		admin.GET("/index", core.Handle(handler.AdminIndex))

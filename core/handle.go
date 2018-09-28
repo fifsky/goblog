@@ -40,7 +40,8 @@ func getContext(c *gin.Context) *Context {
 	var ctx1 *Context
 	if !ok {
 		ctx1 = &Context{
-			Context: c,
+			Context:    c,
+			SharedData: gin.H{},
 		}
 		c.Set(contextKey, ctx1)
 	} else {

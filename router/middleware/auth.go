@@ -1,24 +1,19 @@
 package middleware
 
 import (
-	"net/http"
-
+	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/models"
-	"github.com/gin-gonic/gin"
 	"github.com/ilibs/logger"
 )
 
-func AuthLogin() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if user, _ := c.Get("LoginUser"); user != nil {
-			if _, ok := user.(*models.Users); ok {
-				c.Next()
-				return
-			}
+var AuthLogin core.HandlerFunc = func(c *core.Context) core.Response {
+	if user, ok := c.SharedData["LoginUser"]; ok {
+		if _, ok := user.(*models.Users); ok {
+			c.Next()
+			return nil
 		}
-
-		logger.Error("User not authorized to visit %s", c.Request.RequestURI)
-
-		c.Redirect(http.StatusFound, "/admin/login")
 	}
+
+	logger.Error("User not authorized to visit %s", c.Request.RequestURI)
+	return c.Redirect("/admin/login")
 }

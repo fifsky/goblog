@@ -28,7 +28,7 @@ var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 	cates := make([]*models.Cates, 0)
 	gosql.Model(&cates).All()
 
-	h := defaultH(c.Context)
+	h := gin.H{}
 	h["Posts"] = posts
 	h["Cates"] = cates
 
@@ -43,7 +43,7 @@ var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 }
 
 var AdminArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
-	h := defaultH(c.Context)
+	h := gin.H{}
 	id := helpers.StrTo(c.Query("id")).MustInt()
 
 	if id > 0 {

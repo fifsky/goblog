@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/ilibs/gosql"
@@ -28,6 +29,26 @@ func (u *Users) TableName() string {
 
 func (u *Users) PK() string {
 	return "id"
+}
+
+func (u *Users) AfterChange() {
+	Cache.Delete("user:" + strconv.Itoa(u.Id))
+}
+
+func GetUser(uid int) (*Users, error) {
+	if v, ok := Cache.Get("user:" + strconv.Itoa(uid)); ok {
+		return v.(*Users), nil
+	}
+
+	user := &Users{}
+	err := gosql.Model(user).Where("id = ?", uid).Get()
+
+	if err != nil {
+		return nil, err
+	}
+	Cache.Set("user:"+strconv.Itoa(uid), user, 1*time.Hour)
+
+	return user, nil
 }
 
 func UserGetList(start int, num int) ([]*Users, error) {

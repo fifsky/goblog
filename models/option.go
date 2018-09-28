@@ -1,6 +1,10 @@
 package models
 
-import "github.com/ilibs/gosql"
+import (
+	"time"
+
+	"github.com/ilibs/gosql"
+)
 
 type Options struct {
 	Id          int    `form:"id" json:"id" db:"id"`
@@ -20,7 +24,15 @@ func (o *Options) PK() string {
 	return "id"
 }
 
+func (o *Options) AfterChange() {
+	Cache.Delete("options")
+}
+
 func GetOptions() (map[string]string, error) {
+	if v, ok := Cache.Get("options"); ok {
+		return v.(map[string]string), nil
+	}
+
 	var options = make([]*Options, 0)
 	err := gosql.Model(&options).All()
 	if err != nil {
@@ -31,6 +43,7 @@ func GetOptions() (map[string]string, error) {
 	for _, v := range options {
 		options2[v.OptionKey] = v.OptionValue
 	}
+	Cache.Set("options", options2, 1*time.Hour)
 
 	return options2, nil
 }

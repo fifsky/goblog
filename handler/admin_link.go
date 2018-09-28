@@ -4,12 +4,13 @@ import (
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
+	"github.com/gin-gonic/gin"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
 )
 
 var AdminLinkGet core.HandlerFunc = func(c *core.Context) core.Response {
-	h := defaultH(c.Context)
+	h := gin.H{}
 
 	id, _ := helpers.StrTo(c.Query("id")).Int()
 	if id > 0 {

@@ -4,6 +4,7 @@ import (
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
+	"github.com/gin-gonic/gin"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/identicon"
 )
@@ -46,7 +47,7 @@ var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 		return c.ErrorMessage(err)
 	}
 
-	h := defaultH(c.Context)
+	h := gin.H{}
 	h["Posts"] = posts
 
 	builder := gosql.Model(post)
@@ -91,7 +92,7 @@ var ArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 
 	newpost := &models.UserPosts{Posts: *post, Name: cate.Name, Domain: cate.Domain, NickName: user.NickName}
 
-	h := defaultH(c.Context)
+	h := gin.H{}
 	h["Title"] = post.Title
 	h["Post"] = newpost
 

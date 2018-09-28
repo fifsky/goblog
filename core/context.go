@@ -20,6 +20,7 @@ func getHttpStatus(c *Context, status int) int {
 type Context struct {
 	*gin.Context
 	HttpStatus int
+	SharedData gin.H
 }
 
 func (c *Context) Pagination(total int64, num, page int) *pagination.Paginater {
@@ -85,12 +86,23 @@ func (c *Context) String(format string, values ...interface{}) Response {
 	}
 }
 
-func (c *Context) HTML(name string, obj interface{}) Response {
+func (c *Context) HTML(name string, objs ...gin.H) Response {
+	data := make(map[string]interface{})
+	for k, v := range c.SharedData {
+		data[k] = v
+	}
+
+	for _, obj := range objs {
+		for k, v := range obj {
+			data[k] = v
+		}
+	}
+
 	return &HTMLResponse{
 		HttpStatus: getHttpStatus(c, 200),
 		Context:    c.Context,
 		Name:       name,
-		Data:       obj,
+		Data:       data,
 	}
 }
 

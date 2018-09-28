@@ -4,12 +4,13 @@ import (
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
+	"github.com/gin-gonic/gin"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
 )
 
 var AdminUsersGet core.HandlerFunc = func(c *core.Context) core.Response {
-	h := defaultH(c.Context)
+	h := gin.H{}
 	num := 10
 
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
@@ -27,7 +28,7 @@ var AdminUsersGet core.HandlerFunc = func(c *core.Context) core.Response {
 }
 
 var AdminUserGet core.HandlerFunc = func(c *core.Context) core.Response {
-	h := defaultH(c.Context)
+	h := gin.H{}
 	id := helpers.StrTo(c.Query("id")).MustInt()
 	if id > 0 {
 		user := &models.Users{Id: id}

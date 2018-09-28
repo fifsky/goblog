@@ -1,11 +1,12 @@
 package middleware
 
 import (
+	"runtime"
 	"strings"
 
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/models"
-	"github.com/ilibs/gosql"
+	"github.com/ilibs/logger"
 	"github.com/ilibs/sessions"
 )
 
@@ -13,29 +14,55 @@ import (
 
 var SharedData core.HandlerFunc = func(c *core.Context) core.Response {
 	if !strings.HasPrefix(c.Request.URL.Path, "/static") {
-		//网站全局配置
-		options, ok := core.Global.Load("options")
-		if !ok {
-			options, _ = models.GetOptions()
-			core.Global.Store("options", options)
-			c.Set("options", options)
-		} else {
-			c.Set("options", options.(map[string]string))
-		}
-
 		session := sessions.Default(c.Context)
 		if uid := session.Get("UserId"); uid != nil {
-			if user, ok := core.Global.Load("LoginUser"); ok {
-				c.Set("LoginUser", user.(*models.Users))
-			} else {
-				user = &models.Users{}
-				err := gosql.Model(user).Where("id = ?", uid).Get()
-				if err == nil {
-					core.Global.Store("LoginUser", user)
-					c.Set("LoginUser", user)
-				}
+			user,err := models.GetUser(uid.(int))
+			if err == nil {
+				c.SharedData["LoginUser"] = user
 			}
 		}
+
+		//global shared data
+		options, _ := models.GetOptions()
+
+		c.SharedData["Options"] = options
+		c.SharedData["GOVERSION"] = runtime.Version()
+
+		url := strings.Split(c.Request.URL.Path, "/")
+		c.SharedData["UrlPath"] = c.Request.URL.Path
+		c.SharedData["URI"] = c.Request.RequestURI
+
+		if url[1] != "admin" {
+			mood, err := models.MoodFrist()
+
+			if err != nil {
+				logger.Error(err)
+			}
+
+			cates := models.GetAllCates()
+			links := models.GetAllLinks()
+			archives, err := models.PostArchive()
+			if err != nil {
+				logger.Error(err)
+			}
+
+			c.SharedData["Mood"] = mood
+			c.SharedData["Cates"] = cates
+			c.SharedData["Links"] = links
+			c.SharedData["Archives"] = archives
+
+			comments, err := models.NewComments()
+			if err != nil {
+				logger.Error(err)
+			}
+
+			c.SharedData["NewComments"] = comments
+
+			c.SharedData["IsAdminPage"] = false
+		} else {
+			c.SharedData["IsAdminPage"] = true
+		}
+
 	}
 
 	c.Next()
