@@ -7,16 +7,14 @@ import (
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/logger"
-	"github.com/ilibs/sessions"
 )
 
 //middlewares
 
 var SharedData core.HandlerFunc = func(c *core.Context) core.Response {
 	if !strings.HasPrefix(c.Request.URL.Path, "/static") {
-		session := sessions.Default(c.Context)
-		if uid := session.Get("UserId"); uid != nil {
-			user,err := models.GetUser(uid.(int))
+		if uid := c.Session().Get("UserId"); uid != nil {
+			user, err := models.GetUser(uid.(int))
 			if err == nil {
 				c.SharedData["LoginUser"] = user
 			}

@@ -40,9 +40,7 @@ var AdminMoodPost core.HandlerFunc = func(c *core.Context) core.Response {
 		return c.Fail(201, "参数错误:"+err.Error())
 	}
 
-	if user, exists := c.Get("LoginUser"); exists {
-		moods.UserId = user.(*models.Users).Id
-	}
+	moods.UserId = c.Session().Get("UserId").(int)
 
 	if moods.Content == "" {
 		return c.Fail(201, "内容不能为空")
