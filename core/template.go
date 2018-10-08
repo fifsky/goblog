@@ -3,10 +3,12 @@ package core
 import (
 	"html/template"
 	"net/url"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/fifsky/goblog/config"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
 )
@@ -107,6 +109,9 @@ func IsPage(url ...string) bool {
 
 		suburls := currurls[:plen]
 		exists = strings.Join(suburls, "/") == strings.Join(pages, "/")
+		if exists {
+			return true
+		}
 	}
 
 	return exists
@@ -144,5 +149,5 @@ var funcMap = template.FuncMap{
 
 func SetTemplate(engine *gin.Engine) {
 	engine.SetFuncMap(funcMap)
-	engine.LoadHTMLGlob("views/**/*")
+	engine.LoadHTMLGlob(filepath.Join(config.App.Common.Path, "views/**/*"))
 }

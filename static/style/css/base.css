@@ -271,6 +271,8 @@ table.canlender td.happy{
 .article .entry-title .avatar {
     float: left;
     padding: 2px;
+    width: 40px;
+    height: 40px;
 }
 
 .article .entry-title h2{

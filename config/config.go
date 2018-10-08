@@ -18,6 +18,7 @@ import (
 type common struct {
 	Env           string `json:"env"`
 	Debug         string `json:"debug"`
+	Path          string `json:"path"`
 	ConfigPath    string `json:"config_path"`
 	StoragePath   string `json:"storage_path"`
 	DingToken     string `json:"dingtoken"`
@@ -60,6 +61,7 @@ func Load(args map[string]string) {
 		}
 	}
 
+	App.Common.Path = appPath
 	App.Common.ConfigPath = filepath.Join(appPath, "config")
 
 	conf, err := goconf.NewConfig(filepath.Join(App.Common.ConfigPath, env))
