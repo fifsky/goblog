@@ -30,7 +30,7 @@ func (p *Posts) PK() string {
 	return "id"
 }
 
-func (p *Posts) AfterChange()  {
+func (p *Posts) AfterChange() {
 	Cache.Delete("post-archive")
 }
 
@@ -44,10 +44,9 @@ type UserPosts struct {
 
 func PostPrev(id int) (*Posts, error) {
 	m := &Posts{
-		Id:   id,
 		Type: 1,
 	}
-	err := gosql.Model(m).OrderBy("id desc").Limit(1).Get()
+	err := gosql.Model(m).Where("id < ?", id).OrderBy("id desc").Limit(1).Get()
 	if err != nil {
 		return nil, err
 	}
@@ -56,10 +55,9 @@ func PostPrev(id int) (*Posts, error) {
 
 func PostNext(id int) (*Posts, error) {
 	m := &Posts{
-		Id:   id,
 		Type: 1,
 	}
-	err := gosql.Model(m).OrderBy("id asc").Limit(1).Get()
+	err := gosql.Model(m).Where("id > ?", id).OrderBy("id asc").Limit(1).Get()
 
 	if err != nil {
 		return nil, err
