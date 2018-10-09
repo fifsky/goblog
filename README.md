@@ -34,3 +34,6 @@ test  123456
 config/local 开发环境
 config/prod 线上环境
 ```
+
+## 安装依赖包
+由于一些依赖包需要代理才能安装，而最新的go module模式可以使用 https://goproxy.io/ 提供的代理
