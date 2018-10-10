@@ -32,6 +32,7 @@ func (p *Posts) PK() string {
 
 func (p *Posts) AfterChange() {
 	Cache.Delete("post-archive")
+	Cache.Delete("all-cates")
 }
 
 type UserPosts struct {

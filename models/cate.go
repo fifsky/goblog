@@ -57,12 +57,13 @@ func CateArtivleCountGetList(start int, num int) ([]*CateArtivleCount, error) {
 	return m, nil
 }
 
-func GetAllCates() []*Cates {
+func GetAllCates() []*CateArtivleCount {
 	if v, ok := Cache.Get("all-cates"); ok {
-		return v.([]*Cates)
+		return v.([]*CateArtivleCount)
 	}
-	cates := make([]*Cates, 0)
-	err := gosql.Model(&cates).All()
+	var cates = make([]*CateArtivleCount, 0)
+
+	err := gosql.Select(&cates, "select c.*,count(p.cate_id) num from cates c left join posts p on c.id = p.cate_id where p.type = 1 group by p.cate_id")
 	if err != nil {
 		logger.Error(err)
 		return nil
