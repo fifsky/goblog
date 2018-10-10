@@ -12,17 +12,28 @@
     <link rel="shortcut icon" href="{{ StaticUrl }}style/images/favicon.ico" type="image/x-icon"/>
     <link media="screen" href="{{ StaticUrl }}style/css/base.css" type=text/css rel=stylesheet>
     <script src="//cdn.staticfile.org/jquery/1.10.1/jquery.min.js" type="text/javascript"></script>
-    {{ if not .IsAdminPage }}
-    <link media="screen" href="//cdn.staticfile.org/highlight.js/9.12.0/styles/atelier-lakeside-light.min.css" type=text/css
+{{ if not .IsAdminPage }}
+    <link media="screen" href="//cdn.staticfile.org/highlight.js/9.12.0/styles/atelier-lakeside-light.min.css"
+          type=text/css
           rel=stylesheet>
-    {{ else }}
+{{ else }}
     <link media="screen" href="{{ StaticUrl }}style/css/admin.css" type=text/css
           rel=stylesheet>
     <link media="screen" href="//cdn.staticfile.org/wangEditor/2.1.23/wangEditor.min.css" type=text/css
-              rel=stylesheet>
+          rel=stylesheet>
+    <style>
+        /*fix staticfile path*/
+        @font-face {
+            font-family: icomoon;
+            src: url(//cdn.staticfile.org/wangEditor/2.1.23/fonts/icomoon.eot?-qdfu1s);
+            src: url(//cdn.staticfile.org/wangEditor/2.1.23/fonts/icomoon.eot?#iefix-qdfu1s) format('embedded-opentype'), url(//cdn.staticfile.org/wangEditor/2.1.23/fonts/icomoon.ttf?-qdfu1s) format('truetype'), url(//cdn.staticfile.org/wangEditor/2.1.23/fonts/icomoon.woff?-qdfu1s) format('woff'), url(//cdn.staticfile.org/wangEditor/2.1.23/fonts/icomoon.svg?-qdfu1s#icomoon) format('svg');
+            font-weight: 400;
+            font-style: normal
+        }
+    </style>
     <script src="{{ StaticUrl }}public/laydate/laydate.js" type="text/javascript"></script>
 
-    {{ end }}
+{{ end }}
 </head>
 <body>
 <div id="container">
@@ -39,10 +50,10 @@
             {{ if .LoginUser }}
                 <li><a href="/admin/index">管理中心</a></li>
                 <li><a href="/admin/logout">退出</a></li>
-                {{ else }}
+            {{ else }}
                 <li><a href="/admin/login">登录</a></li>
-                {{ end }}
+            {{ end }}
             </ul>
         </div>
     </div>
-    {{ end }}
+{{ end }}
