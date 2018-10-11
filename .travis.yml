@@ -1,0 +1,13 @@
+language: go
+sudo: false
+go:
+- 1.10.x
+- 1.11.x
+
+services:
+- mysql
+
+# create test database
+before_install:
+- mysql -e 'CREATE DATABASE IF NOT EXISTS blog;'
+- export MYSQL_TEST_DSN1="travis:@/blog?parseTime=true"

@@ -1,6 +1,10 @@
-# A Simple Go Blog
+# FIFSKY Blog for Golang
 
-基于gin构建的简单的博客，编写这个博客主要是为了学习Go语言
+<a href="https://travis-ci.org/fifsky/blog"><img src="https://travis-ci.org/fifsky/blog.svg" alt="Build Status"></a>
+<a href="https://opensource.org/licenses/mit-license.php" rel="nofollow"><img src="https://badges.frapsoft.com/os/mit/mit.svg?v=103"></a>
+
+
+这是基于gin构建的简单的博客，这个博客从08年的ASP版本开始，一路经历了ASP、PHP、Golang版本，这是我个人的学习方法，每学习一门语言，都会使用新的语言重写这个博客，从而锻炼对一门语言细节的掌握
 
 https://fifsky.com/
 
