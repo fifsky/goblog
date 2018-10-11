@@ -112,6 +112,11 @@ func Load(args map[string]string) {
 		c.LogSentryType = App.Log.LogSentryType
 		c.LogDetail = App.Log.LogDetail
 	})
+
+	//test
+	if os.Getenv("MYSQL_TEST_DSN") == "" {
+		App.DB["default"].Dsn = os.Getenv("MYSQL_TEST_DSN")
+	}
 }
 
 func ImportDB() ([]sql.Result, error) {
