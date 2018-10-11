@@ -2,7 +2,7 @@ build:
 	go build -o blog main.go
 
 install:
-    go mod tidy
+	go mod tidy
 	go run main.go install
 
 stop:
