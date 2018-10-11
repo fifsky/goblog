@@ -16,7 +16,6 @@ func Route(router *gin.Engine) {
 	router.Use(middleware.Ginrus())
 	router.Use(core.Middleware(middleware.SharedData))
 
-
 	//静态文件
 	router.Static("/static", "./static")
 
@@ -48,6 +47,10 @@ func Route(router *gin.Engine) {
 		admin.POST("/post/article", core.Handle(handler.AdminArticlePost))
 		admin.GET("/post/article_delete", core.Handle(handler.AdminArticleDelete))
 		admin.POST("/post/upload", core.Handle(handler.AdminUploadPost))
+
+		//评论
+		admin.GET("/comments", core.Handle(handler.AdminCommentGet))
+		admin.GET("/comment_delete", core.Handle(handler.AdminCommentDelete))
 
 		//心情
 		admin.GET("/moods", core.Handle(handler.AdminMoodGet))

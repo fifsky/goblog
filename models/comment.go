@@ -45,10 +45,10 @@ func PostComments(postId, start, num int) ([]*Comments, error) {
 }
 
 type NewComment struct {
-	Type    int    `db:"type"`
-	PostId  int    `db:"post_id"`
-	Url     string `db:"url"`
-	Content string `db:"content"`
+	Comments
+	Type         int    `db:"type"`
+	ArticleTitle string `db:"title"`
+	Url          string `db:"url"`
 }
 
 func NewComments() ([]*NewComment, error) {
@@ -57,13 +57,23 @@ func NewComments() ([]*NewComment, error) {
 	}
 
 	var m = make([]*NewComment, 0)
-	err := gosql.Select(&m, "select p.type,c.post_id,p.url,c.content from comments c left join posts p on c.post_id = p.id order by c.id desc limit 10")
+	err := gosql.Select(&m, "select p.type,p.title,c.* from comments c left join posts p on c.post_id = p.id order by c.id desc limit 10")
 	if err != nil {
 		return nil, err
 	}
 
 	Cache.Set("new-comments", m, 1*time.Hour)
 
+	return m, nil
+}
+
+func CommentList(start, num int) ([]*NewComment, error) {
+	var m = make([]*NewComment, 0)
+	start = (start - 1) * num
+	err := gosql.Select(&m, "select p.type,p.title,c.* from comments c left join posts p on c.post_id = p.id order by c.id desc limit ?,?", start, num)
+	if err != nil {
+		return nil, err
+	}
 	return m, nil
 }
 
