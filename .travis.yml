@@ -1,16 +1,17 @@
 language: go
 sudo: false
 go:
-- 1.11.x
+ - 1.11.x
 
 services:
-- mysql
+ - mysql
 
 # create test database
 before_install:
-- mysql -e 'CREATE DATABASE IF NOT EXISTS blog;'
-- export MYSQL_TEST_DSN="travis:@/blog?parseTime=true"
-- export GO111MODULE=on
+ - mysql -e 'CREATE DATABASE IF NOT EXISTS blog;'
+ - export MYSQL_TEST_DSN="travis:@/blog?parseTime=true"
+ - export GO111MODULE=on
+ - export APP_ENV=local
 
 script:
-  make test
+  - make test
