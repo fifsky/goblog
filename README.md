@@ -1,6 +1,6 @@
 # FIFSKY Blog for Golang
 
-<a href="https://travis-ci.org/fifsky/blog"><img src="https://travis-ci.org/fifsky/blog.svg" alt="Build Status"></a>
+<a href="https://travis-ci.org/fifsky/goblog"><img src="https://travis-ci.org/fifsky/goblog.svg" alt="Build Status"></a>
 <a href="https://opensource.org/licenses/mit-license.php" rel="nofollow"><img src="https://badges.frapsoft.com/os/mit/mit.svg?v=103"></a>
 
 
