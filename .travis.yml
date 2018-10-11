@@ -11,3 +11,6 @@ before_install:
 - mysql -e 'CREATE DATABASE IF NOT EXISTS blog;'
 - export MYSQL_TEST_DSN="travis:@/blog?parseTime=true"
 - export GO111MODULE=on
+
+script:
+  make test

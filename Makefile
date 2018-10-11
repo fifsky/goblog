@@ -14,3 +14,5 @@ start:
 restart:
 	cat blog.pid | xargs kill
 	./blog > /dev/null 2>&1 &
+test:
+	go test ./...
