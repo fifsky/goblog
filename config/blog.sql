@@ -84,7 +84,7 @@ CREATE TABLE `moods` (
   `user_id` int(10) unsigned NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `moods` WRITE;
 /*!40000 ALTER TABLE `moods` DISABLE KEYS */;
@@ -107,8 +107,8 @@ CREATE TABLE `options` (
   `option_key` varchar(100) NOT NULL DEFAULT '',
   `option_value` varchar(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `option_name` (`key`) USING BTREE
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  UNIQUE KEY `option_name` (`option_key`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `options` WRITE;
 /*!40000 ALTER TABLE `options` DISABLE KEYS */;
@@ -144,7 +144,7 @@ CREATE TABLE `posts` (
   KEY `type_status_date` (`id`,`type`),
   KEY `post_name` (`url`) USING BTREE,
   KEY `post_title` (`title`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
@@ -191,7 +191,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `un_user_name` (`name`),
   UNIQUE KEY `uix_users_email` (`email`),
   UNIQUE KEY `uix_users_name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;

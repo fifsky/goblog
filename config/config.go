@@ -114,7 +114,7 @@ func Load(args map[string]string) {
 	})
 
 	//test
-	if os.Getenv("MYSQL_TEST_DSN") == "" {
+	if os.Getenv("MYSQL_TEST_DSN") != "" {
 		App.DB["default"].Dsn = os.Getenv("MYSQL_TEST_DSN")
 	}
 }

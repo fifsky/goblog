@@ -26,6 +26,7 @@ func main() {
 			fmt.Println("Import DB Error:" + err.Error())
 			log.Fatalf("import error %s", err)
 		}
+		fmt.Println("Database init success!")
 		return
 	}
 
