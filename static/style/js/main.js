@@ -144,13 +144,30 @@
     });
 
 
-    var GetQueryString = function (key) {
+    var GetQuery = function (key) {
         var url = window.document.location.href.toString();
         var f = url.match(new RegExp("(^|&|\\?|#)(" + key + ")=([^&#]*)(&|$|#)", ""));
         return f ? f[3] : null
     };
 
-    var keyword = GetQueryString("keyword");
+    /**
+     * @return {string}
+     */
+    var SetQuery = function( key , value , url ) {
+        url = url || window.location.href;
+        url = url.replace( new RegExp( '(^|\\?|&)' + key + '=[^&]*(?=&|#|$)' , 'g' ) , '' );
+        value = $.isArray( value ) ? value : [ value ];
+
+        for ( var i = value.length - 1;i >= 0;i --)
+        {
+            value[ i ] = encodeURIComponent( value[ i ] );
+        }
+
+        var p = key + '=' + value.join( '&' + key + '=' );
+        return url + ( /\?/.test( url ) ? '&' : '?' ) + p;
+    };
+
+    var keyword = GetQuery("keyword");
     if(keyword){
         keyword = decodeURIComponent(keyword);
         $(".entry-title h2").mark(keyword);
@@ -163,5 +180,10 @@
         }else{
             $('#scroll_top').hide();
         }
+    });
+
+    $(".captcha").on("click",function () {
+        var src = $(this).prop("src");
+        $(this).prop("src",SetQuery("reload",(new Date()).getTime(),src));
     });
 })(jQuery);

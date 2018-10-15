@@ -30,6 +30,8 @@ github.com/gorilla/sessions v1.1.2 h1:4esMHhwKLQ9Odtku/p+onvH+eRJFWjV4y3iTDVWrZN
 github.com/gorilla/sessions v1.1.2/go.mod h1:8KCfur6+4Mqcc6S0FEfKuN15Vl5MgXW92AE8ovaJD0w=
 github.com/hpcloud/tail v1.0.0 h1:nfCOvKYfkgYP8hkirhJocXT2+zOD8yUNjXaWfTlyFKI=
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
+github.com/ilibs/captcha v0.0.0-20181012033505-20e6a9666b6f h1:kEJHWBqnj5o4okY/sOAnrPkAojcbaIsmXbFHuvoq95A=
+github.com/ilibs/captcha v0.0.0-20181012033505-20e6a9666b6f/go.mod h1:EtbTr+rhfvLqo14mP8Y5hwzLM+JEWuZ6ctMo3HqnT4Q=
 github.com/ilibs/gosql v1.0.4 h1:uZ0TCluiUUZchddQhZTzytj5jIUJedii90dFbbFJe0A=
 github.com/ilibs/gosql v1.0.4/go.mod h1:0Tra727VgxaxGKrreidpIvC9n2MOgsaISfjloFh8oIo=
 github.com/ilibs/identicon v0.0.0-20180626043057-7875f45b0022 h1:iOaISTH6eBQbm0uYI7lrczoJpe+LsLhEjL0qF1OiRvo=

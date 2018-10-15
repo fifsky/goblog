@@ -10,6 +10,7 @@ require (
 	github.com/gin-gonic/gin v1.3.0
 	github.com/go-sql-driver/mysql v1.4.0
 	github.com/gorilla/sessions v1.1.2 // indirect
+	github.com/ilibs/captcha v0.0.0-20181012033505-20e6a9666b6f
 	github.com/ilibs/gosql v1.0.4
 	github.com/ilibs/identicon v0.0.0-20180626043057-7875f45b0022
 	github.com/ilibs/json5 v0.0.0-20160717195620-7620272ed633 // indirect

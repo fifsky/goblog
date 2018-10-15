@@ -28,6 +28,7 @@ func Route(router *gin.Engine) {
 	router.GET("/date/:year/:month", core.Handle(handler.IndexGet))
 	router.GET("/search", core.Handle(handler.IndexGet))
 	router.GET("/avatar", core.Handle(handler.Avatar))
+	router.GET("/captcha/:id", core.Handle(handler.CaptchaGet))
 
 	//管理后台
 	admin := router.Group("/admin")
