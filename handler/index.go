@@ -5,7 +5,6 @@ import (
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
 	"github.com/gin-gonic/gin"
-	"github.com/ilibs/captcha"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/identicon"
 )
@@ -96,7 +95,7 @@ var ArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 	h := gin.H{}
 	h["Title"] = post.Title
 	h["Post"] = newpost
-	h["CaptchaId"] = captcha.New()
+	//h["CaptchaId"] = captcha.New()
 
 	if url == "" {
 		prev, err := models.PostPrev(post.Id)
