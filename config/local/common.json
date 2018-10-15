@@ -3,5 +3,7 @@
   "debug": "off",
   "storage_path": "storage/",
   "session_secret": "fifsky",
-  "dingtoken": ""
+  "dingtoken": "",
+  "tcaptcha_id":"腾讯验证码ID",
+  "tcaptcha_secret":"腾讯验证码密钥"
 }

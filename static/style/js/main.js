@@ -105,8 +105,17 @@
         calendar(year,month);
     }
 
-    $('#comment_form').submit(function(){
+    window.TCaptcha = function(res){
+        if(res.ret === 0) {
+            var $el = $('#comment_form');
+            window.console.log(res);
+            $el.find('input[name="ticket"]').val(res.ticket);
+            $el.find('input[name="randstr"]').val(res.randstr);
+            $el.submit();
+        }
+    };
 
+    $('#comment_form').submit(function(){
         var $el = $(this).find('input[name="name"]');
         if($.trim($el.val()) === ''){
             $el.focus().closest('p').addClass('error');

@@ -16,13 +16,15 @@ import (
 )
 
 type common struct {
-	Env           string `json:"env"`
-	Debug         string `json:"debug"`
-	Path          string `json:"path"`
-	ConfigPath    string `json:"config_path"`
-	StoragePath   string `json:"storage_path"`
-	DingToken     string `json:"dingtoken"`
-	SessionSecret string `json:"session_secret"`
+	Env            string `json:"env"`
+	Debug          string `json:"debug"`
+	Path           string `json:"path"`
+	ConfigPath     string `json:"config_path"`
+	StoragePath    string `json:"storage_path"`
+	DingToken      string `json:"dingtoken"`
+	SessionSecret  string `json:"session_secret"`
+	TCaptchaId     string `json:"tcaptcha_id"`
+	TCaptchaSecret string `json:"tcaptcha_secret"`
 }
 
 type app struct {

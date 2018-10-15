@@ -31,7 +31,7 @@ require (
 	github.com/robertkrimen/otto v0.0.0-20180617131154-15f95af6e78d // indirect
 	github.com/sirupsen/logrus v1.1.0 // indirect
 	github.com/stretchr/testify v1.2.2
-	github.com/tidwall/gjson v1.1.3 // indirect
+	github.com/tidwall/gjson v1.1.3
 	github.com/tidwall/match v0.0.0-20171002075945-1731857f09b1 // indirect
 	github.com/ugorji/go/codec v0.0.0-20180927125128-99ea80c8b19a // indirect
 	golang.org/x/crypto v0.0.0-20181001203147-e3636079e1a4 // indirect

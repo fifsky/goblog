@@ -8,7 +8,6 @@ import (
 	"github.com/fifsky/goblog/ding"
 	"github.com/fifsky/goblog/models"
 	"github.com/gin-gonic/gin"
-	"github.com/ilibs/captcha"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
 )
@@ -31,9 +30,13 @@ var CommentPost core.HandlerFunc = func(c *core.Context) core.Response {
 		return c.Fail(201, "非法评论")
 	}
 
-	if !captcha.VerifyString(c.PostForm("captcha_id"), c.PostForm("captcha")) {
-		return c.Fail(201, "验证码错误")
+	if err := TCaptchaVerify(c.PostForm("ticket"), c.PostForm("randstr"), c.ClientIP()); err != nil {
+		return c.Fail(201, err)
 	}
+
+	//if !captcha.VerifyString(c.PostForm("captcha_id"), c.PostForm("captcha")) {
+	//	return c.Fail(201, "验证码错误")
+	//}
 
 	post := &models.Posts{}
 	err := gosql.Model(post).Where("id = ?", comment.PostId).Get()
