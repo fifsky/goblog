@@ -16,12 +16,10 @@ require (
 	github.com/ilibs/json5 v0.0.0-20160717195620-7620272ed633 // indirect
 	github.com/ilibs/logger v0.0.0-20180822070604-9b0ffea8fc9a
 	github.com/ilibs/sessions v0.0.0-20180717035129-2a4cbf3ab96f
-	github.com/jmoiron/sqlx v0.0.0-20180614180643-0dae4fefe7c0 // indirect
+	github.com/jmoiron/sqlx v1.2.0 // indirect
 	github.com/json-iterator/go v1.1.5 // indirect
 	github.com/kylelemons/godebug v0.0.0-20170820004349-d65d576e9348 // indirect
-	github.com/lib/pq v1.0.0 // indirect
 	github.com/mattn/go-isatty v0.0.4 // indirect
-	github.com/mattn/go-sqlite3 v1.9.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
