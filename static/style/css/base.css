@@ -8,7 +8,9 @@ body {color:#555555; font:12px/22px Arial,"宋体"; line-height:150%;
 blockquote {
     color: #7e7e7e;
     padding-left: 10px;
+    margin: 10px 0;
     border-left: 3px solid #00ffff;
+    background-color:#f8f8f8;
 }
 a { color:#06c; text-decoration: none;}
 a:hover { color:#ff7031;text-decoration: underline}
@@ -308,7 +310,7 @@ table.canlender td.happy{
 }
 .article .entry .hljs{
 	line-height:14px;
-	border-left: 3px solid rgb(204, 204, 204);
+    border-radius: 3px;
 }
 
 .article .entry p{
