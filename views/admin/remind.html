@@ -1,7 +1,9 @@
-{{ define "admin/remind" }}
-{{ template "layout/header" . }}
+{{define "header"}}
+<script src="{{ StaticUrl }}public/laydate/laydate.js" type="text/javascript"></script>
+{{ end }}
+{{ define "content" }}
 <div id="links" class="admin">
-{{ template "layout/admin_tabs" . }}
+{{ include "layout/admin_tabs" . }}
     <div id="content" class="clearfix">
         <h2>管理提醒</h2>
         <div class="message">保存成功</div>
@@ -64,7 +66,7 @@
                             <option value="女">女</option>
                         </select>
                     </div>
-                {{ template "layout/pagination" . }}
+                {{ include "layout/pagination" . }}
                 </div>
             </form>
         </div>
@@ -159,5 +161,4 @@
         , type: 'datetime'
     });
 </script>
-{{ template "layout/footer" . }}
 {{ end }}

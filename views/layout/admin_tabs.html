@@ -1,4 +1,3 @@
-{{ define "layout/admin_tabs" }}
 <div class=tabs>
     <ul>
         <li {{ if IsPage .UrlPath "admin/index" }}class="current"{{ end }}><a href="/admin/index">设置</a></li>
@@ -11,4 +10,3 @@
         <li {{ if IsPage .UrlPath "admin/users" "admin/post/user" }}class="current"{{ end }}><a href="/admin/users">用户</a></li>
     </ul>
 </div>
-{{ end }}

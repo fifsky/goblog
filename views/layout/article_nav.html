@@ -1,6 +1,4 @@
-{{ define "layout/article_nav" }}
 <div class="post-navi">
     <span class="prev"><strong>上一篇：</strong>{{if .Prev}}<a href="/article/{{.Prev.Id}}">{{.Prev.Title}}</a>{{else}}嘿，这已经是最新的文章啦{{end}}</span>
     <span class="next"><strong>下一篇：</strong>{{if .Next}}<a href="/article/{{.Next.Id}}">{{.Next.Title}}</a>{{else}}嘿，这已经是最后的文章啦{{end}}</span>
 </div>
-{{ end }}

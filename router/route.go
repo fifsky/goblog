@@ -18,6 +18,7 @@ func Route(router *gin.Engine) {
 
 	//静态文件
 	router.Static("/static", "./static")
+	router.StaticFile("/favicon.ico","./static/style/images/favicon.ico")
 
 	router.NoRoute(core.Handle(handler.Handle404))
 	router.GET("/", core.Handle(handler.IndexGet))

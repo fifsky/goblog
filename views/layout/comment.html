@@ -1,4 +1,3 @@
-{{ define "layout/comment" }}
 <div class="comment" id="comments">
     <h3><span class=commsty>评论内容</span></h3>
     <ul>
@@ -6,7 +5,7 @@
         <li class="comment-null">还没有评论!</li>
     {{ else }}
         {{ range .Comments }}
-            {{ template "layout/comment_item" . }}
+            {{ include "layout/comment_item" . }}
         {{ end }}
     {{ end }}
     </ul>
@@ -25,4 +24,3 @@
         </form>
     </div>
 </div>
-{{ end }}

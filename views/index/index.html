@@ -1,14 +1,13 @@
-{{ define "index/index" }}
-{{ template "layout/header" . }}
+{{ define "content" }}
 <div id="main">
-    {{ template "layout/mood" .Mood }}
-    {{ template "layout/tabs" . }}
+    {{ include "layout/mood" .Mood }}
+    {{ include "layout/tabs" . }}
     <div id="content">
         <div class="articles">
             {{ $exists := len .Posts}}
             {{ if gt $exists 0 }}
             {{ range $_,$post := .Posts }}
-            {{ template "layout/article" Args "Post" $post "UrlPath" $.UrlPath }}
+            {{ include "layout/article" (Args "Post" $post "UrlPath" $.UrlPath) }}
             {{ end }}
             {{ else }}
             <div class="not_article">
@@ -16,9 +15,8 @@
             </div>
             {{ end }}
         </div>
-        {{ template "layout/pagination" . }}
+        {{ include "layout/pagination" . }}
     </div>
 </div>
-{{ template "layout/sidebar" . }}
-{{ template "layout/footer" . }}
+{{ include "layout/sidebar" . }}
 {{ end }}

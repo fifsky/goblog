@@ -1,25 +1,25 @@
-{{define "layout/article"}}
-    {{ if .Post.Title }}
-    <div class="article">
-        <div class="entry-title">
-            <img class="avatar" src="/static/public/images/avatar.jpg" alt="">
-            <h2>
-                <a href="/article/{{ .Post.Id }}">{{ .Post.Title }}</a>
-            </h2>
-            <div class="entry-meta">
-                by&nbsp;{{ .Post.NickName }}&nbsp;&nbsp;/&nbsp;&nbsp;<a rel="category tag" title="查看 {{ .Post.Name }} 中的全部文章"
-                                                          href="/categroy/{{ .Post.Domain }}">{{ .Post.Name }}</a>&nbsp;&nbsp;/&nbsp;&nbsp;{{ DateFormat .Post.UpdatedAt "2006-01-02 15:04" }}
-            </div>
+{{ if .Post.Title }}
+<div class="article">
+    <div class="entry-title">
+        <img class="avatar" src="/static/public/images/avatar.jpg" alt="">
+        <h2>
+            <a href="/article/{{ .Post.Id }}">{{ .Post.Title }}</a>
+        </h2>
+        <div class="entry-meta">
+            by&nbsp;{{ .Post.NickName }}&nbsp;&nbsp;/&nbsp;&nbsp;<a rel="category tag"
+                                                                    title="查看 {{ .Post.Name }} 中的全部文章"
+                                                                    href="/categroy/{{ .Post.Domain }}">{{ .Post.Name }}</a>&nbsp;&nbsp;/&nbsp;&nbsp;{{ DateFormat .Post.UpdatedAt "2006-01-02 15:04" }}
         </div>
-        <div class="entry">
-            {{ .Post.Content | Unescaped }}
-        </div>
-        {{ if not (IsPage .UrlPath "/about" "/article") }}
-        <div class="post-meta">
-            <span class="ds-thread-count">{{ if eq .Post.CommentNum 0 }}暂无评论{{ else }}评论({{ .Post.CommentNum }}){{ end }}</span><span class="line">|</span><a
-                href="/article/{{ .Post.Id }}#comments">发表评论&gt;&gt;</a>
-        </div>
-        {{ end }}
     </div>
-    {{ end }}
+    <div class="entry">
+    {{ .Post.Content | Unescaped }}
+    </div>
+{{ if not (IsPage .UrlPath "/about" "/article") }}
+    <div class="post-meta">
+        <span class="ds-thread-count">{{ if eq .Post.CommentNum 0 }}
+            暂无评论{{ else }}评论({{ .Post.CommentNum }}){{ end }}</span><span class="line">|</span><a
+            href="/article/{{ .Post.Id }}#comments">发表评论&gt;&gt;</a>
+    </div>
+{{ end }}
+</div>
 {{ end }}

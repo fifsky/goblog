@@ -1,10 +1,8 @@
-{{ define "error/message" }}
-{{ template "layout/header" . }}
+{{ define "content" }}
 <div id="error404">
     <div id="content">
         <h2>{{.Title}}</h2>
         <p style="margin-top:10px">{{.Message}}</p>
     </div>
 </div>
-{{ template "layout/footer" . }}
 {{ end }}

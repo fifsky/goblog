@@ -1,7 +1,6 @@
-{{ define "admin/users" }}
-{{ template "layout/header" . }}
+{{ define "content" }}
 <div id="pages" class="admin">
-    {{ template "layout/admin_tabs" . }}
+    {{ include "layout/admin_tabs" . }}
     <div id="content">
         <h2>管理用户<a href="/admin/post/user" class="add"><i class="iconfont icon-add" style="color: #444"></i>新增用户</a></h2>
         <form class="nf" action="" method="post" autocomplete="off">
@@ -67,11 +66,10 @@
                         <option value="女">女</option>
                     </select>
                 </div>
-                {{ template "layout/pagination" . }}
+                {{ include "layout/pagination" . }}
             </div>
         </form>
 
     </div>
 </div>
-{{ template "layout/footer" . }}
 {{ end }}

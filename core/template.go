@@ -1,6 +1,7 @@
 package core
 
 import (
+	"bytes"
 	"html/template"
 	"net/url"
 	"path/filepath"
@@ -10,7 +11,8 @@ import (
 
 	"github.com/fifsky/goblog/config"
 	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
+	"github.com/gin-gonic/gin/render"
+	"github.com/ilibs/logger"
 )
 
 // 格式化时间
@@ -119,19 +121,21 @@ func IsPage(url ...string) bool {
 
 //模板传递多个变量
 //{{template "userlist" Args "Users" .MostPopular "Current" .CurrentUser}}
-func Args(values ...interface{}) (map[string]interface{}, error) {
+func Args(values ...interface{}) (map[string]interface{}) {
 	if len(values)%2 != 0 {
-		return nil, errors.New("invalid dict call")
+		logger.Error("invalid dict call")
+		return nil
 	}
 	dict := make(map[string]interface{}, len(values)/2)
 	for i := 0; i < len(values); i += 2 {
 		key, ok := values[i].(string)
 		if !ok {
-			return nil, errors.New("dict keys must be strings")
+			logger.Error("dict keys must be strings")
+			return nil
 		}
 		dict[key] = values[i+1]
 	}
-	return dict, nil
+	return dict
 }
 
 var funcMap = template.FuncMap{
@@ -147,7 +151,43 @@ var funcMap = template.FuncMap{
 	"PageUrl":          PageUrl,
 }
 
+type HTMLProduction struct{}
+
+func (r HTMLProduction) Instance(name string, data interface{}) render.Render {
+	htmlFiles := make([]string, 0)
+	htmlFiles = append(htmlFiles, filepath.Join(config.App.Common.Path, "views/layout/base.html"))
+	htmlFiles = append(htmlFiles, filepath.Join(config.App.Common.Path, "views/", name+".html"))
+	var tpl = template.Must(template.New("base.html").Funcs(funcMap).Funcs(template.FuncMap{"include": tplInclude}).ParseFiles(htmlFiles...))
+
+	// 如果没有定义css和js模板，则定义之
+	if jsTpl := tpl.Lookup("header"); jsTpl == nil {
+		tpl.Parse(`{{define "header"}}{{end}}`)
+	}
+	if cssTpl := tpl.Lookup("footer"); cssTpl == nil {
+		tpl.Parse(`{{define "footer"}}{{end}}`)
+	}
+
+	return render.HTML{
+		Template: tpl,
+		Data:     data,
+	}
+}
+
 func SetTemplate(engine *gin.Engine) {
-	engine.SetFuncMap(funcMap)
-	engine.LoadHTMLGlob(filepath.Join(config.App.Common.Path, "views/**/*"))
+	engine.HTMLRender = HTMLProduction{}
+}
+
+func tplInclude(file string, dot interface{}) template.HTML {
+	var buffer = &bytes.Buffer{}
+	tpl, err := template.New(filepath.Base(file)+".html").Funcs(funcMap).Funcs(template.FuncMap{"include":tplInclude}).ParseFiles(filepath.Join(config.App.Common.Path, "views/", file+".html"))
+	if err != nil {
+		logger.Errorf("parse template file(%s) error:%v\n", file, err)
+		return ""
+	}
+	err = tpl.Execute(buffer, dot)
+	if err != nil {
+		logger.Errorf("template file(%s) syntax error:%v", file, err)
+		return ""
+	}
+	return template.HTML(buffer.String())
 }

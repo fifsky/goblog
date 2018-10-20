@@ -1,7 +1,6 @@
-{{ define "admin/index" }}
-{{ template "layout/header" . }}
+{{ define "content" }}
 <div id="settings" class="admin">
-    {{ template "layout/admin_tabs" . }}
+    {{ include "layout/admin_tabs" . }}
     <div id="content">
         <h2>站点设置</h2>
         <div class="message">保存成功</div>
@@ -61,5 +60,4 @@
         return false;
     });
 </script>
-{{ template "layout/footer" . }}
 {{ end }}

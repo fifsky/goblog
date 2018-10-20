@@ -1,5 +1,18 @@
-{{ define "admin/post_article" }}
-{{ template "layout/header" . }}
+{{define "header"}}
+<link media="screen" href="//cdn.staticfile.org/wangEditor/2.1.23/wangEditor.min.css" type="text/css"
+      rel="stylesheet">
+<style>
+    /*fix staticfile path*/
+    @font-face {
+        font-family: icomoon;
+        src: url(//cdn.staticfile.org/wangEditor/2.1.23/fonts/icomoon.eot?-qdfu1s);
+        src: url(//cdn.staticfile.org/wangEditor/2.1.23/fonts/icomoon.eot?#iefix-qdfu1s) format('embedded-opentype'), url(//cdn.staticfile.org/wangEditor/2.1.23/fonts/icomoon.ttf?-qdfu1s) format('truetype'), url(//cdn.staticfile.org/wangEditor/2.1.23/fonts/icomoon.woff?-qdfu1s) format('woff'), url(//cdn.staticfile.org/wangEditor/2.1.23/fonts/icomoon.svg?-qdfu1s#icomoon) format('svg');
+        font-weight: 400;
+        font-style: normal
+    }
+</style>
+{{end}}
+{{ define "content" }}
 <style>
     .wangEditor-menu-container .menu-item{
         width: 31px;
@@ -24,7 +37,7 @@
     }
 </style>
 <div id="articles" class="admin">
-    {{ template "layout/admin_tabs" . }}
+    {{ include "layout/admin_tabs" . }}
     <div id="content">
         <h2>{{ if .Post }}编辑{{ else }}撰写{{ end }}文章<a href="/admin/articles"><i class="iconfont icon-undo" style="color: #444"></i>返回列表</a></h2>
         <div class="message"></div>
@@ -158,6 +171,4 @@
         return false;
     });
 </script>
-
-{{ template "layout/footer" . }}
 {{ end }}

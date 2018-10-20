@@ -1,8 +1,7 @@
-{{ define "admin/post_user" }}
-{{ template "layout/header" . }}
+{{ define "content" }}
 <div id="users" class="admin">
-    {{ template "layout/admin_tabs" . }}
-    <div id="content">
+    {{ include "layout/admin_tabs" . }}
+    <div id="include">
         <h2>{{ if .User}}编辑{{else}}新增{{end}}用户<a href="/admin/users"><i class="iconfont icon-undo" style="color: #444"></i>返回列表</a></h2>
         <div class="message"></div>
         <form id="user_form" class="vf" action="/admin/post/user" method="post" autocomplete="off">
@@ -97,5 +96,4 @@
         return false;
     });
 </script>
-{{ template "layout/footer" . }}
 {{ end }}

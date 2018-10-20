@@ -1,18 +1,19 @@
-{{ define "index/article" }}
-{{ template "layout/header" . }}
+{{ define "header"}}
+<script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+{{ end }}
+{{ define "content" }}
 <div id="main">
-    {{ template "layout/mood" .Mood }}
-    {{ template "layout/tabs" . }}
+    {{ include "layout/mood" .Mood }}
+    {{ include "layout/tabs" . }}
     <div id="content">
         <div class="article-single">
-            {{ template "layout/article" Args "Post" .Post "UrlPath" $.UrlPath }}
+            {{ include "layout/article" (Args "Post" .Post "UrlPath" $.UrlPath) }}
             {{ if not (IsPage .UrlPath "/about") }}
-            {{ template "layout/article_nav" . }}
+            {{ include "layout/article_nav" . }}
             {{ end }}
         </div>
-        {{ template "layout/comment" . }}
+        {{ include "layout/comment" . }}
     </div>
 </div>
-{{ template "layout/sidebar" . }}
-{{ template "layout/footer" . }}
+{{ include "layout/sidebar" . }}
 {{ end }}

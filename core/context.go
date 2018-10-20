@@ -1,11 +1,6 @@
 package core
 
 import (
-	"bytes"
-	"html/template"
-	"path/filepath"
-
-	"github.com/fifsky/goblog/config"
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/gin-gonic/gin"
@@ -122,13 +117,7 @@ func (c *Context) ErrorMessage(err error) Response {
 	})
 }
 
-var templ = template.Must(template.New("").Funcs(funcMap).ParseGlob(filepath.Join(config.App.Common.Path, "views/**/*")))
-
-func (c *Context) HTMLRender(name string, obj interface{}) (string, error) {
-	writer := &bytes.Buffer{}
-	err := templ.ExecuteTemplate(writer, name, obj)
-	if err != nil {
-		return "", err
-	}
-	return writer.String(), nil
+func (c *Context) HTMLRender(file string, obj interface{}) (string, error) {
+	h := tplInclude(file, obj)
+	return string(h), nil
 }
