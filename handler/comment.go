@@ -52,10 +52,7 @@ var CommentPost core.HandlerFunc = func(c *core.Context) core.Response {
 		return c.Fail(201, "评论失败"+err.Error())
 	}
 
-	body, err := c.HTMLRender("layout/comment_item", comment)
-	if err != nil {
-		return c.Fail(202, err)
-	}
+	body := c.HTMLRender("layout/comment_item", comment)
 
 	content := "您有新的评论!\n"
 	content += fmt.Sprintf("文章:%s\n", post.Title)

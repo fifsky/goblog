@@ -163,6 +163,7 @@ func (r HTMLProduction) Instance(name string, data interface{}) render.Render {
 	if jsTpl := tpl.Lookup("header"); jsTpl == nil {
 		tpl.Parse(`{{define "header"}}{{end}}`)
 	}
+
 	if cssTpl := tpl.Lookup("footer"); cssTpl == nil {
 		tpl.Parse(`{{define "footer"}}{{end}}`)
 	}

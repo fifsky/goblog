@@ -1,6 +1,8 @@
 package core
 
 import (
+	"html/template"
+
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/helpers/pagination"
 	"github.com/gin-gonic/gin"
@@ -117,7 +119,6 @@ func (c *Context) ErrorMessage(err error) Response {
 	})
 }
 
-func (c *Context) HTMLRender(file string, obj interface{}) (string, error) {
-	h := tplInclude(file, obj)
-	return string(h), nil
+func (c *Context) HTMLRender(file string, obj interface{}) template.HTML {
+	return tplInclude(file, obj)
 }
