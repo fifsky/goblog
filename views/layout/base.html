@@ -10,7 +10,6 @@
     <link rel="dns-prefetch" href="//cdn.staticfile.org">
     <link rel="shortcut icon" href="{{ StaticUrl }}style/images/favicon.ico" type="image/x-icon"/>
     <link media="screen" href="{{ StaticUrl }}style/css/base.css" type="text/css" rel="stylesheet">
-    <script src="//cdn.staticfile.org/jquery/1.10.1/jquery.min.js" type="text/javascript"></script>
     {{ template "header" .}}
     <link media="screen" href="//cdn.staticfile.org/highlight.js/9.12.0/styles/atelier-lakeside-light.min.css" type="text/css" rel="stylesheet">
     <style>
@@ -50,17 +49,18 @@
         <p class="info">Build version {{ .GOVERSION }} <a href="http://www.miitbeian.gov.cn/" target="_blank">沪ICP备14029559号</a></p>
     </div>
     <a id="scroll_top" href="#top">返回顶部</a>
-{{ if not .IsAdminPage }}
-    <script type="text/javascript" src="{{ StaticUrl }}style/js/main.js"></script>
-    <script src="//cdn.staticfile.org/highlight.js/9.12.0/highlight.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        hljs.configure({tabReplace: '    '});
-        hljs.initHighlightingOnLoad();
-    </script>
-{{ else }}
-    <script type="text/javascript" src="{{ StaticUrl }}style/js/admin.js"></script>
-{{ end }}
 </div>
+<script src="//cdn.staticfile.org/jquery/1.10.1/jquery.min.js" type="text/javascript"></script>
+{{ if not .IsAdminPage }}
+<script type="text/javascript" src="{{ StaticUrl }}style/js/main.js"></script>
+<script src="//cdn.staticfile.org/highlight.js/9.12.0/highlight.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    hljs.configure({tabReplace: '    '});
+    hljs.initHighlightingOnLoad();
+</script>
+{{ else }}
+<script type="text/javascript" src="{{ StaticUrl }}style/js/admin.js"></script>
+{{ end }}
 {{ template "footer" .}}
 </body>
 </html>

@@ -160,11 +160,11 @@ func (r HTMLProduction) Instance(name string, data interface{}) render.Render {
 	var tpl = template.Must(template.New("base.html").Funcs(funcMap).Funcs(template.FuncMap{"include": tplInclude}).ParseFiles(htmlFiles...))
 
 	// 如果没有定义css和js模板，则定义之
-	if jsTpl := tpl.Lookup("header"); jsTpl == nil {
+	if hasTpl := tpl.Lookup("header"); hasTpl == nil {
 		tpl.Parse(`{{define "header"}}{{end}}`)
 	}
 
-	if cssTpl := tpl.Lookup("footer"); cssTpl == nil {
+	if hasTpl := tpl.Lookup("footer"); hasTpl == nil {
 		tpl.Parse(`{{define "footer"}}{{end}}`)
 	}
 
