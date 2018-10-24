@@ -22,7 +22,7 @@ var SharedData core.HandlerFunc = func(c *core.Context) core.Response {
 
 		//global shared data
 		options, _ := models.GetOptions()
-
+		c.Set("options", options)
 		c.SharedData["Options"] = options
 		c.SharedData["GOVERSION"] = runtime.Version()
 
