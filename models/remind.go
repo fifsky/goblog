@@ -11,7 +11,7 @@ type Reminds struct {
 	Type       int       `form:"type" json:"type" db:"type"`
 	At         string    `form:"at" json:"at" db:"at"`
 	Content    string    `form:"content" json:"content" db:"content"`
-	RemindDate time.Time `form:"remind_date" json:"remind_date" db:"remind_date"`
+	RemindDate time.Time `form:"remind_date" json:"remind_date" db:"remind_date" time_format:"2006-01-02 15:04:05"`
 	CreatedAt  time.Time `form:"-" json:"created_at" db:"created_at"`
 }
 

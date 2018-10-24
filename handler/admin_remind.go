@@ -7,7 +7,6 @@ import (
 	"github.com/fifsky/goblog/helpers"
 	"github.com/fifsky/goblog/models"
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/logger"
 )
@@ -62,7 +61,7 @@ var AdminRemindGet core.HandlerFunc = func(c *core.Context) core.Response {
 
 var AdminRemindPost core.HandlerFunc = func(c *core.Context) core.Response {
 	reminds := &models.Reminds{}
-	if err := c.ShouldBindWith(reminds, binding.Form); err != nil {
+	if err := c.ShouldBind(reminds); err != nil {
 		return c.Fail(201, "参数错误:"+err.Error())
 	}
 
