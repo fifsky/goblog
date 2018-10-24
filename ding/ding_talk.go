@@ -37,6 +37,11 @@ func Alarm(content string, at ...string) error {
 		}
 	}
 
+	//@所有人
+	dingtalk.At = map[string]interface{}{
+		"isAtAll": true,
+	}
+
 	buf, err := json.Marshal(dingtalk)
 	if err != nil {
 		return err
