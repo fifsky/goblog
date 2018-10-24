@@ -17,9 +17,16 @@ import (
 
 var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 	num := 10
-
+	h := gin.H{}
+	post := &models.Posts{}
 	page := helpers.StrTo(c.DefaultQuery("page", "1")).MustInt()
-	posts, err := models.PostGetList(&models.Posts{}, page, num, "", "")
+	cateId := helpers.StrTo(c.DefaultQuery("cate_id", "0")).MustInt()
+	h["CateId"] = cateId
+	if cateId > 0 {
+		post.CateId = cateId
+	}
+
+	posts, err := models.PostGetList(post, page, num, "", "")
 
 	if err != nil {
 		return c.ErrorMessage(err)
@@ -28,7 +35,6 @@ var AdminArticlesGet core.HandlerFunc = func(c *core.Context) core.Response {
 	cates := make([]*models.Cates, 0)
 	gosql.Model(&cates).All()
 
-	h := gin.H{}
 	h["Posts"] = posts
 	h["Cates"] = cates
 

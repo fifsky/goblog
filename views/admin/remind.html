@@ -88,7 +88,7 @@
 
                 <p id="remind_date"><label class="label_input">提醒时间</label>
                     <input class="input_text laydate" size="30" name="remind_date"
-                           value="{{if .Remind}}{{DateFormatString .Remind.RemindDate "2006-01-02 15:04:05"}}{{end}}">
+                           value="{{if .Remind}}{{DateFormat .Remind.RemindDate "2006-01-02 15:04:05"}}{{end}}">
                 </p>
 
                 <p>

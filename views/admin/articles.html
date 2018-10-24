@@ -5,7 +5,6 @@
         <h2>管理文章<a href="/admin/post/article" class="add"><i class="iconfont icon-edit" style="color: #444"></i>写文章</a>
         </h2>
 
-        <form id="list_form" class="nf" action="" method="get" autocomplete="off">
             <div class="operate clearfix">
                 <div class="fl">
                     <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
@@ -17,6 +16,7 @@
                     </select>
                 </div>
                 <div class="fr">
+                    <form id="list_form" class="nf" action="" method="get" autocomplete="off">
                     <select name="post_status">
                         <option value="" selected>显示所有文章</option>
                         <option value="3">草稿箱</option>
@@ -25,9 +25,10 @@
                     <select name="cate_id">
                         <option value="" selected>显示所有分类</option>
                         {{ range .Cates }}
-                        <option value="{{ .Id }}">{{ .Name }}</option>
+                        <option value="{{ .Id }}" {{if eq $.CateId .Id}} selected {{end}}>{{ .Name }}</option>
                         {{ end }}
                     </select>
+                    </form>
                 </div>
             </div>
 
@@ -79,8 +80,6 @@
                 </div>
                 {{ include "layout/pagination" . }}
             </div>
-        </form>
-
     </div>
 </div>
 {{ end }}
