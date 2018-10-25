@@ -7,20 +7,19 @@
 
             <div class="operate clearfix">
                 <div class="fl">
-                    <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
-                    <select name="set_status">
+                    <a href="javascript:void(0);" class="all-selected">全选</a><span class="line">|</span><a href="javascript:void(0);" class="inverse-selected">反选</a>&nbsp;&nbsp;
+                    <select name="batch_operation">
                         <option value="" selected>批量操作</option>
-                        <option value="2">置顶</option>
-                        <option value="3">草稿</option>
-                        <option value="4">删除</option>
+                        <option value="1">置顶</option>
+                        <option value="1">删除</option>
                     </select>
                 </div>
                 <div class="fr">
                     <form id="list_form" class="nf" action="" method="get" autocomplete="off">
                     <select name="post_status">
                         <option value="" selected>显示所有文章</option>
-                        <option value="3">草稿箱</option>
-                        <option value="4">回收站</option>
+                        <option value="1">页面</option>
+                        <option value="2">回收站</option>
                     </select>
                     <select name="cate_id">
                         <option value="" selected>显示所有分类</option>
@@ -73,12 +72,11 @@
             </table>
             <div class="operate clearfix">
                 <div class="fl">
-                    <a href="#">全选</a><span class="line">|</span><a href="#">反选</a>&nbsp;&nbsp;
-                    <select>
+                    <a href="javascript:void(0);" class="all-selected">全选</a><span class="line">|</span><a href="javascript:void(0);" class="inverse-selected">反选</a>&nbsp;
+                    <select name="batch_operation">
                         <option value="" selected>批量操作</option>
-                        <option value="2">置顶</option>
-                        <option value="3">草稿</option>
-                        <option value="4">删除</option>
+                        <option value="1">置顶</option>
+                        <option value="1">删除</option>
                     </select>
                 </div>
                 {{ include "layout/pagination" . }}
