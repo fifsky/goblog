@@ -60,9 +60,12 @@
                     <td><a href="/category/{{.Domain}}" target="_blank">{{.Name}}</a></td>
                     <td>{{ if eq .Type 1 }}文章{{else}}页面{{end}}</td>
                     <td>{{ DateFormat .UpdatedAt "2006-01-02" }}</td>
-                    <td><a href="/admin/post/article?id={{.Id}}">编辑</a><span class="line">|</span><a
+                    <td>{{ if eq .UserId $.LoginUser.Id}}
+                        <a href="/admin/post/article?id={{.Id}}">编辑</a><span class="line">|</span><a
                             href="/admin/post/article_delete?id={{.Id}}"
-                            rel="confirmTodo" title="确定要删除该文章？">删除</a></td>
+                            rel="confirmTodo" title="确定要删除该文章？">删除</a>
+                        {{ end }}
+                    </td>
                 </tr>
                 {{ end }}
                 {{ end }}
