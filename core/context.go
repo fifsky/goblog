@@ -68,6 +68,14 @@ func (c *Context) JSON(data interface{}) Response {
 	}
 }
 
+func (c *Context) XML(data interface{}) Response {
+	return &XMLResponse{
+		HttpStatus: getHttpStatus(c, 200),
+		Context:    c.Context,
+		Data:       data,
+	}
+}
+
 func (c *Context) Redirect(location string) Response {
 	return &RedirectResponse{
 		HttpStatus: getHttpStatus(c, 302),

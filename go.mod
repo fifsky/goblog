@@ -9,6 +9,7 @@ require (
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v1.3.0
 	github.com/go-sql-driver/mysql v1.4.0
+	github.com/gorilla/feeds v1.1.0
 	github.com/gorilla/sessions v1.1.2 // indirect
 	github.com/ilibs/captcha v0.0.0-20181012033505-20e6a9666b6f
 	github.com/ilibs/gosql v1.0.4

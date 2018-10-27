@@ -18,6 +18,16 @@ func (c *JSONResponse) Render() {
 	c.Context.JSON(c.HttpStatus, c.Data)
 }
 
+type XMLResponse struct {
+	HttpStatus int          `json:"-"`
+	Context    *gin.Context `json:"-"`
+	Data       interface{}  `json:"data"`
+}
+
+func (c *XMLResponse) Render() {
+	c.Context.XML(c.HttpStatus, c.Data)
+}
+
 type ApiResponse struct {
 	HttpStatus int          `json:"-"`
 	Context    *gin.Context `json:"-"`

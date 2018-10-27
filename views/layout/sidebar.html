@@ -18,7 +18,6 @@
             {{ range .Cates }}
             <li>
                 <a href="/categroy/{{.Domain}}">{{.Name}}({{.Num}})</a>
-                <a href="#" target="_blank"><i class="iconfont icon-rss" style="color: #ff8c16;font-size: 12px"></i></a>
             </li>
             {{ end }}
         </ul>
@@ -53,6 +52,6 @@
         </ul>
     </div>
     <div class="rss">
-        <i class="iconfont icon-feed" style="color: orangered"></i><a href="/feed" target="_blank">订阅我的消息</a>
+        <i class="iconfont icon-feed" style="color: orangered"></i><a href="/feed.xml" target="_blank">订阅我的消息</a>
     </div>
 </div>

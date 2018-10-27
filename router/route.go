@@ -30,12 +30,14 @@ func Route(router *gin.Engine) {
 	router.GET("/search", core.Handle(handler.IndexGet))
 	router.GET("/avatar", core.Handle(handler.Avatar))
 	router.GET("/captcha/:id", core.Handle(handler.CaptchaGet))
+	router.GET("/feed.xml", core.Handle(handler.FeedGet))
 
 	//管理后台
 	admin := router.Group("/admin")
 	admin.GET("/login", core.Handle(handler.LoginGet))
 	admin.POST("/login", core.Handle(handler.LoginPost))
 	admin.GET("/logout", core.Handle(handler.LogoutGet))
+
 
 	admin.Use(core.Middleware(middleware.AuthLogin))
 	{
