@@ -51,7 +51,7 @@
 
                         <select name="cate_id">
                             {{ range .Cates }}
-                            <option value="{{.Id}}" {{if eq .Id $.Post.CateId}}selected{{end}}>{{.Name}}</option>
+                            <option value="{{.Id}}" {{if $.Post}}{{if eq .Id $.Post.CateId}}selected{{end}}{{end}}>{{.Name}}</option>
                             {{ end }}
                         </select>
                     </p>
