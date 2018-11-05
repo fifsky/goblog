@@ -1,3 +1,6 @@
+{{ define "header"}}
+<script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+{{ end }}
 {{ define "content" }}
 <div id="sign-in" class="admin">
     <div id="content">
@@ -7,6 +10,8 @@
             <p>
                 <label class="label_input">用户名：</label>
                 <input type="text" name="user_name" class="input_text" value=""/>
+                <input type="hidden" name="ticket" value="">
+                <input type="hidden" name="randstr" value="">
             </p>
             <p>
                 <label class="label_input">密码：</label>
@@ -18,7 +23,7 @@
                 </label>
             </p>
             <p class="act">
-                <input type="submit" class="formbutton" value="登录"/>
+                <input type="button" class="formbutton" value="登录" id="TencentCaptcha" data-appid="2004362488" data-cbfn="LoginTCaptcha"/>
             </p>
         </form>
     </div>
@@ -26,6 +31,15 @@
 {{ end }}
 {{ define "footer" }}
 <script type="text/javascript">
+    window.LoginTCaptcha = function(res){
+        if(res.ret === 0) {
+            var $el = $('#login');
+            $el.find('input[name="ticket"]').val(res.ticket);
+            $el.find('input[name="randstr"]').val(res.randstr);
+            $el.submit();
+        }
+    };
+
     $('#login').submit(function () {
         var self = this;
 

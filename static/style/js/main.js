@@ -105,10 +105,9 @@
         calendar(year,month);
     }
 
-    window.TCaptcha = function(res){
+    window.CommentTCaptcha = function(res){
         if(res.ret === 0) {
             var $el = $('#comment_form');
-            window.console.log(res);
             $el.find('input[name="ticket"]').val(res.ticket);
             $el.find('input[name="randstr"]').val(res.randstr);
             $el.submit();

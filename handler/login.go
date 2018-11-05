@@ -28,6 +28,10 @@ var LoginPost core.HandlerFunc = func(c *core.Context) core.Response {
 		return c.Fail(201, "用户名或密码不能为空")
 	}
 
+	if err := TCaptchaVerify(c.PostForm("ticket"), c.PostForm("randstr"), c.ClientIP()); err != nil {
+		return c.Fail(201, err)
+	}
+
 	user := &models.Users{Name: user_name}
 	err := gosql.Model(user).Get()
 
