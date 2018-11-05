@@ -105,15 +105,6 @@
         calendar(year,month);
     }
 
-    window.CommentTCaptcha = function(res){
-        if(res.ret === 0) {
-            var $el = $('#comment_form');
-            $el.find('input[name="ticket"]').val(res.ticket);
-            $el.find('input[name="randstr"]').val(res.randstr);
-            $el.submit();
-        }
-    };
-
     $('#comment_form').submit(function(){
         var $el = $(this).find('input[name="name"]');
         if($.trim($el.val()) === ''){
@@ -123,31 +114,41 @@
 
         var self = this;
 
-        $.ajax({
-            'url': $(this).attr('action'),
-            'type': this.method,
-            'data': $(this).serializeArray(),
-            'dataType': 'json',
-            beforeSend: function(xhr) {
-                $(self).find(':submit').addClass('formdisabled').attr('disabled',true);
-            },
-            complete:function(){
-                $(self).find(':submit').removeClass('formdisabled').attr('disabled',false);
-            },
-            success: function(data) {
-                if (data.statusCode == 200){
-                    if($('#comments .comment-null').length){
-                        $('#comments .comment-null').remove();
+        var captcha = new TencentCaptcha('2004362488', function(res) {
+            if(res.ret === 0) {
+                var d = $(self).serializeArray();
+                d.push({"name":"ticket","value":res.ticket});
+                d.push({"name":"randstr","value":res.randstr});
+
+                $.ajax({
+                    'url': $(self).attr('action'),
+                    'type': self.method,
+                    'data': d,
+                    'dataType': 'json',
+                    beforeSend: function(xhr) {
+                        $(self).find(':submit').addClass('formdisabled').attr('disabled',true);
+                    },
+                    complete:function(){
+                        $(self).find(':submit').removeClass('formdisabled').attr('disabled',false);
+                    },
+                    success: function(data) {
+                        if (data.statusCode == 200){
+                            if($('#comments .comment-null').length){
+                                $('#comments .comment-null').remove();
+                            }
+                            var $content = $(data.data.content).hide();
+                            $('#comments ul').append($content);
+                            $content.fadeIn(200);
+                            self.reset();
+                        }else{
+                            alert(data.message);
+                        }
                     }
-                    var $content = $(data.data.content).hide();
-                    $('#comments ul').append($content);
-                    $content.fadeIn(200);
-                    self.reset();
-                }else{
-                    alert(data.message);
-                }
+                });
             }
         });
+        captcha.show(); // 显示验证码
+
         return false;
     });
 

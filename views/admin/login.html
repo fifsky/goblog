@@ -10,8 +10,6 @@
             <p>
                 <label class="label_input">用户名：</label>
                 <input type="text" name="user_name" class="input_text" value=""/>
-                <input type="hidden" name="ticket" value="">
-                <input type="hidden" name="randstr" value="">
             </p>
             <p>
                 <label class="label_input">密码：</label>
@@ -23,7 +21,7 @@
                 </label>
             </p>
             <p class="act">
-                <input type="button" class="formbutton" value="登录" id="TencentCaptcha" data-appid="2004362488" data-cbfn="LoginTCaptcha"/>
+                <input type="submit" class="formbutton" value="登录"/>
             </p>
         </form>
     </div>
@@ -31,18 +29,8 @@
 {{ end }}
 {{ define "footer" }}
 <script type="text/javascript">
-    window.LoginTCaptcha = function(res){
-        if(res.ret === 0) {
-            var $el = $('#login');
-            $el.find('input[name="ticket"]').val(res.ticket);
-            $el.find('input[name="randstr"]').val(res.randstr);
-            $el.submit();
-        }
-    };
-
     $('#login').submit(function () {
         var self = this;
-
         var $el = $('input[name="user_name"]');
         if ($.trim($el.val()) === '') {
             $el.focus().closest('p').addClass('error');
@@ -55,25 +43,34 @@
             return false;
         }
 
-        $.ajax({
-            'url': $(this).attr('action'),
-            'type': this.method,
-            'data': $(this).serializeArray(),
-            'dataType': 'json',
-            beforeSend: function (xhr) {
-                $(self).find(':submit').addClass('formdisabled').attr('disabled', true);
-            },
-            complete: function () {
-                $(self).find(':submit').removeClass('formdisabled').attr('disabled', false);
-            },
-            success: function (data) {
-                if (data.statusCode === 200) {
-                    location.href = "/admin/index";
-                } else {
-                    $('.message').addClass('notice').html(data.message).show();
-                }
+        var captcha = new TencentCaptcha('2004362488', function (res) {
+            if (res.ret === 0) {
+                var d = $(self).serializeArray();
+                d.push({"name": "ticket", "value": res.ticket});
+                d.push({"name": "randstr", "value": res.randstr});
+
+                $.ajax({
+                    'url': $(self).attr('action'),
+                    'type': self.method,
+                    'data': d,
+                    'dataType': 'json',
+                    beforeSend: function (xhr) {
+                        $(self).find(':submit').addClass('formdisabled').attr('disabled', true);
+                    },
+                    complete: function () {
+                        $(self).find(':submit').removeClass('formdisabled').attr('disabled', false);
+                    },
+                    success: function (data) {
+                        if (data.statusCode === 200) {
+                            location.href = "/admin/index";
+                        } else {
+                            $('.message').addClass('notice').html(data.message).show();
+                        }
+                    }
+                });
             }
         });
+        captcha.show();
 
         return false;
     });
