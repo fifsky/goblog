@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/ilibs/gosql"
-	"github.com/ilibs/logger"
+	"github.com/verystar/logger"
 )
 
 type Cates struct {

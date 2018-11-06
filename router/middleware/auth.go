@@ -3,7 +3,7 @@ package middleware
 import (
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/models"
-	"github.com/ilibs/logger"
+	"github.com/verystar/logger"
 )
 
 var AuthLogin core.HandlerFunc = func(c *core.Context) core.Response {

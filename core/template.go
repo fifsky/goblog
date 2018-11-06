@@ -12,7 +12,7 @@ import (
 	"github.com/fifsky/goblog/config"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/render"
-	"github.com/ilibs/logger"
+	"github.com/verystar/logger"
 )
 
 // 格式化时间

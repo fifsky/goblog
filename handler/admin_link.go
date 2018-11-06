@@ -6,7 +6,7 @@ import (
 	"github.com/fifsky/goblog/models"
 	"github.com/gin-gonic/gin"
 	"github.com/ilibs/gosql"
-	"github.com/ilibs/logger"
+	"github.com/verystar/logger"
 )
 
 var AdminLinkGet core.HandlerFunc = func(c *core.Context) core.Response {

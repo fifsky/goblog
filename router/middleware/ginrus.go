@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ilibs/logger"
+	"github.com/verystar/logger"
 )
 
 func Ginrus() gin.HandlerFunc {

@@ -10,7 +10,6 @@ import (
 )
 
 var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
-
 	options := c.GetStringMapString("options")
 	num, err := helpers.StrTo(options["post_num"]).Int()
 	if err != nil || num < 1 {

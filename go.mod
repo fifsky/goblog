@@ -1,10 +1,7 @@
 module github.com/fifsky/goblog
 
 require (
-	github.com/certifi/gocertifi v0.0.0-20180905225744-ee1a9a0726d2 // indirect
-	github.com/evalphobia/logrus_sentry v0.4.6 // indirect
 	github.com/fifsky/goconf v1.0.0
-	github.com/getsentry/raven-go v0.0.0-20180903072508-084a9de9eb03 // indirect
 	github.com/gin-contrib/sessions v0.0.0-20180827025425-58cbcf30135c // indirect
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v1.3.0
@@ -15,7 +12,6 @@ require (
 	github.com/ilibs/gosql v1.0.4
 	github.com/ilibs/identicon v0.0.0-20180626043057-7875f45b0022
 	github.com/ilibs/json5 v0.0.0-20160717195620-7620272ed633 // indirect
-	github.com/ilibs/logger v0.0.0-20180822070604-9b0ffea8fc9a
 	github.com/ilibs/sessions v0.0.0-20180717035129-2a4cbf3ab96f
 	github.com/jmoiron/sqlx v1.2.0 // indirect
 	github.com/json-iterator/go v1.1.5 // indirect
@@ -28,14 +24,13 @@ require (
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pkg/errors v0.8.0
 	github.com/robertkrimen/otto v0.0.0-20180617131154-15f95af6e78d // indirect
-	github.com/sirupsen/logrus v1.1.0 // indirect
 	github.com/stretchr/testify v1.2.2
 	github.com/tidwall/gjson v1.1.3
 	github.com/tidwall/match v0.0.0-20171002075945-1731857f09b1 // indirect
 	github.com/ugorji/go/codec v0.0.0-20180927125128-99ea80c8b19a // indirect
-	golang.org/x/crypto v0.0.0-20181001203147-e3636079e1a4 // indirect
+	github.com/verystar/logger v1.0.3
 	golang.org/x/net v0.0.0-20181005035420-146acd28ed58 // indirect
-	golang.org/x/sys v0.0.0-20181005133103-4497e2df6f9e // indirect
+	golang.org/x/sys v0.0.0-20181106073832-7155702f2d47 // indirect
 	google.golang.org/appengine v1.2.0 // indirect
 	gopkg.in/airbrake/gobrake.v2 v2.0.9 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
