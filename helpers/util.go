@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"bufio"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/md5"
@@ -16,6 +17,17 @@ import (
 func Md5(source string) string {
 	md5h := md5.New()
 	md5h.Write([]byte(source))
+	return hex.EncodeToString(md5h.Sum(nil))
+}
+
+
+func Md5File(file io.Reader) string {
+	r := bufio.NewReader(file)
+	md5h := md5.New()
+	_, err := io.Copy(md5h, r)
+	if err != nil {
+		return ""
+	}
 	return hex.EncodeToString(md5h.Sum(nil))
 }
 

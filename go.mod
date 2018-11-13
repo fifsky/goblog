@@ -1,6 +1,7 @@
 module github.com/fifsky/goblog
 
 require (
+	github.com/aliyun/aliyun-oss-go-sdk v0.0.0-20181107013735-cab2ffdaf410
 	github.com/fifsky/goconf v1.0.0
 	github.com/gin-contrib/sessions v0.0.0-20180827025425-58cbcf30135c // indirect
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect

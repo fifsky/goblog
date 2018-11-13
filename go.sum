@@ -1,3 +1,5 @@
+github.com/aliyun/aliyun-oss-go-sdk v0.0.0-20181107013735-cab2ffdaf410 h1:AHp0ZczPorIDpT2FcITh6ODv+jIcl9oouAQFrCfY0eI=
+github.com/aliyun/aliyun-oss-go-sdk v0.0.0-20181107013735-cab2ffdaf410/go.mod h1:T/Aws4fEfogEE9v+HPhhw+CntffsBHJ8nXQCwKr0/g8=
 github.com/certifi/gocertifi v0.0.0-20180118203423-deb3ae2ef261 h1:6/yVvBsKeAw05IUj4AzvrxaCnDjN4nUqKjW9+w5wixg=
 github.com/certifi/gocertifi v0.0.0-20180118203423-deb3ae2ef261/go.mod h1:GJKEexRPVJrBSOjoqN5VNOIKJ5Q3RViH6eu3puDRwx4=
 github.com/certifi/gocertifi v0.0.0-20180905225744-ee1a9a0726d2 h1:MmeatFT1pTPSVb4nkPmBFN/LRZ97vPjsFKsZrU3KKTs=

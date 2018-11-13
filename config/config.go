@@ -27,10 +27,18 @@ type common struct {
 	TCaptchaSecret string `json:"tcaptcha_secret"`
 }
 
+type ossConf struct {
+	AccessKey    string `json:"access_key"`
+	AccessSecret string `json:"access_secret"`
+	Endpoint     string `json:"endpoint"`
+	Bucket       string `json:"bucket"`
+}
+
 type app struct {
 	Common    common                   `conf:"common"`
 	Log       logger.Config            `conf:"log"`
 	DB        map[string]*gosql.Config `conf:"database"`
+	OSS       ossConf                  `conf:"oss"`
 	StartTime time.Time
 }
 

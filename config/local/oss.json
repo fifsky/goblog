@@ -1,0 +1,6 @@
+{
+  "access_key":"*****",
+  "access_secret":"********",
+  "endpoint":"oss-cn-hangzhou.aliyuncs.com",
+  "bucket":"fyblog"
+}
