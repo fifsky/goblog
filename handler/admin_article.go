@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"image/png"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
@@ -11,6 +13,7 @@ import (
 	"github.com/fifsky/goblog/models"
 	"github.com/gin-gonic/gin"
 	"github.com/ilibs/gosql"
+	"github.com/nfnt/resize"
 	"github.com/verystar/logger"
 )
 
@@ -112,7 +115,12 @@ var AdminArticleDelete core.HandlerFunc = func(c *core.Context) core.Response {
 }
 
 var AdminUploadPost core.HandlerFunc = func(c *core.Context) core.Response {
-	file, _, err := c.Request.FormFile("wangEditorPasteFile")
+	//开发环境上传到local
+	if config.App.Common.Env == "local" {
+		return AdminUploadPostLocal(c)
+	}
+
+	file, _, err := c.Request.FormFile("uploadFile")
 	if err != nil {
 		c.Status(http.StatusBadRequest)
 		return c.String("Bad request")
@@ -123,7 +131,7 @@ var AdminUploadPost core.HandlerFunc = func(c *core.Context) core.Response {
 		return c.JSON(gin.H{
 			"jsonrpc": "2.0",
 			"error": gin.H{
-				"code":    100,
+				"code":    101,
 				"message": err.Error(),
 			},
 			"id": "id",
@@ -151,65 +159,65 @@ var AdminUploadPost core.HandlerFunc = func(c *core.Context) core.Response {
 	return c.String("https://static.fifsky.com/" + filename+"!blog")
 }
 
-//var AdminUploadPost core.HandlerFunc = func(c *core.Context) core.Response {
-//	file, header, err := c.Request.FormFile("wangEditorPasteFile")
-//	if err != nil {
-//		c.Status(http.StatusBadRequest)
-//		return c.String("Bad request")
-//	}
-//	filename := header.Filename
-//	day := time.Now().Format("20060102")
-//	dir := "static/upload/" + day
-//	exists, _ := helpers.PathExists(dir)
-//	if !exists {
-//		err := os.MkdirAll(dir, 0755)
-//		if err != nil {
-//			logger.Fatal(err)
-//			return c.JSON(gin.H{
-//				"jsonrpc": "2.0",
-//				"error": gin.H{
-//					"code":    100,
-//					"message": "Failed to create directory.",
-//				},
-//				"id": "id",
-//			})
-//		}
-//	}
-//
-//	out, err := os.Create(dir + "/" + filename)
-//	if err != nil {
-//		logger.Fatal(err)
-//
-//		return c.JSON(gin.H{
-//			"jsonrpc": "2.0",
-//			"error": gin.H{
-//				"code":    100,
-//				"message": "Failed to create file.",
-//			},
-//			"id": "id",
-//		})
-//	}
-//	defer out.Close()
-//
-//	img, err := png.Decode(file)
-//	if err != nil {
-//		logger.Fatal(err)
-//	}
-//	file.Close()
-//
-//	m := resize.Resize(800, 0, img, resize.Lanczos3)
-//	err = png.Encode(out, m)
-//
-//	if err != nil {
-//		logger.Fatal(err)
-//		return c.JSON(gin.H{
-//			"jsonrpc": "2.0",
-//			"error": gin.H{
-//				"code":    100,
-//				"message": "Failed to save directory.",
-//			},
-//			"id": "id",
-//		})
-//	}
-//	return c.String("/static/upload/" + day + "/" + filename)
-//}
+var AdminUploadPostLocal core.HandlerFunc = func(c *core.Context) core.Response {
+	file, header, err := c.Request.FormFile("uploadFile")
+	if err != nil {
+		c.Status(http.StatusBadRequest)
+		return c.String("Bad request")
+	}
+	filename := header.Filename
+	day := time.Now().Format("20060102")
+	dir := "static/upload/" + day
+	exists, _ := helpers.PathExists(dir)
+	if !exists {
+		err := os.MkdirAll(dir, 0755)
+		if err != nil {
+			logger.Fatal(err)
+			return c.JSON(gin.H{
+				"jsonrpc": "2.0",
+				"error": gin.H{
+					"code":    100,
+					"message": "Failed to create directory.",
+				},
+				"id": "id",
+			})
+		}
+	}
+
+	out, err := os.Create(dir + "/" + filename)
+	if err != nil {
+		logger.Fatal(err)
+
+		return c.JSON(gin.H{
+			"jsonrpc": "2.0",
+			"error": gin.H{
+				"code":    100,
+				"message": "Failed to create file.",
+			},
+			"id": "id",
+		})
+	}
+	defer out.Close()
+
+	img, err := png.Decode(file)
+	if err != nil {
+		logger.Fatal(err)
+	}
+	file.Close()
+
+	m := resize.Resize(800, 0, img, resize.Lanczos3)
+	err = png.Encode(out, m)
+
+	if err != nil {
+		logger.Fatal(err)
+		return c.JSON(gin.H{
+			"jsonrpc": "2.0",
+			"error": gin.H{
+				"code":    100,
+				"message": "Failed to save directory.",
+			},
+			"id": "id",
+		})
+	}
+	return c.String("/static/upload/" + day + "/" + filename)
+}
