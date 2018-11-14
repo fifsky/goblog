@@ -175,7 +175,6 @@ form p.inputting .formtip { color:#000;}
 /* footer */
 #footer { clear:both; padding:1em 0; text-align:center;font-size: 13px}
 #footer p { margin:1em 0;}
-#footer a { margin:0 .5em;}
 #footer p.info {color: #ccc;}
 #footer p.info a,#footer p.info a:hover { color:#ccc; text-decoration:none;}
 
