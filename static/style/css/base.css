@@ -108,7 +108,6 @@ textarea { padding:4px; overflow:auto;}
     overflow: hidden;
     visibility: hidden;
 }
-.clearfix{*zoom:1}
 .line{
     padding: 0 5px;
     color: #ccc;
@@ -129,7 +128,6 @@ form p.inputting .formtip { color:#000;}
 .nf .label_check { margin-left:170px; cursor:pointer;}
 .nf .input_text { width:200px;}
 .nf:after, .nf p:after { content:"."; display:block; font-size:0; line-height:0; clear:both; visibility:hidden;}
-.nf, .nf p { *zoom:1;}
 .nf ul { list-style:none;}
 .nf li { margin:.5em 0;}
 .nf p.act { margin-left:100px;}
@@ -186,7 +184,6 @@ form p.inputting .formtip { color:#000;}
 /* tabs */
 .tabs { position:relative; top:1px; font-size:14px;}
 .tabs:after { content:"."; display:block; font-size:0; line-height:0; clear:both; visibility:hidden;}
-.tabs { *zoom:1;}
 .tabs ul { float:right; list-style:none;}
 .tabs li { float:left; margin:0 0 0 5px;}
 .tabs li a { float:left; margin:5px 0 0; padding:2px 14px; background:#89d5ef; border:1px solid #89d5ef; color:#333; text-decoration:none;}
@@ -200,7 +197,6 @@ form p.inputting .formtip { color:#000;}
 .alist li a { float:left; width:48px; height:64px; overflow:hidden; text-decoration:none;}
 .alist li a img { height:48px;}
 .alist li a span { display:block; text-align:center; line-height:150%; white-space:nowrap;}
-.alist { *zoom:1;}
 
 /* page navigator */
 .paginator { list-style:none; padding:10px 0; text-align:center;}
@@ -211,13 +207,10 @@ form p.inputting .formtip { color:#000;}
 
 
 /* user & message */
-#info { position:relative; margin:0 0 10px; *zoom:1;}
+#info { position:relative; margin:0 0 10px; font-size: 13px}
 #info #avatar { float:left; padding:1px; border:1px solid #89d5ef; background:#fff; overflow:hidden;}
 #info #avatar img {display:block; width:96px; height:96px;}
 #latest { min-height:98px; margin-left:120px; border:1px solid #89d5ef;
-    background: -webkit-linear-gradient(#fff, #EEFFDE); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(#fff, #EEFFDE); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(#fff, #EEFFDE); /* Firefox 3.6 - 15 */
     background: linear-gradient(#fff, #EEFFDE);
 }
 #latest:before{
@@ -232,10 +225,9 @@ form p.inputting .formtip { color:#000;}
     border-right:0.7rem solid #fff;
 }
 
-* html #latest { height:98px;}
+#latest { height:98px;}
 #latest .current { padding:10px; line-height:120%; word-break:break-all; overflow:hidden; -o-text-overflow:ellipsis;}
 #latest .current:after { content:"."; display:block; font-size:0; line-height:0; clear:both; visibility:hidden;}
-#latest .current { *zoom:1;}
 #latest .stamp { position:absolute; right:10px; bottom:5px; line-height:120%;color: #8c8c8c;font-size: 12px}
 #latest .stamp a.post_act { margin-left:1em; color:#555;}
 
@@ -364,7 +356,7 @@ span.highlight{
 .comment ul{
     margin: 10px 0 20px;
 }
-.comment ul,.comment li{list-style: none;*zoom:1;}
+.comment ul,.comment li{list-style: none;}
 .comment ul li:after{
     clear: both;
     content: ".";
