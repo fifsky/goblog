@@ -12,6 +12,7 @@ blockquote {
     margin: 10px 0;
     border-left: 3px solid #00ffff;
     background-color:#f8f8f8;
+    word-break: break-all;
 }
 a { color:#06c; text-decoration: none;}
 a:hover { color:#ff7031;text-decoration: underline}
