@@ -1,9 +1,10 @@
 * { margin:0; padding:0;}
-body {color:#555555; font:12px/22px Arial,"宋体"; line-height:150%;
-    background: -webkit-linear-gradient(#97D2E8, #fff); /* Safari 5.1 - 6.0 */
-    background: -o-linear-gradient(#97D2E8, #fff); /* Opera 11.1 - 12.0 */
-    background: -moz-linear-gradient(#97D2E8, #fff); /* Firefox 3.6 - 15 */
+body {
+    line-height:150%;
     background: linear-gradient(#97D2E8, #fff 350px) no-repeat;
+    font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
+    font-size: 14px;
+    color: #555555;
 }
 blockquote {
     color: #7e7e7e;
@@ -121,7 +122,7 @@ form p.inputting .formtip { color:#000;}
 .formtip { color:#666;}
 
 /* nf for normal forms */
-.nf { clear:both;}
+.nf { clear:both;font-size: 13px}
 .nf h3 { width:400px; margin:.8em 0 .5em 170px; border-bottom:1px solid #eee; font-size:13px; color:#444;}
 .nf .label_input { width:100px; margin-right:15px; float:left; text-align:right;}
 .nf .label_check { margin-left:170px; cursor:pointer;}
@@ -133,7 +134,7 @@ form p.inputting .formtip { color:#000;}
 .nf p.act { margin-left:100px;}
 .nf p.note { width:400px; margin-left:170px; line-height:150%;}
 .nf p.pending { width:384px; padding:7px 5px 7px 9px; margin-left:170px; border:1px solid #ccc; background:#eee;}
-.nf span.hint { display:block; margin-left:170px; color:#666;}
+.nf span.hint { display:block; margin-left:170px; color:#666;font-size: 12px}
 .nf span.hidden { display:none;}
 .nf p.err { color:red;}
 
@@ -147,14 +148,14 @@ form p.inputting .formtip { color:#000;}
 #header h1 a { display:block; text-decoration:none;}
 #header h1 a span { display:none; margin-left:.5em; font-size:13px; font-weight:normal;}
 #header h1 a:hover span { display:inline; color:#fff;}
-#navigation { float:right; height:35px; margin:.5em 0 0; padding:0 10px; background-color: #fff;border-radius: 8px;font-size:14px; line-height:35px; white-space:nowrap;}
+#navigation { float:right; height:35px; margin:.5em 0 0; padding:0 10px; background-color: #fff;border-radius: 8px; line-height:35px; white-space:nowrap;}
 #navigation ul { float:left; list-style:none;}
 #navigation li { float:left; background:#fff;}
 #navigation li a { padding:2px 7px}
 #navigation li a:hover{background-color: #0066CC;color: #fff;text-decoration: none}
 
 /* sidebar */
-#sidebar { float:right; width:205px; padding:15px 10px 20px 18px; border:1px solid #89d5ef; background:#fff;}
+#sidebar { float:right; width:205px; padding:15px 10px 20px 18px; border:1px solid #89d5ef; background:#fff;font-size: 13px}
 #sidebar ul { list-style:none;}
 #sidebar ul.tlist {list-style: disc inside none;}
 #sidebar ul.tlist li {
@@ -164,9 +165,7 @@ form p.inputting .formtip { color:#000;}
 }
 #sidebar .sect { margin:0 0 1.5em;}
 #sidebar h2 { margin:0 0 0 -10px; padding:8px 5px 5px 10px; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMUAAAAlCAMAAADFot1AAAAANlBMVEUAAAD////8/v/6/f73/P7z+/3w+f3r9/vt+Pzn9vvh8/rl9frc8vnU7vfG6fTM6/a55PK/5vPI1xmBAAAAAXRSTlMAQObYZgAAAW1JREFUWMPd1tuugyAQQFEug9ystv//sycVpOCIEk1Pgd2kjw0rzGgJIXZ64l5J06Y57YEbk0yUdWmf9KmlwSeiIMSjmI++I+Qxj+FXQ/KTWhuiBA6i+PKViXG2G70e0bO0Js6uYZBEnENMjsJyXVdMRhvjLh1RdGjXITYOeH9AnDJuC7DiKa1ZRnfEo2tTAhotIdLLKBDkp+nWRL2kLdm9s1m6en50+MsKGw+RF0hdtgu/GSG8F0p/1tlXeAGwie/1nfNjhdThcZSfoBuPIgz4gmKQTlA6QXWd3yvmQZ1dQDmA/RMAK8QgVcEK/H6FTxTHG1D3+b3iIUThBPEqAUEhTt9hUO35VwW0egGpAsoBrD6AU4wAUPsjqEDBk+O3MUFIYTj3gIYmaE/Bq/gXcU/ROMApLGtqAzIKzVjTAKeQrWzwsaLl0weFoqmgSQcZKG32CmJFBxFBO6gTBdAO6kTBaQd1omj9VeEUtIf+AGt9QDY3RRkOAAAAAElFTkSuQmCC) 0 0 no-repeat; font-size:14px; font-weight:normal;}
-#sidebar h3 { font-size:13px; font-weight:normal;}
 #sidebar p { margin:5px 0;}
-#sidebar textarea { width:195px;}
 
 #sidebar .rss { list-style:none;display: inline-flex}
 #sidebar .rss a { padding-left:5px;}
@@ -175,7 +174,7 @@ form p.inputting .formtip { color:#000;}
 #sidebar #searchpanel .formbutton { width:60px; padding:0; letter-spacing:0;}
 
 /* footer */
-#footer { clear:both; padding:1em 0; text-align:center;}
+#footer { clear:both; padding:1em 0; text-align:center;font-size: 13px}
 #footer p { margin:1em 0;}
 #footer a { margin:0 .5em;}
 #footer p.info {color: #ccc;}
@@ -183,7 +182,6 @@ form p.inputting .formtip { color:#000;}
 
 /* content */
 #content { padding:20px; border:1px solid #89d5ef; background:#fff;}
-
 /* tabs */
 .tabs { position:relative; top:1px; font-size:14px;}
 .tabs:after { content:"."; display:block; font-size:0; line-height:0; clear:both; visibility:hidden;}
@@ -206,8 +204,8 @@ form p.inputting .formtip { color:#000;}
 /* page navigator */
 .paginator { list-style:none; padding:10px 0; text-align:center;}
 .paginator li { margin:0 .2em; display:inline;}
-.paginator li.current,.paginator li.normal { padding:2px 5px; border:1px solid #ddd; background: #ddd}
-.paginator li a { padding:2px 5px; border:1px solid #ddd; text-decoration:none;}
+.paginator li.current,.paginator li.normal { padding:2px 8px; border:1px solid #ddd; background: #ddd}
+.paginator li a { padding:2px 8px; border:1px solid #ddd; text-decoration:none;}
 .paginator li a:hover { border-color:#06c; background:#06c; color:#fff;}
 
 
@@ -234,18 +232,18 @@ form p.inputting .formtip { color:#000;}
 }
 
 * html #latest { height:98px;}
-#latest .current { padding:10px; line-height:120%; font-size:12px; word-break:break-all; overflow:hidden; -o-text-overflow:ellipsis;}
+#latest .current { padding:10px; line-height:120%; word-break:break-all; overflow:hidden; -o-text-overflow:ellipsis;}
 #latest .current:after { content:"."; display:block; font-size:0; line-height:0; clear:both; visibility:hidden;}
 #latest .current { *zoom:1;}
-#latest .stamp { position:absolute; right:10px; bottom:5px; line-height:120%;}
+#latest .stamp { position:absolute; right:10px; bottom:5px; line-height:120%;color: #8c8c8c;font-size: 12px}
 #latest .stamp a.post_act { margin-left:1em; color:#555;}
 
 table.canlender{
     width: 200px;
+    font-size: 13px;
 }
 table.canlender td{
     text-align: center;
-    font-family: "宋体";
 }
 
 table.canlender td.today{
@@ -258,9 +256,7 @@ table.canlender td.happy{
 }
 
 /*文章*/
-.articles{
-}
-
+.articles{}
 
 .article .entry-title{
     height: 54px;
@@ -276,12 +272,13 @@ table.canlender td.happy{
 
 .article .entry-title h2{
     font-size: 14px;
-    margin: 3px 0 0 55px;
+    margin: 0 0 0 55px;
 }
 
 .article .entry-title .entry-meta{
     color:#999;
     margin: 4px 0 0 55px;
+    font-size: 12px;
 }
 
 .article .post-meta{
@@ -290,14 +287,13 @@ table.canlender td.happy{
     margin-top: 20px;
     padding: 10px 0;
     text-align: right;
-}
-.article .post-meta a{
-    font-family: "宋体";
+    font-size: 13px;
 }
 
 .article .entry{
     color: #555555;
     line-height: 22px;
+    font-size: 13px;
 }
 .article .entry img{
     max-width: 98%;
@@ -322,6 +318,7 @@ table.canlender td.happy{
 }
 .article-single .post-navi {
     overflow: hidden;
+    font-size: 13px;
 }
 .article-single .post-navi span {
     display: block;
@@ -346,13 +343,14 @@ span.highlight{
 }
 
 .comment{
+    font-size: 13px;
 }
 
 .comment h3{
     border-bottom: 1px solid #CCCCCC;
-    font-size: 12px;
     font-weight: bold;
     line-height: 30px;
+    font-size: 14px;
 }
 
 .comment .comment-close{
@@ -491,6 +489,7 @@ mark{
 }
 
 /*admin*/
+.admin #content {font-size: 13px}
 .admin .tabs ul {float: left;}
 .admin .tabs ul li{margin: 0 5px 0 0;}
 .admin .paginator{text-align: right;float: right;padding: 0;}
@@ -503,8 +502,8 @@ mark{
 }
 .admin h2 a{
     margin-left: 10px;
-    font-size: 12px;
     font-weight: normal;
+    font-size: 14px;
     line-height: 16px;
 }
 
@@ -526,7 +525,6 @@ mark{
 .nf h3 {
     border-bottom: 1px solid #EEEEEE;
     color: #444444;
-    font-size: 13px;
     margin: 0.8em 0 0.5em 170px;
     width: 400px;
 }
@@ -590,7 +588,7 @@ mark{
     display: block;
     line-height: 150%;
     margin: 3px 0 3px 0;
-    font-family: sans-serif;
+    font-size: 12px;
 }
 
 
@@ -621,7 +619,7 @@ mark{
 
 table.list{
     width: 100%;
-
+    font-size: 13px;
 }
 table.list th {
     border-bottom: 2px solid #D9E0EC;
