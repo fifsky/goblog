@@ -31,7 +31,7 @@ var SharedData core.HandlerFunc = func(c *core.Context) core.Response {
 		c.SharedData["URI"] = c.Request.RequestURI
 
 		if url[1] != "admin" {
-			mood, err := models.MoodFrist()
+			mood, err := models.MoodGetList(1,10)
 
 			if err != nil {
 				logger.Error(err)
@@ -44,7 +44,7 @@ var SharedData core.HandlerFunc = func(c *core.Context) core.Response {
 				logger.Error(err)
 			}
 
-			c.SharedData["Mood"] = mood
+			c.SharedData["Moods"] = mood
 			c.SharedData["Cates"] = cates
 			c.SharedData["Links"] = links
 			c.SharedData["Archives"] = archives
