@@ -230,7 +230,7 @@ form p.inputting .formtip { color:#000;}
 #latest .current:after { content:"."; display:block; font-size:0; line-height:0; clear:both; visibility:hidden;}
 #latest .stamp { position:absolute; right:10px; bottom:5px; line-height:120%;color: #8c8c8c;font-size: 12px}
 #latest .stamp a.post_act { margin-left:1em; color:#555;}
-#info .handle {position: absolute;bottom: 0;left: 125px;cursor: pointer;display: none}
+#info .handle {position: absolute;bottom: 0;left: 125px;cursor: pointer;display: none;user-select: none;}
 #info .handle i.iconfont{
     font-size: 20px;
     color: rgba(48, 175, 255,0.5);
