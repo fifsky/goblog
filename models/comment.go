@@ -57,7 +57,7 @@ func NewComments() ([]*NewComment, error) {
 	}
 
 	var m = make([]*NewComment, 0)
-	err := gosql.Select(&m, "select p.type,p.title,c.* from comments c left join posts p on c.post_id = p.id order by c.id desc limit 10")
+	err := gosql.Select(&m, "select p.type,p.title,p.url,c.* from comments c left join posts p on c.post_id = p.id order by c.id desc limit 10")
 	if err != nil {
 		return nil, err
 	}
