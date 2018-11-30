@@ -73,10 +73,10 @@ func Truncate(s string, n int) string {
 //返回资源路径
 func StaticUrl(url ...string) string {
 	if len(url) > 0 {
-		return "/static/" + strings.Trim(url[0], "/")
+		return config.App.Common.StaticDomain + "/static/" + strings.Trim(url[0], "/")
 	}
 
-	return "/static/"
+	return config.App.Common.StaticDomain + "/static/"
 }
 
 func PageUrl(uri string, page int) string {

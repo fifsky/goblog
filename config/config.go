@@ -21,6 +21,7 @@ type common struct {
 	Path           string `json:"path"`
 	ConfigPath     string `json:"config_path"`
 	StoragePath    string `json:"storage_path"`
+	StaticDomain   string `json:"static_domain"`
 	DingToken      string `json:"dingtoken"`
 	SessionSecret  string `json:"session_secret"`
 	TCaptchaId     string `json:"tcaptcha_id"`
