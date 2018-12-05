@@ -1,10 +1,8 @@
 package models
 
 import (
-	"strings"
 	"time"
 
-	"github.com/fifsky/goblog/helpers"
 	"github.com/ilibs/gosql"
 )
 
@@ -77,19 +75,14 @@ func CommentList(start, num int) ([]*NewComment, error) {
 	return m, nil
 }
 
-func PostCommentNum(postId []int) (map[int]int, error) {
+func PostCommentNum(postIds []int) (map[int]int, error) {
 	m := make(map[int]int)
-
-	postIds := make([]string, 0)
-	for _, v := range postId {
-		postIds = append(postIds, helpers.ToStr(v))
-	}
 
 	if len(postIds) == 0 {
 		return m, nil
 	}
 
-	rows, err := gosql.Queryx("select count(*) comment_num,post_id from comments where post_id in(" + strings.Join(postIds, ",") + ") group by post_id")
+	rows, err := gosql.Queryx("select count(*) comment_num,post_id from comments where post_id in(?) group by post_id", postIds)
 
 	if err != nil {
 		return nil, err

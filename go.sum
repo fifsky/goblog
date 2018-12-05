@@ -36,6 +36,8 @@ github.com/ilibs/captcha v0.0.0-20181012033505-20e6a9666b6f h1:kEJHWBqnj5o4okY/s
 github.com/ilibs/captcha v0.0.0-20181012033505-20e6a9666b6f/go.mod h1:EtbTr+rhfvLqo14mP8Y5hwzLM+JEWuZ6ctMo3HqnT4Q=
 github.com/ilibs/gosql v1.0.4 h1:uZ0TCluiUUZchddQhZTzytj5jIUJedii90dFbbFJe0A=
 github.com/ilibs/gosql v1.0.4/go.mod h1:0Tra727VgxaxGKrreidpIvC9n2MOgsaISfjloFh8oIo=
+github.com/ilibs/gosql v1.0.12 h1:Vgng64BjXVHuSIPMYw8EvxxW0jh2nt4VLsNw8Z5jHog=
+github.com/ilibs/gosql v1.0.12/go.mod h1:ozm6ZENhuyB2Cwa0Ct3LrgkHqbXRoSFESA1mD1fg6YY=
 github.com/ilibs/identicon v0.0.0-20181115051304-dabd1e22d472 h1:Q09rfq5h7ABJDdAG+xhP+thF9JEPM8OB4C6dovJmnDk=
 github.com/ilibs/identicon v0.0.0-20181115051304-dabd1e22d472/go.mod h1:fvMfql5XlQQmJeHgMq6NOBAu1EQeD3eAcTV2PMvNCeg=
 github.com/ilibs/json5 v0.0.0-20160717195620-7620272ed633 h1:QNN+bjo6UVhBrBm7VlJAiFiPTEGu1f9VhSQoRLcSGjA=
@@ -61,6 +63,7 @@ github.com/mattn/go-isatty v0.0.4 h1:bnP0vzxcAdeI1zdubAl5PjU6zsERjGZb7raWodagDYs
 github.com/mattn/go-isatty v0.0.4/go.mod h1:M+lRXTBqGeGNdLjl/ufCoiOlB5xdOkqRJdNxMWT7Zi4=
 github.com/mattn/go-sqlite3 v1.9.0 h1:pDRiWfl+++eC2FEFRy6jXmQlvp4Yh3z1MJKg4UeYM/4=
 github.com/mattn/go-sqlite3 v1.9.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
+github.com/mattn/go-sqlite3 v1.10.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd h1:TRLaZ9cD/w8PVh93nsPXa1VrQ6jlwL5oN8l14QlcNfg=
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/reflect2 v1.0.1 h1:9f412s+6RmYXLWZSEzVVgPGK7C2PphHj5RJrvfx9AWI=
