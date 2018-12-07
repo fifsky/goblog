@@ -209,8 +209,11 @@ form p.inputting .formtip { color:#000;}
 #info { position:relative; margin:0 0 10px; font-size: 13px}
 #info #avatar { float:left; padding:1px; border:1px solid #89d5ef; background:#fff; overflow:hidden;}
 #info #avatar img {display:block; width:96px; height:96px;}
-#latest { min-height:98px; margin-left:120px; border:1px solid #89d5ef;
+#latest {
+    min-height:98px; margin-left:120px; border:1px solid #89d5ef;
     background: linear-gradient(#fff, #EEFFDE);
+    word-spacing: 1px;
+    letter-spacing: 1px;
 }
 #latest:before{
     content: '';
@@ -301,6 +304,11 @@ table.canlender td.happy{
     color: #555555;
     line-height: 22px;
     font-size: 13px;
+    text-align: justify;
+    word-wrap: break-word;
+    hyphens: auto;
+    word-spacing: 1px;
+    letter-spacing: 1px;
 }
 .article .entry img{
     max-width: 98%;
@@ -314,6 +322,8 @@ table.canlender td.happy{
 .article .entry .hljs{
 	line-height:14px;
     border-radius: 3px;
+    word-spacing: normal;
+    letter-spacing: normal;
 }
 
 .article .entry p{
