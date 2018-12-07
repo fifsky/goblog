@@ -1,7 +1,7 @@
 {{ if .Post.Title }}
 <div class="article">
     <div class="entry-title">
-        <img class="avatar" src="/static/public/images/avatar.jpg" alt="">
+        <img class="avatar" src="{{ StaticUrl }}public/images/avatar.jpg" alt="">
         <h2>
             <a href="/article/{{ .Post.Id }}">{{ .Post.Title }}</a>
         </h2>
