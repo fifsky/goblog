@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/identicon"
+	"github.com/verystar/logger"
 )
 
 var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
@@ -81,6 +82,15 @@ var ArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 
 	if err != nil {
 		return c.Message("文章不存在", "您访问的文章不存在或已经删除！")
+	}
+
+	_, err = gosql.Table("posts").Update(map[string]interface{}{
+		"id":       post.Id,
+		"view_num": gosql.Expr("view_num + 1"),
+	})
+
+	if err != nil {
+		logger.Error("view num add error", err)
 	}
 
 	cate := &models.Cates{Id: post.CateId}

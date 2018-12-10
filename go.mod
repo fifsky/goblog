@@ -3,7 +3,9 @@ module github.com/fifsky/goblog
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v0.0.0-20181107013735-cab2ffdaf410
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
+	github.com/evalphobia/logrus_sentry v0.5.0 // indirect
 	github.com/fifsky/goconf v1.0.0
+	github.com/getsentry/raven-go v0.2.0 // indirect
 	github.com/gin-contrib/sessions v0.0.0-20180827025425-58cbcf30135c // indirect
 	github.com/gin-contrib/sse v0.0.0-20170109093832-22d885f9ecc7 // indirect
 	github.com/gin-gonic/gin v1.3.0
@@ -11,7 +13,7 @@ require (
 	github.com/gorilla/feeds v1.1.0
 	github.com/gorilla/sessions v1.1.2 // indirect
 	github.com/ilibs/captcha v0.0.0-20181012033505-20e6a9666b6f
-	github.com/ilibs/gosql v1.0.12
+	github.com/ilibs/gosql v1.1.1
 	github.com/ilibs/identicon v0.0.0-20181115051304-dabd1e22d472
 	github.com/ilibs/json5 v0.0.0-20160717195620-7620272ed633 // indirect
 	github.com/ilibs/sessions v0.0.0-20180717035129-2a4cbf3ab96f
@@ -31,10 +33,11 @@ require (
 	github.com/tidwall/gjson v1.1.3
 	github.com/tidwall/match v0.0.0-20171002075945-1731857f09b1 // indirect
 	github.com/ugorji/go/codec v0.0.0-20180927125128-99ea80c8b19a // indirect
-	github.com/verystar/logger v1.0.3
+	github.com/verystar/logger v1.0.4
+	golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9 // indirect
 	golang.org/x/net v0.0.0-20181005035420-146acd28ed58 // indirect
 	golang.org/x/sync v0.0.0-20180314180146-1d60e4601c6f // indirect
-	golang.org/x/sys v0.0.0-20181106073832-7155702f2d47 // indirect
+	golang.org/x/sys v0.0.0-20181210030007-2a47403f2ae5 // indirect
 	google.golang.org/appengine v1.2.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect

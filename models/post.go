@@ -14,6 +14,7 @@ type Posts struct {
 	Title     string    `form:"title" json:"title" db:"title"`
 	Url       string    `form:"url" json:"url" db:"url"`
 	Content   string    `form:"content" json:"content" db:"content"`
+	ViewNum   string    `form:"view_num" json:"view_num" db:"view_num"`
 	CreatedAt time.Time `form:"-" json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `form:"-" json:"updated_at" db:"updated_at"`
 }
