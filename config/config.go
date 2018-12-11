@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
+	"runtime"
 	"time"
 
 	"github.com/fifsky/goblog/ding"
@@ -64,12 +64,8 @@ func Load(args map[string]string) {
 
 	appPath := args["config"]
 	if appPath == "" {
-		//获得程序路径从里面获取到goblog的路径
-		execpath, err := os.Getwd()
-		if err == nil {
-			src := "/goblog"
-			appPath = execpath[0 : strings.Index(execpath, src)+len(src)]
-		}
+		_, file, _, _ := runtime.Caller(0)
+		appPath = filepath.Dir(filepath.Dir(file))
 	}
 
 	App.Common.Path = appPath
