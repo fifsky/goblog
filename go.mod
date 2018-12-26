@@ -13,7 +13,7 @@ require (
 	github.com/gorilla/feeds v1.1.0
 	github.com/gorilla/sessions v1.1.2 // indirect
 	github.com/ilibs/captcha v0.0.0-20181012033505-20e6a9666b6f
-	github.com/ilibs/gosql v1.1.1
+	github.com/ilibs/gosql v1.1.2
 	github.com/ilibs/identicon v0.0.0-20181115051304-dabd1e22d472
 	github.com/ilibs/json5 v0.0.0-20160717195620-7620272ed633 // indirect
 	github.com/ilibs/sessions v0.0.0-20180717035129-2a4cbf3ab96f
