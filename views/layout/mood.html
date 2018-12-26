@@ -5,7 +5,7 @@
         <p class="current {{if eq $k 0}}active{{end}}">
             {{ .Content | Unescaped }}
             <span class="stamp">
-                <span class="method">{{ DateFormat .CreatedAt "2006-01-02 15:04" }} by {{.NickName}}</span>
+                <span class="method">{{ DateFormat .CreatedAt "2006-01-02 15:04" }} by {{.User.NickName}}</span>
             </span>
         </p>
         {{ end }}

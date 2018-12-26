@@ -62,7 +62,7 @@ var AdminArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 		user := &models.Users{Id: post.UserId}
 		gosql.Model(user).Get()
 
-		newpost := &models.UserPosts{Posts: *post, Name: cate.Name, Domain: cate.Domain, NickName: user.NickName}
+		newpost := &models.UserPosts{Posts: *post, Cate: cate, User: user}
 		h["Post"] = newpost
 	}
 
@@ -141,8 +141,8 @@ var AdminUploadPost core.HandlerFunc = func(c *core.Context) core.Response {
 	bucket, _ := client.Bucket(config.App.OSS.Bucket)
 	day := time.Now().Format("20060102")
 
-	filename := "upload/"+day+"/"+helpers.Md5File(file)+".png"
-	file.Seek(0,0)
+	filename := "upload/" + day + "/" + helpers.Md5File(file) + ".png"
+	file.Seek(0, 0)
 
 	err = bucket.PutObject(filename, file)
 	if err != nil {
@@ -156,7 +156,7 @@ var AdminUploadPost core.HandlerFunc = func(c *core.Context) core.Response {
 		})
 	}
 
-	return c.String("https://static.fifsky.com/" + filename+"!blog")
+	return c.String("https://static.fifsky.com/" + filename + "!blog")
 }
 
 var AdminUploadPostLocal core.HandlerFunc = func(c *core.Context) core.Response {

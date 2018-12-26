@@ -72,20 +72,19 @@ var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
 var ArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 	id := helpers.StrTo(c.Param("id")).MustInt()
 	url := c.GetString("url")
-	post := &models.Posts{Id: id}
+	post := &models.UserPosts{}
 
 	if url != "" {
 		post.Url = url
 	}
 
-	err := gosql.Model(post).Get()
+	err := gosql.Model(post).Where("id = ?", id).Get()
 
 	if err != nil {
 		return c.Message("文章不存在", "您访问的文章不存在或已经删除！")
 	}
 
-	_, err = gosql.Table("posts").Update(map[string]interface{}{
-		"id":       post.Id,
+	_, err = gosql.Table("posts").Where("id = ?", post.Id).Update(map[string]interface{}{
 		"view_num": gosql.Expr("view_num + 1"),
 	})
 
@@ -93,17 +92,9 @@ var ArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 		logger.Error("view num add error", err)
 	}
 
-	cate := &models.Cates{Id: post.CateId}
-	gosql.Model(cate).Get()
-
-	user := &models.Users{Id: post.UserId}
-	gosql.Model(user).Get()
-
-	newpost := &models.UserPosts{Posts: *post, Name: cate.Name, Domain: cate.Domain, NickName: user.NickName}
-
 	h := gin.H{}
 	h["Title"] = post.Title
-	h["Post"] = newpost
+	h["Post"] = post
 	//h["CaptchaId"] = captcha.New()
 
 	if url == "" {

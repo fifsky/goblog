@@ -31,25 +31,7 @@ func (m *Moods) AfterChange() {
 
 type UserMoods struct {
 	Moods
-	NickName string `db:"nick_name"`
-}
-
-func MoodFrist() (*UserMoods, error) {
-	if v, ok := Cache.Get("mood-first"); ok {
-		return v.(*UserMoods), nil
-	}
-
-	m := &UserMoods{}
-
-	err := gosql.QueryRowx("select m.*,u.nick_name from moods m left join users u on m.user_id = u.id order by m.id desc limit 1").StructScan(m)
-
-	if err != nil {
-		return nil, err
-	}
-
-	Cache.Set("mood-first", m, 1*time.Hour)
-
-	return m, nil
+	User *Users `db:"nick_name" relation:"user_id,id"`
 }
 
 func MoodGetList(start int, num int) ([]*UserMoods, error) {
@@ -57,7 +39,7 @@ func MoodGetList(start int, num int) ([]*UserMoods, error) {
 	var moods = make([]*UserMoods, 0)
 	start = (start - 1) * num
 
-	err := gosql.Select(&moods, "select m.*,u.nick_name from moods m left join users u on m.user_id = u.id order by m.id desc limit ?,?", start, num)
+	err := gosql.Model(&moods).Limit(num).Offset(start).OrderBy("id desc").All()
 
 	if err != nil {
 		return nil, err

@@ -37,16 +37,6 @@ type CateArtivleCount struct {
 	Num int `db:"num"`
 }
 
-func CateGetList(start int, num int) ([]*Cates, error) {
-	var m = make([]*Cates, 0)
-	start = (start - 1) * num
-	err := gosql.Model(&m).OrderBy("id desc").Limit(num).Offset(start).All()
-	if err != nil {
-		return nil, err
-	}
-	return m, nil
-}
-
 func CateArtivleCountGetList(start int, num int) ([]*CateArtivleCount, error) {
 	var m = make([]*CateArtivleCount, 0)
 	start = (start - 1) * num

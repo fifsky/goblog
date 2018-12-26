@@ -55,8 +55,8 @@
                     <td class="comment-num"><a href="{{if eq .Type 2}}/{{.Url}}{{else}}/article/{{.Id}}{{end}}#comments" target="_blank">{{ .CommentNum }}</a></td>
                     <td><a href="{{if eq .Type 2}}/{{.Url}}{{else}}/article/{{.Id}}{{end}}">{{.Title}}</a>
                     </td>
-                    <td>{{.NickName}}</td>
-                    <td><a href="/category/{{.Domain}}" target="_blank">{{.Name}}</a></td>
+                    <td>{{.User.NickName }}</td>
+                    <td><a href="/category/{{.Cate.Domain}}" target="_blank">{{.Cate.Name}}</a></td>
                     <td>{{ if eq .Type 1 }}文章{{else}}页面{{end}}</td>
                     <td>{{ DateFormat .UpdatedAt "2006-01-02" }}</td>
                     <td>{{ if eq .UserId $.LoginUser.Id}}

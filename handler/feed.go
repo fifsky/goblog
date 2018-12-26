@@ -40,7 +40,7 @@ var FeedGet core.HandlerFunc = func(c *core.Context) core.Response {
 			Title:       v.Title,
 			Link:        &feeds.Link{Href: fmt.Sprintf("https://fifsky.com/article/%d", v.Id)},
 			Description: v.Content,
-			Author:      &feeds.Author{Name: v.NickName, Email: "fifsky@gmail.com"},
+			Author:      &feeds.Author{Name: v.User.NickName, Email: "fifsky@gmail.com"},
 			Created:     now,
 		})
 	}

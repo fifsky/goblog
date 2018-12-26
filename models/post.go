@@ -38,9 +38,8 @@ func (p *Posts) AfterChange() {
 
 type UserPosts struct {
 	Posts
-	Name       string `db:"name"`
-	NickName   string `db:"nick_name"`
-	Domain     string `db:"domain"`
+	Cate       *Cates `db:"-" relation:"cate_id,id"`
+	User       *Users `db:"-" relation:"user_id,id"`
 	CommentNum int    `db:"-"`
 }
 
@@ -99,31 +98,29 @@ func PostGetList(p *Posts, start int, num int, artdate, keyword string) ([]*User
 	start = (start - 1) * num
 
 	args := make([]interface{}, 0)
-	where := "where 1 = 1 "
+	where := "1 = 1 "
 
 	if p.CateId > 0 {
-		where += " and p.cate_id = ?"
+		where += " and cate_id = ?"
 		args = append(args, p.CateId)
 	}
 
 	if p.Type > 0 {
-		where += " and p.type = ?"
+		where += " and type = ?"
 		args = append(args, p.Type)
 	}
 
 	if artdate != "" {
-		where += " and DATE_FORMAT(p.created_at,'%Y-%m') = ?"
+		where += " and DATE_FORMAT(created_at,'%Y-%m') = ?"
 		args = append(args, artdate)
 	}
 
 	if keyword != "" {
-		where += " and p.title like ?"
+		where += " and title like ?"
 		args = append(args, "%"+keyword+"%")
 	}
 
-	args = append(args, start, num)
-
-	rows, err := gosql.Queryx("select p.*,c.name,u.nick_name,c.domain from posts p left join users u on p.user_id = u.id left join cates c on p.cate_id = c.id "+where+" order by p.id desc limit ?,?", args...)
+	err := gosql.Model(&posts).Where(where, args...).Limit(num).Offset(start).OrderBy("id desc").All()
 
 	if err != nil {
 		return nil, err
@@ -131,14 +128,8 @@ func PostGetList(p *Posts, start int, num int, artdate, keyword string) ([]*User
 
 	postIds := make([]int, 0)
 
-	for rows.Next() {
-		m := &UserPosts{}
-		err := rows.StructScan(m)
-		if err != nil {
-			return nil, err
-		}
-		posts = append(posts, m)
-		postIds = append(postIds, m.Id)
+	for _,v := range posts {
+		postIds = append(postIds, v.Id)
 	}
 
 	cm, err := PostCommentNum(postIds)
