@@ -74,11 +74,15 @@ var ArticleGet core.HandlerFunc = func(c *core.Context) core.Response {
 	url := c.GetString("url")
 	post := &models.UserPosts{}
 
+	if id >0{
+		post.Id = id
+	}
+
 	if url != "" {
 		post.Url = url
 	}
 
-	err := gosql.Model(post).Where("id = ?", id).Get()
+	err := gosql.Model(post).Get()
 
 	if err != nil {
 		return c.Message("文章不存在", "您访问的文章不存在或已经删除！")
