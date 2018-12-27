@@ -75,6 +75,11 @@ func CommentList(start, num int) ([]*NewComment, error) {
 	return m, nil
 }
 
+type CommentNum struct {
+	CommentNum int `db:"comment_num"`
+	PostId int `db:"post_id"`
+}
+
 func PostCommentNum(postIds []int) (map[int]int, error) {
 	m := make(map[int]int)
 
@@ -82,20 +87,16 @@ func PostCommentNum(postIds []int) (map[int]int, error) {
 		return m, nil
 	}
 
-	rows, err := gosql.Queryx("select count(*) comment_num,post_id from comments where post_id in(?) group by post_id", postIds)
+	t := make([]*CommentNum,0)
+
+	err := gosql.Select(&t,"select count(*) comment_num,post_id from comments where post_id in(?) group by post_id", postIds)
 
 	if err != nil {
 		return nil, err
 	}
 
-	for rows.Next() {
-		var commentNum, postId int
-		err := rows.Scan(&commentNum, &postId)
-		if err != nil {
-			return nil, err
-		}
-
-		m[postId] = commentNum
+	for _,v := range t {
+		m[v.PostId] = v.CommentNum
 	}
 
 	return m, nil
