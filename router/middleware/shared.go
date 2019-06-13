@@ -6,7 +6,7 @@ import (
 
 	"github.com/fifsky/goblog/core"
 	"github.com/fifsky/goblog/models"
-	"github.com/verystar/logger"
+	"github.com/goapt/logger"
 )
 
 //middlewares

@@ -6,7 +6,7 @@ import (
 	"github.com/fifsky/goblog/models"
 	"github.com/gin-gonic/gin"
 	"github.com/ilibs/gosql"
-	"github.com/verystar/logger"
+	"github.com/goapt/logger"
 )
 
 var AdminCommentGet core.HandlerFunc = func(c *core.Context) core.Response {

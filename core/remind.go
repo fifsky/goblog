@@ -6,7 +6,7 @@ import (
 	"github.com/fifsky/goblog/ding"
 	"github.com/fifsky/goblog/models"
 	"github.com/ilibs/gosql"
-	"github.com/verystar/logger"
+	"github.com/goapt/logger"
 )
 
 func StartCron() {

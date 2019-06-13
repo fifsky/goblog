@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/ilibs/gosql"
-	"github.com/verystar/logger"
+	"github.com/goapt/logger"
 )
 
 type Links struct {

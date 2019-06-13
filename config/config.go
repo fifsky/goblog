@@ -12,7 +12,7 @@ import (
 	"github.com/fifsky/goconf"
 	"github.com/gin-gonic/gin"
 	"github.com/ilibs/gosql"
-	"github.com/verystar/logger"
+	"github.com/goapt/logger"
 )
 
 type common struct {

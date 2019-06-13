@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/ilibs/gosql"
 	"github.com/ilibs/identicon"
-	"github.com/verystar/logger"
+	"github.com/goapt/logger"
 )
 
 var IndexGet core.HandlerFunc = func(c *core.Context) core.Response {
