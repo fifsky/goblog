@@ -9,7 +9,7 @@
 https://fifsky.com/
 
 ## VUE 版本
-https://github.com/fifsky/goblog-vue
+https://github.com/fifsky/blog
 
 ## 初始化
 1、创建数据库blog
